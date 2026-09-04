@@ -41,6 +41,9 @@ ExportedObj/
 *.opendb
 *.VC.db
 
+# Local nested worktrees or copied projects should not be committed here.
+/SurvivorFarm/
+
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta

@@ -260,3 +260,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectName: Survivor Farm
   targetFrameRate: 60
+  buildFarmPrototypeOnStart: 1

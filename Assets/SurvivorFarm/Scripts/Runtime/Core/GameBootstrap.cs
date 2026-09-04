@@ -1,4 +1,6 @@
 using UnityEngine;
+using SurvivorFarm.Runtime.Gameplay;
+using SurvivorFarm.Runtime.World;
 
 namespace SurvivorFarm.Runtime.Core
 {
@@ -6,6 +8,7 @@ namespace SurvivorFarm.Runtime.Core
     {
         [SerializeField] private string projectName = "Survivor Farm";
         [SerializeField] private int targetFrameRate = 60;
+        [SerializeField] private bool buildFarmPrototypeOnStart = true;
 
         private void Awake()
         {
@@ -15,6 +18,13 @@ namespace SurvivorFarm.Runtime.Core
         private void Start()
         {
             Debug.Log($"{projectName} started.");
+
+            if (!buildFarmPrototypeOnStart || FindFirstObjectByType<FarmingPlot>() != null)
+            {
+                return;
+            }
+
+            FarmPrototypeBuilder.Build();
         }
     }
 }
