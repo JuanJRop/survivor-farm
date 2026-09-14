@@ -261,7 +261,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             Inventory=GetComponent<PlayerInventory>(); Home=transform.position;
             EnsurePlayerDepth();
             World=new GameObject("Historia del Valle").AddComponent<ValleyWorld>(); World.Build(this); World.gameObject.AddComponent<TutorialHomestead>().Build(this); gameObject.AddComponent<HouseSystem>();
-            gameObject.AddComponent<EnemyCampWorld>().Configure(this);
+            if (!PortfolioSession.Active) gameObject.AddComponent<EnemyCampWorld>().Configure(this);
             gameObject.AddComponent<WildResourceRegrowth>();
         }
         void EnsurePlayerDepth()
@@ -277,6 +277,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         void Update(){Evaluate();}
         public void Evaluate()
         {
+            if (PortfolioSession.Active) return;
             var clock=FindFirstObjectByType<DayNightCycle>();
             if(Data.startDay==0&&clock!=null)Data.startDay=clock.Day;
             SyncVillageProgress();

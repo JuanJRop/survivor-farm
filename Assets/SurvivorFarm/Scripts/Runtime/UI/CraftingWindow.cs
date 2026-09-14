@@ -91,6 +91,7 @@ namespace SurvivorFarm.Runtime.UI
             ids.AddRange(crafting.GetRecipeDescriptors().Select(recipe => recipe.Id));
             foreach (string id in ids.Distinct())
             {
+                if(Core.PortfolioSession.Active&&!Core.PortfolioSession.IsDemoRecipe(id))continue;
                 var rect = AdventureWindow.Rect(recipeContent, id, 0, 0, 840, 116);
                 var output = AdventureWindow.Rect(rect, "Resultado", 8, 16, 48, 48).gameObject.AddComponent<Image>();
                 output.preserveAspect = true;

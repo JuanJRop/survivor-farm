@@ -45,8 +45,8 @@ namespace SurvivorFarm.Runtime.Core
         public string LastSaveError => saveStore?.LastError ?? lastReportedError;
         public SaveLoadSource LastLoadSource { get; private set; } = SaveLoadSource.Missing;
 
-        public static bool IsQa => Array.IndexOf(Environment.GetCommandLineArgs(),"--qa")>=0;
-        public static string CurrentSlot => IsQa?"qa":PlayerPrefs.GetString("SurvivorFarmSlot","");
+        public static bool IsQa => Array.IndexOf(Environment.GetCommandLineArgs(),"--qa")>=0 || Array.IndexOf(Environment.GetCommandLineArgs(),"-runTests")>=0;
+        public static string CurrentSlot => PortfolioSession.Active ? "portfolio_"+(IsQa?PortfolioSession.Instance.QaSlot:PlayerPrefs.GetString("SurvivorFarmPortfolioSlot","demo")) : IsQa?"qa":PlayerPrefs.GetString("SurvivorFarmSlot","");
         public string SaveFile => SavePath;
         private string SavePath
         {
@@ -109,6 +109,7 @@ namespace SurvivorFarm.Runtime.Core
 
         private void Start()
         {
+            if (PortfolioSession.Active) return; // The title screen explicitly chooses new or continue.
             if (loadOnStart && !loadedOnce)
             {
                 TryLoadGame();
@@ -141,6 +142,7 @@ namespace SurvivorFarm.Runtime.Core
 
         public void SaveGame(bool notify)
         {
+            if (PortfolioSession.Active && !PortfolioSession.Instance.CanSave) return;
             if (player == null || inventory == null || persistenceBusy)
             {
                 return;
@@ -351,6 +353,7 @@ namespace SurvivorFarm.Runtime.Core
             GameSaveData data = new GameSaveData
             {
                 version = SaveVersion,
+                portfolio = PortfolioSession.Active ? PortfolioSession.Instance.Capture() : null,
                 bridgeRepaired = FindFirstObjectByType<RepairableBridge>(FindObjectsInactive.Include)?.IsRepaired ?? false,
                 adventure = inventory.GetComponent<AdventureProgress>()?.Data,
                 valley = inventory.GetComponent<ValleyCampaign>()?.Data,
@@ -487,7 +490,7 @@ namespace SurvivorFarm.Runtime.Core
             if (data.hasCheckpoint) respawn?.SetCheckpoint(data.checkpoint.ToVector3());
             bool restoreDungeon = restorePlayerLocation && data.insideDungeon && !recoverDeath;
             bool restoreShop = restorePlayerLocation && data.insideShop && !restoreDungeon && !recoverDeath;
-            dungeonEntrance?.EnsureExpedition();
+            if (!PortfolioSession.Active) dungeonEntrance?.EnsureExpedition();
             dungeonEntrance?.Expedition?.Restore(data.dungeonExpedition);
 
             if (shopEntrance != null)
@@ -649,6 +652,7 @@ namespace SurvivorFarm.Runtime.Core
             inventory?.GetComponent<ValleyCampaign>()?.Restore(data.valley);
             if (restoreShop) shopEntrance?.RecoverLegacyInterior();
             inventory?.GetComponent<HouseSystem>()?.RestorePresence(restorePlayerLocation&&data.house!=null&&data.house.inside&&!recoverDeath&&!restoreDungeon);
+            if (PortfolioSession.Active) PortfolioSession.Instance.Restore(data.portfolio);
         }
 
         private static void RestoreGroundLoot(List<GroundLootSaveData> savedDrops)
@@ -707,6 +711,7 @@ namespace SurvivorFarm.Runtime.Core
         [Serializable]
         private sealed class GameSaveData
         {
+            public SliceSnapshot portfolio;
             public HouseData house;
             public List<GroundLootSaveData> groundLoot = new List<GroundLootSaveData>();
             public AdventureData adventure;

@@ -65,7 +65,7 @@ namespace SurvivorFarm.Runtime.Player
 
         public void AttackTarget(IDamageable preferredTarget)
         {
-            if (InventoryPanelSystem.IsOpen || Time.timeScale == 0f) return;
+            if (InventoryPanelSystem.IsOpen || Time.timeScale == 0f || (movement != null && movement.IsDashing)) return;
             var survival = GetComponent<PlayerSurvivalStats>();
             if (survival != null && survival.CurrentHealth <= 0) return;
             if (Time.time < nextAttackTime)
@@ -145,7 +145,7 @@ namespace SurvivorFarm.Runtime.Player
         }
 
         private static bool ValidTarget(IDamageable target) => target != null &&
-            !(target is Object instance && instance == null) && target.Transform != null && target.IsAlive;
+            !(target is Object instance && instance == null) && target.Transform != null && DamageRules.CanPlayerHit(target);
 
         private IEnumerator ReleaseArrow(IDamageable target, int generation, int damage, float delay)
         {

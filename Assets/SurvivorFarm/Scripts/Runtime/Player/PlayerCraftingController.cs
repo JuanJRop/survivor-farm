@@ -75,7 +75,7 @@ namespace SurvivorFarm.Runtime.Player
             foreach (EconomyCookingRecipe recipe in EconomyCookingRecipes.All)
                 if (TryGetRecipeDescriptor(recipe.Id, out EconomyRecipeDescriptor descriptor)) descriptors.Add(descriptor);
             if (TryGetRecipeDescriptor("Sword", out EconomyRecipeDescriptor sword)) descriptors.Add(sword);
-            foreach (string id in new[] { "Campfire", "Fence", "Chest", "Workbench", "Beacon", "Bed", "Cabinet", "Furnace" })
+            foreach (string id in new[] { "Campfire", "Fence", "Trap", "Turret", "Chest", "Workbench", "Beacon", "Bed", "Cabinet", "Furnace" })
                 if (TryGetRecipeDescriptor(id, out EconomyRecipeDescriptor descriptor)) descriptors.Add(descriptor);
             foreach (EquipmentRecipe recipe in equipmentRecipes)
                 if (TryGetRecipeDescriptor(recipe.Id, out EconomyRecipeDescriptor descriptor)) descriptors.Add(descriptor);
@@ -125,6 +125,8 @@ namespace SurvivorFarm.Runtime.Player
             }
             else if (BackpackActions.IsBuilding(id))
             {
+                if(Core.PortfolioSession.Active)
+                    requirements.Add(new EconomyRequirementDescriptor("Day", "Disponible desde el día 2.", Core.PortfolioSession.Instance.CanBuild(id)));
                 name = ConstructionSystem.Label(id);
                 ConstructionSystem.Cost(id, out int wood, out int stone, out int iron);
                 AddIngredient(costs, "Wood", wood);

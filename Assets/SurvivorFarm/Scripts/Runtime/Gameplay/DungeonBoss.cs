@@ -12,6 +12,23 @@ namespace SurvivorFarm.Runtime.Gameplay
         private Vector3 impact, chargeStart;
         private float until;
         private int phase;
+        private FarmBossPattern farmPattern;
+        private Core.PortfolioSession farmSession;
+        public void ConfigureFarmBoss(Core.PortfolioSession owner, SpriteRenderer visual, EnemyProjectilePool arrows)
+        {
+            farmSession=owner;Configure(owner.Player.transform,null);
+            ConfigureVisuals(visual,null,new Color(1,.85f,.65f),"El Custodio");
+            ConfigureStats("El Custodio",owner.Settings.bossHealth,2,1.4f,1.5f,2,0);
+            ConfigureAnimation(Resources.Load<PlayerAnimationLibrary>("SpearGoblinAnimations"));
+            visual.transform.localScale=Vector3.one*1.8f;
+            visual.gameObject.AddComponent<WorldSpriteDepth>().Visual=visual;
+            farmPattern=gameObject.AddComponent<FarmBossPattern>();farmPattern.Configure(owner,this,arrows);
+        }
+        public override void TakeDamage(int amount, PlayerInventory source)
+        {
+            if(farmSession!=null&&farmSession.Phase!=Core.SlicePhase.Boss)return;
+            base.TakeDamage(farmPattern!=null&&farmPattern.IsExposed?amount*2:amount,source);
+        }
         public bool IsTelegraphing => phase == 1;
         public bool IsExposed => phase == 3;
         public Vector3 ImpactPosition => impact;
@@ -31,13 +48,14 @@ namespace SurvivorFarm.Runtime.Gameplay
         }
         public override void ActivateFromPool(Vector3 position)
         {
-            base.ActivateFromPool(position); phase = 0; until = Time.time + 1.2f; warning.enabled = false;
+            base.ActivateFromPool(position); phase = 0; until = Time.time + 1.2f; if(warning!=null)warning.enabled = false;
         }
         public override void ReturnToPool() { if (warning != null) warning.enabled = false; base.ReturnToPool(); }
-        protected override bool CanMoveTo(Vector2 p) => DungeonLayout.RoomAt(p) == 5 && DungeonLayout.Walkable(p, .65f);
+        protected override bool CanMoveTo(Vector2 p) => farmSession!=null ? Mathf.Abs(p.x)<16&&p.y>-9&&p.y<7 : DungeonLayout.RoomAt(p) == 5 && DungeonLayout.Walkable(p, .65f);
         protected override bool CanApplyKnockback(Vector2 p) => CanMoveTo(p);
         protected override void TickEnemy()
         {
+            if(farmPattern!=null){farmPattern.Tick();return;}
             if (!expedition.BossFightActive || DungeonLayout.RoomAt(Target.position) != 5) { warning.enabled = false; return; }
             if (phase == 0)
             {
@@ -78,6 +96,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         }
         protected override void OnDefeated(PlayerInventory inventory)
         {
+            if(farmSession!=null){farmPattern.Stop();farmSession.Win();FarmGameEvents.RaiseEnemyDefeated();return;}
             warning.enabled = false; expedition.CompleteBoss(); FarmGameEvents.RaiseEnemyDefeated();
         }
         private void OnDestroy() { if (warning != null) Destroy(warning.gameObject); if (warningMaterial != null) Destroy(warningMaterial); }

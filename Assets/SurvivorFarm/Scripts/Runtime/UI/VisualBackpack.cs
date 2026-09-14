@@ -53,12 +53,13 @@ namespace SurvivorFarm.Runtime.UI
             panelSprite = Icon("Panel"); slotSprite = Icon("Slot");
             FarmUiStyle.Frame(GetComponent<Image>());
             Label(root, "MOCHILA", 24, 18, 400, 32, 26);
-            FarmUiStyle.IconButton(Button(root, "Personaje [C]", 726, 16, 44, 40, owner.OpenEquipment),"Helmet","Personaje [C]");
+            if(!Core.PortfolioSession.Active)FarmUiStyle.IconButton(Button(root, "Personaje [C]", 726, 16, 44, 40, owner.OpenEquipment),"Helmet","Personaje [C]");
             FarmUiStyle.CloseButton(Button(root, "Cerrar  [Esc]", 782, 16, 44, 40, owner.Close));
             string[] labels = { "Todo", "Comida", "Materiales", "Gemas", "Elementos", "Varios" };
             int[] categoryIds = { 0, 3, 4, 6, 7, 1 };
             for (int i = 0; i < labels.Length; i++)
             {
+                if(Core.PortfolioSession.Active&&i>=3)continue;
                 int value = categoryIds[i];
                 tabs.Add(Button(root, labels[i], 24 + i * 135, 66, 128, 38, () => SetCategory(value)));
             }
@@ -104,6 +105,7 @@ namespace SurvivorFarm.Runtime.UI
             Add("Wood", "Madera", inventory.Wood, 4); Add("Stone", "Piedra", inventory.Stone, 4);
             Add("Iron", "Hierro", inventory.GetComponent<AdventureProgress>()?.Data.iron ?? 0, 4);
             Add("Fruit", "Fruta", inventory.Fruit, 3); Add("Food", "Comida", inventory.Food, 3);
+            if(Core.PortfolioSession.Active)Add("CommonSeeds","Semillas",inventory.CommonSeeds,4,"CommonSeeds","Acércate a un surco del huerto y pulsa E para plantar.");
             foreach (var definition in SurvivalItemCatalog.All.Where(item => !item.IsSeed))
                 Add(definition.Id, definition.Name, inventory.GetItemCount(definition.Id), (int)definition.Category, definition.Icon, definition.Description);
             foreach(var packed in inventory.PackedBuildings)Add(packed.kind,ConstructionSystem.Label(packed.kind),packed.count,4);
@@ -132,7 +134,7 @@ namespace SurvivorFarm.Runtime.UI
             visible = items.Where(i => category == 0 || i.Category == category).ToList();
             content.sizeDelta = new Vector2(548, Mathf.Max(365, Mathf.Ceil(visible.Count / 4f) * 112));
             content.anchoredPosition = new Vector2(0, Mathf.Clamp(content.anchoredPosition.y, 0, content.sizeDelta.y - 365));
-            summary.text = $"{visible.Count} pilas · Oro: {inventory.Coins}";
+            summary.text = Core.PortfolioSession.Active?"Fruta para cocinar · raciones para curarte · materiales para defender la granja":$"{visible.Count} pilas · Oro: {inventory.Coins}";
             empty.gameObject.SetActive(visible.Count == 0);
             for (int i = 0; i < tabs.Count; i++) FarmUiStyle.Button(tabs[i],new[] { 0, 3, 4, 6, 7, 1 }[i] == category);
             DrawCells();
@@ -173,7 +175,7 @@ namespace SurvivorFarm.Runtime.UI
             detailContent.anchoredPosition=Vector2.zero;
             use.gameObject.SetActive(selected!=null);
             use.GetComponentInChildren<Text>().text=tool?"Equipar":selected!=null&&BackpackActions.IsBuilding(id)?"Colocar":food?"Comer 1":"Ver recetas";
-            bool removable=selected!=null&&!tool&&BackpackActions.Price(id)>0;
+            bool removable=!Core.PortfolioSession.Active&&selected!=null&&!tool&&BackpackActions.Price(id)>0;
             quantity.gameObject.SetActive(removable);sell.gameObject.SetActive(removable);discard.gameObject.SetActive(removable);
             quantity.GetComponentInChildren<Text>().text="Cantidad: "+count+" · cambiar";
             sell.GetComponentInChildren<Text>().text="Vender "+count+" · +"+(selected==null?0:count*BackpackActions.Price(id))+" oro";

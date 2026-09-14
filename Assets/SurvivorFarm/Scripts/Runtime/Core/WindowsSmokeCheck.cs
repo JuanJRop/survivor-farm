@@ -10,7 +10,7 @@ namespace SurvivorFarm.Runtime.Core
     {
         string output;bool failed;
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void Initialize(){if(GameSaveSystem.IsQa)new GameObject("Windows QA").AddComponent<WindowsSmokeCheck>();}
+        static void Initialize(){if(Array.IndexOf(Environment.GetCommandLineArgs(),"--qa")>=0&&!PortfolioSession.Active)new GameObject("Windows QA").AddComponent<WindowsSmokeCheck>();}
         void Awake(){output=Path.GetFullPath(Path.Combine(Application.dataPath,"../QA"));Directory.CreateDirectory(output);Application.logMessageReceived+=Log;Application.runInBackground=true;}
         void Log(string message,string trace,LogType kind){if(kind==LogType.Exception||kind==LogType.Error){failed=true;File.AppendAllText(Path.Combine(output,"errors.txt"),message+"\n"+trace+"\n");}}
         IEnumerator Start()

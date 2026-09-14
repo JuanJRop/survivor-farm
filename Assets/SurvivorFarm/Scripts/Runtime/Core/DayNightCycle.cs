@@ -21,6 +21,7 @@ namespace SurvivorFarm.Runtime.Core
 
         public bool TrySleepUntilMorning()
         {
+            if (PortfolioSession.Active) return false;
             if (!IsNight) return false;
             Restore(hour >= 21f ? day + 1 : day, 8f);
             FarmGameEvents.RaiseSleptUntilMorning();
@@ -40,6 +41,7 @@ namespace SurvivorFarm.Runtime.Core
 
         private void Update()
         {
+            if (PortfolioSession.Active) return;
             bool wasNight=IsNight; float previous=hour;
             Advance(Time.deltaTime);
             if(previous<19f && hour>=19f)SurvivorFarm.Runtime.UI.FarmNotificationCenter.Show("Anochece pronto. Cocina, equipa tu arma y prepara la cama.");
@@ -78,7 +80,8 @@ namespace SurvivorFarm.Runtime.Core
             if (worldTint == null) return;
             worldTint.raycastTarget = false;
             bool indoors = (shop != null && shop.IsInsideShop) || (dungeon != null && dungeon.IsInsideDungeon);
-            worldTint.color = indoors ? Color.clear : EvaluateTint(hour);
+            Color tint=indoors?Color.clear:EvaluateTint(hour);
+            worldTint.color=PortfolioSession.Active?Color.Lerp(worldTint.color,tint,1-Mathf.Exp(-Time.unscaledDeltaTime*1.8f)):tint;
         }
 
         private void OnDisable()

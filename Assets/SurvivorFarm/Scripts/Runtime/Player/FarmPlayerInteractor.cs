@@ -18,6 +18,8 @@ namespace SurvivorFarm.Runtime.Player
         private IWorldInteractable highlightedInteractable;
         private Camera mainCamera;
         private SpriteRenderer[] indicatorRenderers = new SpriteRenderer[0];
+        private WorldInteractable[] nearbyCandidates;
+        private float refreshCandidatesAt;
 
         private void Awake()
         {
@@ -96,7 +98,6 @@ namespace SurvivorFarm.Runtime.Player
             }
 
             FarmTool selectedTool = toolbelt != null ? toolbelt.SelectedTool : FarmTool.Sword;
-            if (highlightedInteractable is FarmingPlot) return;
             movement?.StopMovement();
             FarmTool interactionTool = ResolveInteractionTool(highlightedInteractable, selectedTool);
             if (!Supports(highlightedInteractable, interactionTool) || AdventureWindow.IsOpen || IsPointerOverUi(-1)) return;
@@ -109,7 +110,8 @@ namespace SurvivorFarm.Runtime.Player
         public static bool Supports(IWorldInteractable target, FarmTool tool)
         {
             if(target==null || !target.IsAvailable)return false;
-            if(target is FarmingPlot)return false;
+            if(target is Behaviour component && !component.isActiveAndEnabled)return false;
+            if(target is FarmingPlot plot)return plot.SupportsTool(tool);
             if(target is AnimalResource)return tool==FarmTool.Sword || tool==FarmTool.Bow;
             if(target is HarvestableResource resource)return resource.SupportsTool(tool);
             if(target is ValleyInteraction story)return story.SupportsTool(tool);
@@ -140,17 +142,22 @@ namespace SurvivorFarm.Runtime.Player
             FarmTool selectedTool=toolbelt!=null?toolbelt.SelectedTool:FarmTool.Sword;
             SelectedPlot=null;
             if(IsPointerOverUi(-1))return null;
-            WorldInteractable[] interactables = FindObjectsByType<WorldInteractable>(FindObjectsSortMode.None);
+            if(nearbyCandidates==null||Time.time>=refreshCandidatesAt)
+            {
+                nearbyCandidates=FindObjectsByType<WorldInteractable>(FindObjectsSortMode.None);
+                refreshCandidatesAt=Time.time+.15f;
+            }
+            WorldInteractable[] interactables=nearbyCandidates;
             if(mainCamera!=null)
             {
                 Vector3 pointer=mainCamera.ScreenToWorldPoint(Input.mousePosition);pointer.z=0;
                 IWorldInteractable pointed = interactables
-                    .Where(t=>!(t is FarmingPlot)&&Supports(t,ResolveInteractionTool(t,selectedTool))&&Vector2.Distance(position,t.Transform.position)<=radius&&Vector2.Distance(pointer,t.Transform.position)<.65f)
+                    .Where(t=>t!=null&&Supports(t,ResolveInteractionTool(t,selectedTool))&&Vector2.Distance(position,t.Transform.position)<=radius&&Vector2.Distance(pointer,t.Transform.position)<.65f)
                     .OrderBy(t=>(t.Transform.position-pointer).sqrMagnitude).FirstOrDefault();
                 if(pointed!=null)return pointed;
             }
             IWorldInteractable nearestObject = interactables
-                .Where(t=>!(t is FarmingPlot)&&Supports(t,ResolveInteractionTool(t,selectedTool))&&Vector2.Distance(position,t.Transform.position)<=radius)
+                .Where(t=>t!=null&&Supports(t,ResolveInteractionTool(t,selectedTool))&&Vector2.Distance(position,t.Transform.position)<=radius)
                 .OrderBy(t=>(t.Transform.position-position).sqrMagnitude).FirstOrDefault();
             return nearestObject;
         }

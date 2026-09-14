@@ -17,7 +17,7 @@ namespace SurvivorFarm.Runtime.UI
             inventory=player;canvas=ui;root=Rect(ui,"Diario y construcción",0,0,850,600);root.anchorMin=root.anchorMax=root.pivot=new Vector2(.5f,.5f);root.anchoredPosition=Vector2.zero;
             FarmUiStyle.Frame(root.gameObject.AddComponent<Image>());root.gameObject.SetActive(false);
             var hud=ui.GetComponentInChildren<OriginalSpriteHud>(true);
-            if(!Application.isEditor&&!GameSaveSystem.IsQa)Open("Pause");
+            if(!Application.isEditor&&!GameSaveSystem.IsQa&&!PortfolioSession.Active)Open("Pause");
             if(hud!=null){var button=Button(hud.transform,"Diario [J]",296,0,132,34,()=>Open("Journal"));var rect=button.GetComponent<RectTransform>();rect.anchorMin=rect.anchorMax=rect.pivot=Vector2.zero;rect.anchoredPosition=new Vector2(296,64);hud.RequestStyleRefresh();}
         }
         public static RectTransform Rect(Transform p,string n,float x,float y,float w,float h){var t=new GameObject(n,typeof(RectTransform)).GetComponent<RectTransform>();t.SetParent(p,false);t.anchorMin=t.anchorMax=t.pivot=new Vector2(0,1);t.anchoredPosition=new Vector2(x,-y);t.sizeDelta=new Vector2(w,h);return t;}
@@ -27,6 +27,7 @@ namespace SurvivorFarm.Runtime.UI
         public void OpenChest(BuildingData data){chest=data;Open("Chest");}
         public void Open(string selected)
         {
+            if(PortfolioSession.Active)return;
             if((selected=="Home"||selected=="HomeStorage")&&inventory.GetComponent<HouseSystem>()?.CanUseServices!=true)return;
             VillageDialogueWindow.CloseActive();
             SimpleShopSystem.CloseActive();

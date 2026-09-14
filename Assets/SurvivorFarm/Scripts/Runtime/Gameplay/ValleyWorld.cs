@@ -166,6 +166,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         {
             campaign=owner;
             BuildStartingVillage(owner);
+            if (Core.PortfolioSession.Active) { Refresh(); return; }
             Item("Chest",VillageLayout.Note,"note","Nota del valle",.65f);
             VillageItem(transform,"Sign",VillageLayout.CampExit,"go:1","Camino al campamento",.7f,null);
             Item("Gem",new Vector3(-1.4f,-3.1f),"plant","Devolver reliquia al altar",.7f);

@@ -4,7 +4,7 @@ using SurvivorFarm.Runtime.UI;
 
 namespace SurvivorFarm.Runtime.Player
 {
-    public sealed class PlayerSurvivalStats : MonoBehaviour
+    public sealed class PlayerSurvivalStats : MonoBehaviour, SurvivorFarm.Runtime.Gameplay.IDamageable
     {
         [SerializeField] private int maxHealth = 5;
         [SerializeField] private int currentHealth = 5;
@@ -22,6 +22,11 @@ namespace SurvivorFarm.Runtime.Player
 
         public int MaxHealth => maxHealth;
         public int CurrentHealth => currentHealth;
+        public Transform Transform => transform;
+        public bool IsAlive => isActiveAndEnabled && currentHealth > 0;
+        public int SpawnGeneration { get; private set; }
+        public void TakeDamage(int amount, PlayerInventory source) => TakeDamage(amount);
+        public void GrantInvulnerability(float seconds) => invulnerableUntil = Mathf.Max(invulnerableUntil, Time.time + Mathf.Max(0, seconds));
         // Legacy saves and callers still carry satiety; it no longer affects gameplay.
         public float HungerPercent => 1f;
 
@@ -50,6 +55,7 @@ namespace SurvivorFarm.Runtime.Player
                 if(amount<=0){FarmNotificationCenter.Show("Tu armadura absorbió el golpe.");return;}
             }
             currentHealth = Mathf.Max(0, currentHealth - amount);
+            if (Core.PortfolioSession.Active) GrantInvulnerability(.7f);
             GetComponent<SurvivorFarm.Runtime.Gameplay.GameFeelFeedback>()?.Pulse("−"+amount,transform.position,true);
             GetComponent<PlayerCharacterAnimator>()?.PlayNamedAction(currentHealth <= 0 ? "Dead" : "Damage");
             NotifyChanged();
@@ -93,6 +99,7 @@ namespace SurvivorFarm.Runtime.Player
 
         public void Restore(int savedMaxHealth, int savedHealth, float hungerPercent)
         {
+            SpawnGeneration++;
             maxHealth = Mathf.Max(1, savedMaxHealth);
             currentHealth = Mathf.Clamp(savedHealth, 0, maxHealth);
             NotifyChanged();

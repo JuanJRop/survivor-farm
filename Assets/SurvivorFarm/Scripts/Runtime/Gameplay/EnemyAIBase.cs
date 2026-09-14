@@ -231,7 +231,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             hurtFlashEndsAt = Time.time + hurtFlashDuration;
             VisibleHitFeedback.Play(gameObject);
             FarmGameEvents.RaiseEnemyDamaged();
-            FarmNotificationCenter.Show($"{enemyName} recibio {finalDamage} de dano.");
+            if(!Core.PortfolioSession.Active)FarmNotificationCenter.Show($"{enemyName} recibio {finalDamage} de dano.");
             if (currentHealth <= 0)
             {
                 projectiles?.Cancel(this);
