@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SurvivorFarm.Runtime.Gameplay
 {
-    public sealed class DungeonEntrance : MonoBehaviour, IWorldInteractable
+    public sealed class DungeonEntrance : WorldInteractable
     {
         [SerializeField] private GameObject outdoorRoot;
         [SerializeField] private GameObject dungeonRoot;
@@ -18,9 +18,19 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         private bool insideDungeon;
 
-        public Transform Transform => transform;
-        public bool IsAvailable => requiredZone == null || requiredZone.IsUnlocked;
+        public override bool IsAvailable => requiredZone == null || requiredZone.IsUnlocked;
         public bool IsInsideDungeon => insideDungeon;
+        public DungeonExpedition Expedition { get; private set; }
+
+        private void Awake() => EnsureExpedition();
+        public void EnsureExpedition()
+        {
+            if (Expedition != null || dungeonRoot == null || player == null || enemyPool == null) return;
+            Expedition = dungeonRoot.GetComponent<DungeonExpedition>() ?? dungeonRoot.AddComponent<DungeonExpedition>();
+            Expedition.Initialize(this, player, enemyPool, insideSpawn);
+        }
+
+        protected override float HighlightScale => 1.1f;
 
         public void Configure(
             GameObject outsideWorld,
@@ -41,7 +51,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             SetInside(false, false);
         }
 
-        public string GetInteractionLabel(FarmTool selectedTool)
+        public override string GetInteractionLabel(FarmTool selectedTool)
         {
             if (!IsAvailable)
             {
@@ -51,12 +61,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             return insideDungeon ? "Interactuar: salir de mazmorra" : "Interactuar: entrar a mazmorra";
         }
 
-        public void SetHighlighted(bool highlighted)
-        {
-            transform.localScale = highlighted ? Vector3.one * 1.1f : Vector3.one;
-        }
-
-        public void Interact(FarmTool selectedTool, PlayerInventory inventory)
+        public override void Interact(FarmTool selectedTool, PlayerInventory inventory)
         {
             if (!IsAvailable)
             {
@@ -69,7 +74,9 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         public void EnterDungeon()
         {
+            if (player != null && !insideDungeon) player.GetComponent<PlayerRespawnController>()?.SetCheckpoint(player.position);
             SetInside(true, true);
+            player?.GetComponent<AdventureProgress>()?.EnterRuins();
         }
 
         public void ExitDungeon()
@@ -84,6 +91,7 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         private void SetInside(bool value, bool notify)
         {
+            if (Application.isPlaying) EnsureExpedition();
             insideDungeon = value;
 
             if (outdoorRoot != null)
@@ -116,10 +124,12 @@ namespace SurvivorFarm.Runtime.Gameplay
                 }
             }
 
+            Expedition?.SetPresent(insideDungeon);
+
             Camera camera = Camera.main;
             if (camera != null)
             {
-                camera.orthographicSize = insideDungeon ? insideCameraSize : outsideCameraSize;
+                camera.orthographicSize = insideDungeon && Expedition != null ? 5.6f : insideDungeon ? insideCameraSize : outsideCameraSize;
                 if (player != null)
                 {
                     camera.transform.position = player.position + new Vector3(0f, 0f, -10f);

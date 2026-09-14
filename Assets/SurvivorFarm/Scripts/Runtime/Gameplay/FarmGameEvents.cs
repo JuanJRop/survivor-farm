@@ -11,6 +11,8 @@ namespace SurvivorFarm.Runtime.Gameplay
         public static event Action SeedPlanted;
         public static event Action CropWatered;
         public static event Action CropHarvested;
+        public static event Action FoodEaten;
+        public static event Action SleptUntilMorning;
         public static event Action EnemyDamaged;
         public static event Action EnemyDefeated;
 
@@ -21,6 +23,8 @@ namespace SurvivorFarm.Runtime.Gameplay
         public static void RaiseSeedPlanted() => SeedPlanted?.Invoke();
         public static void RaiseCropWatered() => CropWatered?.Invoke();
         public static void RaiseCropHarvested() => CropHarvested?.Invoke();
+        public static void RaiseFoodEaten() => FoodEaten?.Invoke();
+        public static void RaiseSleptUntilMorning() => SleptUntilMorning?.Invoke();
         public static void RaiseEnemyDamaged() => EnemyDamaged?.Invoke();
         public static void RaiseEnemyDefeated() => EnemyDefeated?.Invoke();
     }

@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09bb5cbc7bdde94a94be99544bfbcad, type: 3}
+  m_Name: GingerCat
+  m_EditorClassIdentifier: SurvivorFarm.Runtime::SurvivorFarm.Runtime.Gameplay.PetDefinition
+  displayName: Gato
+  playerDamageBonus: 1
+  damage: 1
+  attackCooldown: 1.4
+  speed: 3.8
+  walkFrames:
+  - {fileID: 562187067565225365, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -8518930510128411623, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -8043375489881954640, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 2476792603818331933, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -6283173103044552363, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 2912274277864144584, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -5215971833437167399, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -7201806556676508410, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 4840252227169342495, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 6902767983909224796, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 6288929850079192605, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 734627354580083366, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  runFrames:
+  - {fileID: 1026083629937978330, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -2860079829444218812, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 3017887504532011437, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 5604722058207373143, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 2435472292283242144, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -4489736659582311037, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -8433407965685251273, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 1201049869217920185, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -595203083646446716, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: -1183846103900657347, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 3653676070187832824, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}
+  - {fileID: 5624027060367071280, guid: eb811ec371edde14d8d41b6393ebf772, type: 3}

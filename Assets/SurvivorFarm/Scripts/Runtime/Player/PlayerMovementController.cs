@@ -7,25 +7,23 @@ namespace SurvivorFarm.Runtime.Player
     {
         public enum MobileMovementMode
         {
-            TapToMove
+            KeyboardAndMouse
         }
 
         [SerializeField] private float walkSpeed = 3.1f;
         [SerializeField] private float runSpeed = 5.1f;
-        [SerializeField] private float runDistance = 3.2f;
-        [SerializeField] private float destinationStopDistance = 0.08f;
-        [SerializeField] private MobileMovementMode movementMode = MobileMovementMode.TapToMove;
+        [SerializeField] private MobileMovementMode movementMode = MobileMovementMode.KeyboardAndMouse;
 
         private Rigidbody2D body;
+        private PlayerCharacterAnimator characterAnimator;
         private Vector2 moveInput;
-        private Vector2 destination;
-        private float destinationMoveSpeed = 3.1f;
-        private bool hasDestination;
 
         public MobileMovementMode MovementMode => movementMode;
 
         private void Awake()
         {
+            var feet = GetComponent<CircleCollider2D>();
+            if (feet != null) { feet.radius = .27f; feet.offset = new Vector2(0, -.12f); }
             body = GetComponent<Rigidbody2D>();
             body.gravityScale = 0f;
             body.freezeRotation = true;
@@ -33,62 +31,30 @@ namespace SurvivorFarm.Runtime.Player
 
         private void Update()
         {
-            Vector2 keyboardInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            moveInput = Vector2.zero;
-
-            if (keyboardInput.sqrMagnitude > 0.01f)
-            {
-                moveInput = keyboardInput;
-                hasDestination = false;
-            }
-
-            if (moveInput.sqrMagnitude > 1f)
-            {
-                moveInput.Normalize();
-            }
+            if (SurvivorFarm.Runtime.UI.InventoryPanelSystem.IsOpen) { StopMovement(); return; }
+            moveInput = new Vector2((Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0),
+                (Input.GetKey(KeyCode.W) ? 1 : 0) - (Input.GetKey(KeyCode.S) ? 1 : 0));
+            moveInput = Vector2.ClampMagnitude(moveInput, 1f);
         }
 
         private void FixedUpdate()
         {
-            if (hasDestination)
-            {
-                Vector2 toDestination = destination - body.position;
-                if (toDestination.magnitude <= destinationStopDistance)
-                {
-                    hasDestination = false;
-                    body.linearVelocity = Vector2.zero;
-                    return;
-                }
-
-                body.linearVelocity = toDestination.normalized * destinationMoveSpeed;
-                return;
-            }
-
-            body.linearVelocity = moveInput * (Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed);
+            if (characterAnimator == null) characterAnimator = GetComponent<PlayerCharacterAnimator>();
+            if (characterAnimator != null && characterAnimator.MovementLocked)
+            { body.linearVelocity = Vector2.zero; return; }
+            body.linearVelocity = moveInput * (Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed) * (GetComponent<PlayerInventory>()?.MovementBonus ?? 1f);
         }
 
+        // Old save data can no longer enable destination or touch movement.
         public void SetMovementMode(MobileMovementMode mode)
         {
-            movementMode = MobileMovementMode.TapToMove;
-            hasDestination = false;
-            if (body != null)
-            {
-                body.linearVelocity = Vector2.zero;
-            }
-        }
-
-        public void MoveToWorldPosition(Vector2 worldPosition)
-        {
-            destination = worldPosition;
-            Vector2 currentPosition = body != null ? body.position : (Vector2)transform.position;
-            destinationMoveSpeed = Vector2.Distance(currentPosition, destination) >= runDistance ? runSpeed : walkSpeed;
-            hasDestination = true;
+            movementMode = MobileMovementMode.KeyboardAndMouse;
+            StopMovement();
         }
 
         public void StopMovement()
         {
             moveInput = Vector2.zero;
-            hasDestination = false;
 
             if (body != null)
             {

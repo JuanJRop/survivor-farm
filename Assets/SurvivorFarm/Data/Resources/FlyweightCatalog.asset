@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9db763baf2134560d8da158fd7df9dd3, type: 3}
+  m_Name: FlyweightCatalog
+  m_EditorClassIdentifier: SurvivorFarm.Runtime::SurvivorFarm.Runtime.Gameplay.FlyweightCatalog
+  items:
+  - {fileID: 11400000, guid: a6cc4e0c74809134e838edc992834007, type: 2}
+  - {fileID: 11400000, guid: 52e51629d8a6f99408cf2bf3b05a0bff, type: 2}
+  - {fileID: 11400000, guid: 428dc77dfb6f1ba4bb58104c7996aa84, type: 2}
+  - {fileID: 11400000, guid: 917b5823267a58d4280ec63a5feb1d2a, type: 2}
+  - {fileID: 11400000, guid: b78dfec14b6925e41b06f2c8ad9eb5c8, type: 2}
+  - {fileID: 11400000, guid: de196908d22c21744952b046fc2aaa06, type: 2}
+  - {fileID: 11400000, guid: a6d2e513dd4c0ed4aae57bb77c178f97, type: 2}
+  - {fileID: 11400000, guid: e8bd1c1a12927db40badb79a7b250a98, type: 2}
+  resources:
+  - {fileID: 11400000, guid: 5d8c533e28892a645b49ffe583d93e22, type: 2}
+  - {fileID: 11400000, guid: 191ac9c24ce87a54c83bc2955ae1a9cd, type: 2}
+  - {fileID: 11400000, guid: fcade1eb222e7044c87dfe792e949d2c, type: 2}
+  - {fileID: 11400000, guid: 257450843c4bd3e47ae74222a65707ec, type: 2}
+  - {fileID: 11400000, guid: 44126f4f300a0fd48a4bdb42f4514d44, type: 2}
+  - {fileID: 11400000, guid: c25b08ce248f2b94883331c48aefdddd, type: 2}
+  - {fileID: 11400000, guid: c4f36235b97f55940bc3fad514053db0, type: 2}
+  - {fileID: 11400000, guid: 520343c5d813e174fb4c85e873e709c9, type: 2}
+  - {fileID: 11400000, guid: 93cfcf4db5d3f9343a468e1ba736c860, type: 2}
+  - {fileID: 11400000, guid: 37a936ef8fb8a6f4b8584ddbf8bab469, type: 2}
+  - {fileID: 11400000, guid: d1e947730365e5c47a3904cc108af0ce, type: 2}
+  - {fileID: 11400000, guid: 5e185582730c5174bac3dd7439236cea, type: 2}
+  - {fileID: 11400000, guid: 73c046368699b5b41988d79f894f21e6, type: 2}
+  - {fileID: 11400000, guid: 6ed834cedc96a9d4bbf7530207328c37, type: 2}
+  animations:
+  - {fileID: 11400000, guid: 33784a13639aae9448d6da2d937d1f7c, type: 2}
+  cultivations:
+  - {fileID: 11400000, guid: 1acacc51a6467b947aa692d41a3c410c, type: 2}

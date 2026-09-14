@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 360cab37ff1d48fb8ce3f610cd761496, type: 3}
+  m_Name: DungeonArt
+  m_EditorClassIdentifier:
+  Tiles: {fileID: 2800000, guid: 97639c7ee6625f44ca9aef49c72e5c1b, type: 3}
+  Boxes: {fileID: 2800000, guid: 3017ce3924464c242a89a822223b839f, type: 3}
+  Door: {fileID: 2800000, guid: a3480addb0d818f4ea3bbc81c8867c0d, type: 3}
+  Statue: {fileID: 2800000, guid: 2eca1fca9f74c224d93bfb32851e3e37, type: 3}

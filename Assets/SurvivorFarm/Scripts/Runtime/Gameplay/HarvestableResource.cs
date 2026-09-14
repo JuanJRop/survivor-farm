@@ -1,32 +1,68 @@
+using System;
 using UnityEngine;
 using SurvivorFarm.Runtime.Player;
 using SurvivorFarm.Runtime.UI;
 
 namespace SurvivorFarm.Runtime.Gameplay
 {
-    public sealed class HarvestableResource : MonoBehaviour, IWorldInteractable
+    public abstract class HarvestableResource : WorldInteractable
     {
-        public enum ResourceKind
-        {
-            Tree,
-            Rock
-        }
-
-        [SerializeField] private ResourceKind kind = ResourceKind.Tree;
+        [SerializeField] private ResourceDefinition definition;
+        public ResourceDefinition Definition => definition != null ? definition : definition = ResourceFlyweights.Resource(ResourceKind);
+        public void SetDefinition(ResourceDefinition sharedDefinition) { definition = sharedDefinition; }
         [SerializeField] private SpriteRenderer mainRenderer;
         [SerializeField] private SpriteRenderer secondaryRenderer;
         [SerializeField] private Collider2D blockingCollider;
-        [SerializeField] private int harvestAmount = 2;
-        [SerializeField] private int coinReward = 5;
+        private int harvestAmount => Definition.HarvestAmount;
+        private int coinReward => Definition.CoinReward;
+        private int maxHealth => Definition.MaxHealth;
+        [SerializeField, HideInInspector] private int currentHealth = -1;
+        [SerializeField, HideInInspector] private bool harvested;
 
-        private bool harvested;
+        private Renderer[] renderers;
+        private Collider2D[] colliders;
+        private Color defaultColor;
+        private float hurtFlashEndsAt;
+        private bool gathering;
+        private PlayerInventory activeGatherInventory;
+        private int activeToolBonus;
+        private int activeGatherHitCount;
+        private int completedGatherHits;
+        private float gatherStartedAt;
+        private float gatherEndsAt;
+        private float nextGatherHitAt;
+        private float activeGatherDuration;
+        private float gatherHitInterval;
+        private PlayerCharacterAnimator activeGatherAnimator;
+        private PlayerSurvivalStats activeGatherStats;
+        private string activeGatherClip;
+        private const float GatherReach = 1.35f;
 
-        public Transform Transform => transform;
-        public bool IsAvailable => !harvested;
+        public override bool IsAvailable => !harvested && isActiveAndEnabled;
         public bool IsHarvested => harvested;
+        public bool IsGathering => gathering;
+        public int CurrentHealth => currentHealth < 0 ? maxHealth : currentHealth;
+        public int SpawnGeneration { get; private set; }
+        public event Action<HarvestableResource> Depleted;
 
-        private void Awake()
+        protected override float HighlightScale => 1.12f;
+
+        protected abstract FarmTool RequiredTool { get; }
+        public bool SupportsTool(FarmTool tool) => !(this is AnimalResource) && tool == RequiredTool;
+        protected abstract string InteractionText { get; }
+        protected abstract string MissingToolText { get; }
+        protected abstract ItemKind ResourceKind { get; }
+        protected string RewardName => Definition.Reward.DisplayName;
+        protected abstract void RaiseHarvestEvent();
+        protected virtual float GatherDuration => 2.2f;
+        protected virtual int GatherHitCount => 4;
+        protected virtual string GatherStartText => "Recolectando...";
+        protected virtual string GatherPresentText => "Recolectando";
+
+        protected virtual void Awake()
         {
+            var feet = GetComponent<CircleCollider2D>();
+            if (feet != null) { feet.radius = this is TreeResource ? .28f : .34f; if(this is AnimalResource) feet.isTrigger=true; }
             if (mainRenderer == null)
             {
                 mainRenderer = GetComponent<SpriteRenderer>();
@@ -36,109 +72,299 @@ namespace SurvivorFarm.Runtime.Gameplay
             {
                 blockingCollider = GetComponent<Collider2D>();
             }
+
+            CacheVisuals();
+            if (currentHealth < 0)
+            {
+                currentHealth = maxHealth;
+            }
         }
 
-        public void Configure(ResourceKind resourceKind, SpriteRenderer primary, SpriteRenderer secondary, int amount)
+        protected virtual void Update()
         {
-            Configure(resourceKind, primary, secondary, amount, coinReward);
+            if (mainRenderer != null)
+            {
+                Color tint = Time.time < hurtFlashEndsAt ? Color.Lerp(defaultColor, Color.white, 0.7f) : defaultColor;
+                tint.a = mainRenderer.color.a;
+                mainRenderer.color = tint;
+            }
+
+            if (gathering)
+            {
+                UpdateGathering();
+            }
         }
 
-        public void Configure(ResourceKind resourceKind, SpriteRenderer primary, SpriteRenderer secondary, int amount, int coins)
+        public void Configure(SpriteRenderer primary, SpriteRenderer secondary, int amount)
         {
-            kind = resourceKind;
+            Configure(primary, secondary, amount, coinReward);
+        }
+
+        public void Configure(SpriteRenderer primary, SpriteRenderer secondary, int amount, int coins)
+        {
             mainRenderer = primary;
             secondaryRenderer = secondary;
             blockingCollider = GetComponent<Collider2D>();
-            harvestAmount = Mathf.Max(1, amount);
-            coinReward = Mathf.Max(0, coins);
+            definition = ResourceFlyweights.Resource(ResourceKind, amount, coins, maxHealth, Definition.Animation);
+            CacheVisuals();
             ApplyVisuals();
         }
 
-        public string GetInteractionLabel(FarmTool selectedTool)
+        public void ConfigureHealth(int health)
         {
-            if (harvested)
+            definition = ResourceFlyweights.Resource(ResourceKind, harvestAmount, coinReward, health, Definition.Animation);
+            currentHealth = maxHealth;
+        }
+
+        public override string GetInteractionLabel(FarmTool selectedTool)
+        {
+            if (!IsAvailable)
             {
                 return string.Empty;
             }
 
-            return kind == ResourceKind.Tree ? "Interactuar: talar con hacha" : "Interactuar: picar con pico";
+            if (gathering)
+            {
+                return $"{GatherPresentText} {GetProgressText()}";
+            }
+
+            return InteractionText;
         }
 
-        public void SetHighlighted(bool highlighted)
+        public override void Interact(FarmTool selectedTool, PlayerInventory inventory)
         {
-            transform.localScale = highlighted ? Vector3.one * 1.12f : Vector3.one;
-        }
-
-        public void Interact(FarmTool selectedTool, PlayerInventory inventory)
-        {
-            if (harvested)
+            if (!IsAvailable || inventory == null)
             {
                 return;
             }
 
-            if (kind == ResourceKind.Tree && selectedTool != FarmTool.Axe)
+            if (selectedTool != RequiredTool)
             {
-                FarmNotificationCenter.Show("Necesitas el hacha para talar.");
+                FarmNotificationCenter.Show(MissingToolText);
                 return;
             }
 
-            if (kind == ResourceKind.Rock && selectedTool != FarmTool.Pickaxe)
+            var stats = inventory.GetComponent<PlayerSurvivalStats>();
+            if (stats != null && stats.CurrentHealth <= 0) return;
+
+            if (gathering)
             {
-                FarmNotificationCenter.Show("Necesitas el pico para romper roca.");
                 return;
             }
-
-            harvested = true;
-            SetHighlighted(false);
 
             PlayerToolUpgradeController upgrades = inventory != null
                 ? inventory.GetComponent<PlayerToolUpgradeController>()
                 : null;
             int toolBonus = upgrades != null ? upgrades.GetResourceBonus(selectedTool) : 0;
-            int finalHarvestAmount = harvestAmount + toolBonus;
-            int finalCoinReward = coinReward + toolBonus * 2;
-
-            if (kind == ResourceKind.Tree)
+            PlayerCharacterAnimator animator = inventory.GetComponent<PlayerCharacterAnimator>();
+            if (animator != null && Application.isPlaying)
             {
-                inventory?.AddWood(finalHarvestAmount);
-                inventory?.AddCoins(finalCoinReward);
-                FarmNotificationCenter.Show($"+{finalHarvestAmount} madera, +{finalCoinReward} oro");
-                FarmGameEvents.RaiseTreeHarvested();
-            }
-            else
-            {
-                inventory?.AddStone(finalHarvestAmount);
-                inventory?.AddCoins(finalCoinReward);
-                FarmNotificationCenter.Show($"+{finalHarvestAmount} piedra, +{finalCoinReward} oro");
-                FarmGameEvents.RaiseRockHarvested();
+                if (animator.MovementLocked || !inventory.isActiveAndEnabled ||
+                    Vector2.Distance(inventory.transform.position, transform.position) > GatherReach) return;
+                BeginGathering(selectedTool, inventory, toolBonus, animator);
+                return;
             }
 
-            ApplyVisuals();
+            animator?.PlayAction(PlayerCharacterAnimator.ToolClip(selectedTool), 0, transform.position);
+            ApplyDamage(1 + toolBonus, inventory, toolBonus);
         }
 
-        public void Restore(bool wasHarvested)
+        private void BeginGathering(FarmTool tool, PlayerInventory inventory, int toolBonus, PlayerCharacterAnimator animator)
+        {
+            activeGatherInventory = inventory;
+            activeGatherAnimator = animator;
+            activeGatherStats = inventory.GetComponent<PlayerSurvivalStats>();
+            activeGatherClip = PlayerCharacterAnimator.ToolClip(tool);
+            activeToolBonus = toolBonus;
+            completedGatherHits = 0;
+            activeGatherDuration = Mathf.Max(0.8f, GatherDuration / (1f + Mathf.Max(0, toolBonus) * 0.18f));
+            var clip = animator.Library != null ? animator.Library.Find(activeGatherClip) : null;
+            gatherHitInterval = clip != null && clip.FramesPerSecond > 0f
+                ? clip.Frames / clip.FramesPerSecond : activeGatherDuration / Mathf.Max(1, GatherHitCount);
+            gatherHitInterval = Mathf.Max(0.01f, gatherHitInterval);
+            activeGatherDuration = Mathf.Max(activeGatherDuration, gatherHitInterval);
+            // Impact once per animation cycle, after the tool has descended.
+            float firstImpact = gatherHitInterval * 0.6f;
+            activeGatherHitCount = Mathf.Max(1, Mathf.CeilToInt((activeGatherDuration - firstImpact) / gatherHitInterval));
+            gatherStartedAt = Time.time;
+            gatherEndsAt = Time.time + activeGatherDuration;
+            nextGatherHitAt = gatherStartedAt + firstImpact;
+            gathering = true;
+            if (activeGatherStats != null) activeGatherStats.StatsChanged += CheckGathererHealth;
+            animator.PlayAction(activeGatherClip, activeGatherDuration, transform.position);
+            FarmNotificationCenter.SetPrompt($"{GatherPresentText} {GetProgressText()}");
+        }
+
+        private void UpdateGathering()
+        {
+            if (activeGatherInventory == null || !activeGatherInventory.isActiveAndEnabled ||
+                Vector2.Distance(activeGatherInventory.transform.position, transform.position) > GatherReach)
+            {
+                CancelGathering();
+                return;
+            }
+
+            if (activeGatherStats != null && activeGatherStats.CurrentHealth <= 0 ||
+                activeGatherAnimator == null || !activeGatherAnimator.isActiveAndEnabled)
+            {
+                CancelGathering();
+                return;
+            }
+
+            bool finished = Time.time >= gatherEndsAt;
+            bool naturalEnd = finished && activeGatherAnimator.CurrentClip == "Idle" && !activeGatherAnimator.MovementLocked;
+            if (activeGatherAnimator.CurrentClip != activeGatherClip && !naturalEnd)
+            {
+                CancelGathering();
+                return;
+            }
+
+            bool hit = false;
+            while (Time.time >= nextGatherHitAt && completedGatherHits < activeGatherHitCount)
+            {
+                completedGatherHits++;
+                hit = true;
+                nextGatherHitAt += gatherHitInterval;
+            }
+            // A delayed frame advances work but emits only one visual impact.
+            if (hit) hurtFlashEndsAt = Time.time + 0.1f;
+
+            FarmNotificationCenter.SetPrompt($"{GatherPresentText} {GetProgressText()}");
+            if (!finished)
+            {
+                return;
+            }
+
+            PlayerInventory inventory = activeGatherInventory;
+            int toolBonus = activeToolBonus;
+            CancelGathering();
+            ApplyDamage(CurrentHealth, inventory, toolBonus);
+        }
+
+        private void CheckGathererHealth()
+        {
+            if (activeGatherStats != null && activeGatherStats.CurrentHealth <= 0) CancelGathering();
+        }
+
+        public void CancelGathering()
+        {
+            if (!gathering) return;
+            var animator = activeGatherAnimator;
+            string clip = activeGatherClip;
+            ClearGatheringState();
+            // Damage/death may already own the animator; do not replace that action.
+            if (animator != null && animator.CurrentClip == clip) animator.CancelAction();
+            hurtFlashEndsAt = 0f;
+        }
+
+        protected virtual void OnDisable() => CancelGathering();
+
+        private void ClearGatheringState()
+        {
+            if (activeGatherStats != null) activeGatherStats.StatsChanged -= CheckGathererHealth;
+            gathering = false;
+            activeGatherAnimator = null;
+            activeGatherStats = null;
+            activeGatherClip = null;
+            activeGatherInventory = null;
+            activeToolBonus = 0;
+            activeGatherHitCount = 0;
+            completedGatherHits = 0;
+            gatherStartedAt = 0f;
+            gatherEndsAt = 0f;
+            nextGatherHitAt = 0f;
+            activeGatherDuration = 0f;
+            gatherHitInterval = 0f;
+        }
+
+        protected void ApplyDamage(int damage, PlayerInventory inventory, int toolBonus = 0)
+        {
+            if (!IsAvailable || inventory == null || damage <= 0)
+            {
+                return;
+            }
+
+            currentHealth = Mathf.Max(0, CurrentHealth - damage);
+            hurtFlashEndsAt = Time.time + 0.15f;
+            if (currentHealth > 0)
+            {
+                return;
+            }
+
+            // Deactivate before rewards/events, so another hit cannot pay twice.
+            CancelGathering();
+            harvested = true;
+            SetHighlighted(false);
+            ApplyVisuals();
+            int finalHarvestAmount = harvestAmount + Mathf.Max(0, toolBonus);
+            int finalCoinReward = coinReward + Mathf.Max(0, toolBonus) * 2;
+
+            Definition.Reward.Grant(inventory, finalHarvestAmount);
+            inventory?.RecordGathered(finalHarvestAmount);
+            ResourceFlyweights.Item(ItemKind.Coins).Grant(inventory, finalCoinReward);
+            string rewardText = $"+{finalHarvestAmount} {RewardName}";
+            FarmNotificationCenter.Show(finalCoinReward > 0 ? $"{rewardText}, +{finalCoinReward} oro" : rewardText);
+            RaiseHarvestEvent();
+            Depleted?.Invoke(this);
+        }
+
+        public void Spawn(Vector3 position)
+        {
+            transform.position = position;
+            SpawnGeneration++;
+            Restore(false);
+        }
+
+        public void Restore(bool wasHarvested, int savedHealth = -1)
         {
             harvested = wasHarvested;
+            currentHealth = harvested ? 0 : savedHealth < 0 ? maxHealth : Mathf.Clamp(savedHealth, 1, maxHealth);
+            hurtFlashEndsAt = 0f;
+            CancelGathering();
             SetHighlighted(false);
             ApplyVisuals();
         }
 
+        private float GatherProgress => gathering ? Mathf.Clamp01((Time.time - gatherStartedAt) / Mathf.Max(0.01f, activeGatherDuration)) : 1f;
+
+        private string GetProgressText()
+        {
+            int percent = Mathf.RoundToInt(GatherProgress * 100f);
+            return $"[{BuildProgressBar(GatherProgress)}] {percent}%";
+        }
+
+        private static string BuildProgressBar(float progress)
+        {
+            const int segmentCount = 10;
+            int filledSegments = Mathf.RoundToInt(Mathf.Clamp01(progress) * segmentCount);
+            return new string('#', filledSegments) + new string('-', segmentCount - filledSegments);
+        }
+
+        private void CacheVisuals()
+        {
+            renderers = GetComponentsInChildren<Renderer>(true);
+            colliders = GetComponentsInChildren<Collider2D>(true);
+            defaultColor = mainRenderer != null ? mainRenderer.color : Color.white;
+        }
+
         private void ApplyVisuals()
         {
-            if (mainRenderer != null)
+            if (renderers == null || colliders == null)
             {
-                mainRenderer.enabled = !harvested;
+                CacheVisuals();
             }
 
-            if (secondaryRenderer != null)
+            foreach (Renderer renderer in renderers)
             {
-                secondaryRenderer.enabled = !harvested;
+                renderer.enabled = !harvested;
             }
 
-            if (blockingCollider != null)
+            foreach (Collider2D collider in colliders)
             {
-                blockingCollider.enabled = !harvested;
+                collider.enabled = !harvested;
             }
+
+            gameObject.SetActive(!harvested);
         }
     }
 }

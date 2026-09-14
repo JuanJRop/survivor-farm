@@ -1,4 +1,5 @@
 using UnityEngine;
+using SurvivorFarm.Runtime.Player;
 
 namespace SurvivorFarm.Runtime.Gameplay
 {
@@ -8,37 +9,67 @@ namespace SurvivorFarm.Runtime.Gameplay
         [SerializeField] private float hitDistance = 0.28f;
         [SerializeField] private float lifetime = 1.2f;
 
-        private BasicEnemyAI target;
+        private IDamageable target;
+        private PlayerInventory source;
+        private int targetGeneration;
         private int damage;
         private float destroyAt;
+        private bool resolved;
 
-        public void Configure(BasicEnemyAI enemyTarget, int arrowDamage)
+        public void Configure(IDamageable enemyTarget, int arrowDamage, PlayerInventory attacker)
         {
             target = enemyTarget;
+            source = attacker;
+            targetGeneration = target != null ? target.SpawnGeneration : 0;
             damage = Mathf.Max(1, arrowDamage);
             destroyAt = Time.time + lifetime;
+            resolved = false;
+            if (TargetIsValid()) Face(target.Transform.position - transform.position);
         }
 
         private void Update()
         {
-            if (target == null || !target.gameObject.activeInHierarchy || Time.time >= destroyAt)
+            if (resolved) return;
+            if (!TargetIsValid() || Time.time >= destroyAt)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            Vector3 toTarget = target.transform.position - transform.position;
-            if (toTarget.sqrMagnitude <= hitDistance * hitDistance)
+            if (Time.timeScale == 0f) return;
+            Vector3 targetPosition = target.Transform.position;
+            Vector3 next = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+            bool impact = (targetPosition - next).sqrMagnitude <= hitDistance * hitDistance;
+            // Recheck cover in flight; a moving target can step behind a wall after release.
+            foreach (var hit in Physics2D.LinecastAll(transform.position, impact ? targetPosition : next))
             {
-                target.TakeDamage(damage);
+                if (hit.collider.isTrigger || hit.transform.IsChildOf(transform) ||
+                    hit.transform.IsChildOf(target.Transform) || source != null && hit.transform.IsChildOf(source.transform)) continue;
+                resolved = true;
                 Destroy(gameObject);
                 return;
             }
 
-            Vector3 direction = toTarget.normalized;
-            transform.position += direction * speed * Time.deltaTime;
+            Face(targetPosition - transform.position);
+            transform.position = next;
+            if (impact)
+            {
+                resolved = true;
+                target.TakeDamage(damage, source);
+                Destroy(gameObject);
+            }
+        }
+
+        private bool TargetIsValid() => target != null && !(target is Object instance && instance == null) &&
+            target.Transform != null && target.IsAlive && target.SpawnGeneration == targetGeneration;
+
+        private void Face(Vector3 direction)
+        {
+            if (direction.sqrMagnitude < 0.0001f) return;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
+
+        private void OnDisable() { resolved = true; target = null; source = null; }
     }
 }

@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68d0619aa7cee74eb4f66b21a2a27a6, type: 3}
+  m_Name: EnemyCampArt
+  m_EditorClassIdentifier: SurvivorFarm.Runtime::SurvivorFarm.Runtime.Player.PlayerAnimationLibrary
+  Clips:
+  - Name: Shelter
+    Atlas: {fileID: 2800000, guid: 22d18b0d33358cc49868913c211a3a12, type: 3}
+    Width: 48
+    Height: 48
+    Frames: 8
+    Directions: 4
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0}
+    FramesPerSecond: 10
+    Loop: 0
+  - Name: Fire
+    Atlas: {fileID: 2800000, guid: 26d498e366d61814ebe727acd7580ef5, type: 3}
+    Width: 16
+    Height: 32
+    Frames: 6
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0}
+    FramesPerSecond: 7
+    Loop: 1
+  - Name: Fence
+    Atlas: {fileID: 2800000, guid: ab66162031d3feb48880c7f8e9370c44, type: 3}
+    Width: 16
+    Height: 16
+    Frames: 6
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0}
+    FramesPerSecond: 10
+    Loop: 0
+  - Name: Crate
+    Atlas: {fileID: 2800000, guid: 3017ce3924464c242a89a822223b839f, type: 3}
+    Width: 16
+    Height: 16
+    Frames: 2
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0}
+    FramesPerSecond: 10
+    Loop: 0
+  - Name: Chest
+    Atlas: {fileID: 2800000, guid: 9247e0589bbaf5245bbceeb35cf78bab, type: 3}
+    Width: 32
+    Height: 16
+    Frames: 8
+    Directions: 2
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0}
+    FramesPerSecond: 10
+    Loop: 0

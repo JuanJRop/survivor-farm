@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68d0619aa7cee74eb4f66b21a2a27a6, type: 3}
+  m_Name: SpearGoblinAnimations
+  m_EditorClassIdentifier: SurvivorFarm.Runtime::SurvivorFarm.Runtime.Player.PlayerAnimationLibrary
+  Clips:
+  - Name: Idle
+    Atlas: {fileID: 2800000, guid: 36835145427223c498c211767f41b0ff, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 6
+    Loop: 1
+  - Name: Walk
+    Atlas: {fileID: 2800000, guid: cdbbbe7359acdef4a8b8823bba156f25, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 9
+    Loop: 1
+  - Name: Attack
+    Atlas: {fileID: 2800000, guid: e71d920ad203c69439eaccbb065dd361, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 9
+    Loop: 0
+  - Name: Damage
+    Atlas: {fileID: 2800000, guid: 9bdb596266a36a3488fa5fe92fac8bb6, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 16
+    Loop: 0
+  - Name: Dead
+    Atlas: {fileID: 2800000, guid: 4cbae7ce407193c47bc88418ad41e0bb, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 8
+    Loop: 0

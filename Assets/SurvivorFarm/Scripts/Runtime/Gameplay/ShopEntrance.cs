@@ -4,22 +4,28 @@ using SurvivorFarm.Runtime.UI;
 
 namespace SurvivorFarm.Runtime.Gameplay
 {
-    public sealed class ShopEntrance : MonoBehaviour, IWorldInteractable
+    public sealed class ShopEntrance : WorldInteractable
     {
         [SerializeField] private GameObject outdoorRoot;
         [SerializeField] private GameObject shopInteriorRoot;
         [SerializeField] private Transform player;
         [SerializeField] private Transform outsideSpawn;
-        [SerializeField] private Transform insideSpawn;
         [SerializeField] private SimpleShopSystem shopSystem;
         [SerializeField] private float outsideCameraSize = 6f;
-        [SerializeField] private float insideCameraSize = 4.2f;
 
-        private bool insideShop;
+        public bool IsInsideShop => false;
+        public Vector3 OutsidePosition => outsideSpawn != null ? outsideSpawn.position : transform.position + Vector3.down * 1.5f;
 
-        public Transform Transform => transform;
-        public bool IsAvailable => true;
-        public bool IsInsideShop => insideShop;
+        private void Start()
+        {
+            HideInterior();
+            shopSystem?.SetEntrance(this);
+        }
+
+        private void HideInterior()
+        {
+            if (shopInteriorRoot != null) shopInteriorRoot.SetActive(false);
+        }
 
         public void Configure(
             GameObject outsideWorld,
@@ -33,77 +39,59 @@ namespace SurvivorFarm.Runtime.Gameplay
             shopInteriorRoot = interiorWorld;
             player = playerTransform;
             outsideSpawn = outsidePoint;
-            insideSpawn = insidePoint;
             shopSystem = system;
-            SetInside(false, false);
+            HideInterior();
+            shopSystem?.SetEntrance(this);
         }
 
-        public string GetInteractionLabel(FarmTool selectedTool)
+        public override string GetInteractionLabel(FarmTool selectedTool)
         {
-            return insideShop ? "Interactuar: salir de tienda" : "Interactuar: entrar a tienda";
+            return "Mercado - comerciar";
         }
 
-        public void SetHighlighted(bool highlighted)
+        public override void Interact(FarmTool selectedTool, PlayerInventory inventory)
         {
-            transform.localScale = highlighted ? Vector3.one * 1.08f : Vector3.one;
-        }
-
-        public void Interact(FarmTool selectedTool, PlayerInventory inventory)
-        {
-            SetInside(!insideShop, true);
+            if (inventory == null || (player != null && player != inventory.transform)) return;
+            HideInterior();
+            (shopSystem != null ? shopSystem : FindFirstObjectByType<SimpleShopSystem>())?.SetOpen(true);
         }
 
         public void ExitShop()
         {
-            SetInside(false, true);
+            HideInterior();
+            shopSystem?.SetOpen(false);
         }
 
         public void RestoreInsideState(bool restoreInsideShop)
         {
-            SetInside(restoreInsideShop, false);
+            HideInterior();
+            shopSystem?.SetOpen(false);
+            if (restoreInsideShop) RecoverLegacyInterior();
         }
 
-        private void SetInside(bool value, bool notify)
+        public void RecoverLegacyInterior()
         {
-            insideShop = value;
-
-            if (outdoorRoot != null)
+            HideInterior();
+            if (outdoorRoot != null) outdoorRoot.SetActive(true);
+            if (player != null)
             {
-                outdoorRoot.SetActive(!insideShop);
-            }
-
-            if (shopInteriorRoot != null)
-            {
-                shopInteriorRoot.SetActive(insideShop);
-            }
-
-            Transform spawn = insideShop ? insideSpawn : outsideSpawn;
-            if (player != null && spawn != null)
-            {
-                player.position = spawn.position;
+                player.position = OutsidePosition;
+                var body = player.GetComponent<Rigidbody2D>();
+                if (body != null) { body.position = player.position; body.linearVelocity = Vector2.zero; }
                 PlayerMovementController movement = player.GetComponent<PlayerMovementController>();
                 movement?.StopMovement();
             }
-
-            if (shopSystem != null)
-            {
-                shopSystem.SetOpen(insideShop);
-            }
-
+            shopSystem?.SetOpen(false);
             Camera camera = Camera.main;
             if (camera != null)
             {
-                camera.orthographicSize = insideShop ? insideCameraSize : outsideCameraSize;
+                camera.orthographicSize = outsideCameraSize;
                 if (player != null)
                 {
                     camera.transform.position = player.position + new Vector3(0f, 0f, -10f);
                 }
             }
 
-            if (notify)
-            {
-                FarmNotificationCenter.Show(insideShop ? "Entraste a la tienda." : "Saliste de la tienda.");
-            }
         }
     }
 }

@@ -16,12 +16,7 @@ namespace SurvivorFarm.Runtime.Player
         private static readonly FarmTool[] Tools =
         {
             FarmTool.Sword,
-            FarmTool.Bow,
-            FarmTool.Axe,
-            FarmTool.Pickaxe,
-            FarmTool.Hoe,
-            FarmTool.Shovel,
-            FarmTool.WateringCan
+            FarmTool.Bow
         };
 
         private void Start()
@@ -36,6 +31,7 @@ namespace SurvivorFarm.Runtime.Player
 
         private void Update()
         {
+            if (SurvivorFarm.Runtime.UI.InventoryPanelSystem.IsOpen) return;
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 Select(FarmTool.Sword);
@@ -44,30 +40,27 @@ namespace SurvivorFarm.Runtime.Player
             {
                 Select(FarmTool.Bow);
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                Select(FarmTool.Axe);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                Select(FarmTool.Pickaxe);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
-            {
-                Select(FarmTool.Hoe);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha6))
-            {
-                Select(FarmTool.Shovel);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha7))
-            {
-                Select(FarmTool.WateringCan);
-            }
         }
 
         public void Select(FarmTool tool)
         {
+            var inventory = GetComponent<PlayerInventory>();
+            if (inventory != null && (tool == FarmTool.Sword || tool == FarmTool.Bow))
+            {
+                string equippedWeapon = inventory.EquippedEquipment != null && inventory.EquippedEquipment.Length > 3
+                    ? inventory.EquippedEquipment[3]
+                    : string.Empty;
+                var equippedDefinition = EquipmentItems.Find(equippedWeapon);
+                if (equippedDefinition == null || equippedDefinition.Weapon != tool)
+                {
+                    string fallbackId = tool == FarmTool.Sword ? "Sword" : "Bow";
+                    var ownedWeapon = inventory.OwnsEquipment(fallbackId)
+                        ? EquipmentItems.Find(fallbackId)
+                        : Array.Find(EquipmentItems.All, item => item != null && item.Weapon == tool && inventory.OwnsEquipment(item.Id));
+                    if (ownedWeapon == null) return;
+                    if (inventory.EquippedEquipment[3] != ownedWeapon.Id) { inventory.Equip(ownedWeapon.Id,3); return; }
+                }
+            }
             if (Array.IndexOf(Tools, tool) < 0)
             {
                 return;
@@ -107,7 +100,7 @@ namespace SurvivorFarm.Runtime.Player
                 case FarmTool.Hoe:
                     return "Azada";
                 case FarmTool.Shovel:
-                    return "Pala";
+                    return "Azada";
                 case FarmTool.WateringCan:
                     return "Regadera";
                 default:

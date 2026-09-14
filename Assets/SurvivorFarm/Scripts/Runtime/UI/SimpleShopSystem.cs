@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UI;
 using SurvivorFarm.Runtime.Gameplay;
 using SurvivorFarm.Runtime.Player;
@@ -14,6 +16,10 @@ namespace SurvivorFarm.Runtime.UI
         [SerializeField] private ShopEntrance entrance;
         [SerializeField] private PlayerToolUpgradeController toolUpgrades;
         [SerializeField] private PlayerCraftingController crafting;
+        private ExteriorShopWindow window;
+        private static SimpleShopSystem activeShop;
+        public static bool IsOpen => activeShop != null && activeShop.panel != null && activeShop.panel.activeInHierarchy;
+        public static void CloseActive() { if (activeShop != null) activeShop.SetOpen(false); }
 
         public void Configure(
             GameObject shopPanel,
@@ -23,6 +29,7 @@ namespace SurvivorFarm.Runtime.UI
             PlayerToolUpgradeController upgrades,
             PlayerCraftingController playerCrafting)
         {
+            Unsubscribe();
             panel = shopPanel;
             walletText = wallet;
             stockText = stock;
@@ -30,20 +37,7 @@ namespace SurvivorFarm.Runtime.UI
             toolUpgrades = upgrades;
             crafting = playerCrafting;
 
-            if (inventory != null)
-            {
-                inventory.InventoryChanged += Refresh;
-            }
-
-            if (toolUpgrades != null)
-            {
-                toolUpgrades.ToolUpgradesChanged += Refresh;
-            }
-
-            if (crafting != null)
-            {
-                crafting.CraftingChanged += Refresh;
-            }
+            Subscribe();
 
             Refresh();
             SetOpen(false);
@@ -56,6 +50,21 @@ namespace SurvivorFarm.Runtime.UI
 
         public void SetOpen(bool open)
         {
+            if (open)
+            {
+                VillageDialogueWindow.CloseActive();
+                if (activeShop != null && activeShop != this) CloseActive();
+                FindFirstObjectByType<AdventureWindow>()?.Close();
+                FindFirstObjectByType<InventoryPanelSystem>()?.Close();
+                FindFirstObjectByType<PlayerEquipmentWindow>()?.Close();
+                FindFirstObjectByType<CraftingWindow>()?.Close();
+                inventory?.GetComponent<ConstructionSystem>()?.Cancel();
+                inventory?.GetComponent<PlayerMovementController>()?.StopMovement();
+                EnsureWindow();
+                activeShop = this;
+                panel?.transform.SetAsLastSibling();
+            }
+            else if (activeShop == this) activeShop = null;
             if (panel != null)
             {
                 panel.SetActive(open);
@@ -69,82 +78,143 @@ namespace SurvivorFarm.Runtime.UI
 
         public void BuySeeds()
         {
-            if (inventory == null)
-            {
-                return;
-            }
-
-            int availableSpace = inventory.MaxSeedsPerSlot - inventory.Seeds;
-            if (availableSpace <= 0)
-            {
-                FarmNotificationCenter.Show("El slot de semillas esta lleno.");
-                return;
-            }
-
-            if (!inventory.TrySpendCoins(5))
-            {
-                FarmNotificationCenter.Show("No tienes monedas suficientes.");
-                return;
-            }
-
-            int purchasedSeeds = Mathf.Min(3, availableSpace);
-            inventory.AddSeeds(purchasedSeeds);
-            FarmNotificationCenter.Show($"Compraste {purchasedSeeds} semillas.");
+            // Kept for serialized buttons from old scenes; seeds are no longer sold.
         }
 
         public void BuyMineralSeeds()
         {
-            BuySeedBundle(SeedRarity.Mineral, 12, 1, "Compraste 1 semilla mineral.");
         }
 
         public void BuyMagicSeeds()
         {
-            BuySeedBundle(SeedRarity.Magic, 25, 1, "Compraste 1 semilla magica.");
         }
 
         public void BuyWood()
         {
-            BuyItem(4, () => inventory.AddWood(1), "Compraste 1 madera.");
+            BuyItem(4, () => inventory.AddWood(1), "Compraste 1 madera.", inventory?.Wood ?? 0);
         }
 
         public void BuyStone()
         {
-            BuyItem(5, () => inventory.AddStone(1), "Compraste 1 piedra.");
+            BuyItem(5, () => inventory.AddStone(1), "Compraste 1 piedra.", inventory?.Stone ?? 0);
         }
 
         public void BuyFruit()
         {
-            BuyItem(8, () => inventory.AddFruit(1), "Compraste 1 fruta.");
+            BuyItem(8, () => inventory.AddFruit(1), "Compraste 1 fruta.", inventory?.Fruit ?? 0);
+        }
+
+        private void EnsureWindow()
+        {
+            if (window != null || panel == null || inventory == null) return;
+            window = panel.GetComponent<ExteriorShopWindow>() ?? panel.AddComponent<ExteriorShopWindow>();
+            window.Configure(this, inventory, toolUpgrades);
+        }
+
+        public void OpenService(string category)
+        {
+            SetOpen(true);
+            window?.SelectCategory(category);
+        }
+
+        private void Update()
+        {
+            if (activeShop != this) return;
+            if (Input.GetKeyDown(KeyCode.Escape) || PlayerRespawnController.MenuOpen ||
+                (inventory != null && inventory.GetComponent<PlayerSurvivalStats>()?.CurrentHealth <= 0)) ExitShop();
+            else if (panel != null) FarmUiStyle.FitWindow((RectTransform)panel.transform);
+        }
+
+        private void Subscribe()
+        {
+            Unsubscribe();
+            if (inventory != null) inventory.InventoryChanged += Refresh;
+            if (toolUpgrades != null) toolUpgrades.ToolUpgradesChanged += Refresh;
+            if (crafting != null) crafting.CraftingChanged += Refresh;
+        }
+
+        private void OnEnable() => Subscribe();
+        private void OnDisable() { SetOpen(false); Unsubscribe(); }
+
+        private void Unsubscribe()
+        {
+            if (inventory != null) inventory.InventoryChanged -= Refresh;
+            if (toolUpgrades != null) toolUpgrades.ToolUpgradesChanged -= Refresh;
+            if (crafting != null) crafting.CraftingChanged -= Refresh;
+        }
+
+        private void OnDestroy()
+        {
+            if (activeShop == this) activeShop = null;
+            Unsubscribe();
+        }
+
+        public void BuyFood() => BuyItem(18, () => inventory.AddFood(1), "Compraste una racion.", inventory?.Food ?? 0);
+
+        public bool CanBuyCatalogItem(string id, out string requirement)
+        {
+            var item = SurvivalItemCatalog.Find(id);
+            requirement = item == null ? "Objeto desconocido." : item.IsSeed ? "Objeto retirado del mercado." : inventory == null ? "Necesitas un inventario." :
+                (inventory.GetComponent<PlayerCraftingController>()?.MealsCooked ?? 0) < item.UnlockMealsCooked ?
+                $"Cocina {item.UnlockMealsCooked} veces para ampliar el surtido." : string.Empty;
+            return requirement.Length == 0;
+        }
+
+        public IEnumerable<SurvivalItemCatalog.Definition> GetAvailableCatalogItems() =>
+            SurvivalItemCatalog.All.Where(item => CanBuyCatalogItem(item.Id, out _));
+
+        public void BuyCatalogItem(string id, int amount = 1)
+        {
+            var item = SurvivalItemCatalog.Find(id);
+            if (item == null || amount <= 0) return;
+            if (!CanBuyCatalogItem(id, out string requirement))
+            {
+                FarmNotificationCenter.Show(requirement);
+                return;
+            }
+            if (!inventory.TryBuyCatalogItem(id, amount))
+            {
+                FarmNotificationCenter.Show("Compra no disponible: revisa el oro y la cantidad.");
+                return;
+            }
+            FarmNotificationCenter.Show($"Compraste {amount} x {item.Name}.");
         }
 
         public void SellSeeds()
         {
-            SellItem(inventory != null && inventory.TryRemoveSeeds(1), 1, "Vendiste 1 semilla.");
+            SellResource("CommonSeeds");
         }
 
         public void SellMineralSeeds()
         {
-            SellItem(inventory != null && inventory.TryRemoveSeeds(SeedRarity.Mineral, 1), 5, "Vendiste 1 semilla mineral.");
+            SellResource("MineralSeeds");
         }
 
         public void SellMagicSeeds()
         {
-            SellItem(inventory != null && inventory.TryRemoveSeeds(SeedRarity.Magic, 1), 12, "Vendiste 1 semilla magica.");
+            SellResource("MagicSeeds");
         }
 
         public void SellWood()
         {
-            SellItem(inventory != null && inventory.TryRemoveWood(1), 3, "Vendiste 1 madera.");
+            SellResource("Wood");
         }
 
         public void SellStone()
         {
-            SellItem(inventory != null && inventory.TryRemoveStone(1), 4, "Vendiste 1 piedra.");
+            SellResource("Stone");
         }
 
         public void SellFruit()
         {
-            SellItem(inventory != null && inventory.TryRemoveFruit(1), 6, "Vendiste 1 fruta.");
+            SellResource("Fruit");
+        }
+
+        public void SellCatalogItem(string id, int amount = 1)
+        {
+            var item = SurvivalItemCatalog.Find(id);
+            if (item == null || amount <= 0) return;
+            SellResource(id, amount);
         }
 
         public void UpgradeAxe()
@@ -161,7 +231,12 @@ namespace SurvivorFarm.Runtime.UI
 
         public void UpgradeShovel()
         {
-            toolUpgrades?.UpgradeShovel();
+            UpgradeHoe();
+        }
+
+        public void UpgradeHoe()
+        {
+            toolUpgrades?.UpgradeHoe();
             Refresh();
         }
 
@@ -179,31 +254,27 @@ namespace SurvivorFarm.Runtime.UI
 
         public void ExitShop()
         {
-            entrance?.ExitShop();
+            SetOpen(false);
         }
 
-        private void SellItem(bool removed, int coinsEarned, string message)
+        private void SellResource(string id, int amount = 1)
         {
-            if (!removed)
+            if (!BackpackActions.Sell(inventory, id, amount))
             {
-                FarmNotificationCenter.Show("No tienes ese objeto para vender.");
-                return;
+                FarmNotificationCenter.Show("Venta no disponible: revisa la cantidad y el espacio para oro.");
             }
-
-            inventory.AddCoins(coinsEarned);
-            FarmNotificationCenter.Show(message);
         }
 
-        private void BuyItem(int coinCost, System.Action addItem, string message)
+        private void BuyItem(int coinCost, System.Action addItem, string message, int currentCount = 0)
         {
             if (inventory == null)
             {
                 return;
             }
 
-            if (inventory.GetSeedCount(rarity) + amount > inventory.MaxSeedsPerSlot)
+            if (currentCount == int.MaxValue)
             {
-                FarmNotificationCenter.Show("Ese slot de semillas esta lleno.");
+                FarmNotificationCenter.Show("No caben mas unidades de este recurso.");
                 return;
             }
 
@@ -217,22 +288,6 @@ namespace SurvivorFarm.Runtime.UI
             FarmNotificationCenter.Show(message);
         }
 
-        private void BuySeedBundle(SeedRarity rarity, int coinCost, int amount, string message)
-        {
-            if (inventory == null)
-            {
-                return;
-            }
-
-            if (!inventory.TrySpendCoins(coinCost))
-            {
-                FarmNotificationCenter.Show("No tienes monedas suficientes.");
-                return;
-            }
-
-            inventory.AddSeeds(rarity, amount);
-            FarmNotificationCenter.Show(message);
-        }
 
         private void Refresh()
         {
@@ -250,8 +305,21 @@ namespace SurvivorFarm.Runtime.UI
             {
                 string toolSummary = toolUpgrades != null ? $"\n{toolUpgrades.GetUpgradeSummary()}" : string.Empty;
                 string craftingSummary = crafting != null ? $"\n{crafting.GetCraftingSummary()}" : string.Empty;
-                stockText.text = $"Semillas C{inventory.CommonSeeds} M{inventory.MineralSeeds} G{inventory.MagicSeeds} | Madera {inventory.Wood} | Piedra {inventory.Stone} | Fruta {inventory.Fruit}{toolSummary}{craftingSummary}";
+                int foods = 0, rareMaterials = 0, gems = 0, elements = 0;
+                foreach (var stack in inventory.ItemStacks ?? new System.Collections.Generic.List<InventoryStack>())
+                {
+                    var item = stack != null ? SurvivalItemCatalog.Find(stack.id) : null;
+                    if (item == null) continue;
+                    else if (item.IsFood) foods += stack.count;
+                    else if (item.Category == SurvivalItemCategory.Material) rareMaterials += stack.count;
+                    else if (item.IsGem) gems += stack.count;
+                    else if (item.IsElement) elements += stack.count;
+                }
+                int iron = inventory.GetComponent<AdventureProgress>()?.Data.iron ?? 0;
+                int goldOre = inventory.GetItemCount("GoldOre");
+                stockText.text = $"Madera {inventory.Wood} | Piedra {inventory.Stone} | Hierro {iron} | Oro bruto {goldOre} | Mat. raros {rareMaterials} | Fruta {inventory.Fruit} | Comidas {foods} | Gemas {gems} | Elem. {elements}{toolSummary}{craftingSummary}";
             }
+            if (window != null) { window.Refresh(); return; }
         }
     }
 }

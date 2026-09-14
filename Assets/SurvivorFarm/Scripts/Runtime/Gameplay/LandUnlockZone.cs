@@ -4,7 +4,7 @@ using SurvivorFarm.Runtime.UI;
 
 namespace SurvivorFarm.Runtime.Gameplay
 {
-    public sealed class LandUnlockZone : MonoBehaviour, IWorldInteractable
+    public sealed class LandUnlockZone : WorldInteractable
     {
         [SerializeField] private int unlockCost = 25;
         [SerializeField] private bool unlocked;
@@ -12,10 +12,45 @@ namespace SurvivorFarm.Runtime.Gameplay
         [SerializeField] private Collider2D blockerCollider;
         [SerializeField] private Transform interactionPoint;
         [SerializeField] private LandUnlockZone prerequisiteZone;
+        [SerializeField] private bool openExploration;
+        [SerializeField] private RepairableBridge explorationBridge;
 
-        public Transform Transform => interactionPoint != null ? interactionPoint : transform;
-        public bool IsAvailable => !unlocked;
-        public bool IsUnlocked => unlocked;
+        public override Transform Transform => interactionPoint != null ? interactionPoint : transform;
+        public override bool IsAvailable => !openExploration && !unlocked;
+        public bool IsUnlocked => openExploration ? explorationBridge == null || explorationBridge.IsRepaired : unlocked;
+
+        public void ConfigureExploration(RepairableBridge bridge)
+        {
+            openExploration = true;
+            explorationBridge = bridge;
+            ApplyVisuals();
+        }
+        public string RegionDescription => name switch
+        {
+            "West Zone" => "Bosque · reserva de madera",
+            "East Zone" => "Cantera · reserva de piedra",
+            "North Zone" => "Campamento · provisiones",
+            "South Zone" => "Pradera · provisiones",
+            "North West Zone" => "Bosque antiguo · anillo de sustento",
+            "North East Zone" => "Ruinas · acceso a la mazmorra y gemas",
+            "South West Zone" => "Vergel · amuleto de recuperación",
+            "South East Zone" => "Yacimiento · minerales",
+            _ => "Frontera · recursos"
+        };
+        private void GrantDiscovery(PlayerInventory inventory)
+        {
+            switch(name)
+            {
+                case "West Zone": inventory.AddWood(12); break;
+                case "East Zone": inventory.AddStone(12); break;
+                case "North Zone": inventory.AddFruit(4); break;
+                case "South Zone": inventory.AddFood(3); break;
+                case "North West Zone": inventory.AddEquipment("Ring"); break;
+                case "North East Zone": inventory.AddItem("Ruby",1); break;
+                case "South West Zone": inventory.AddEquipment("Amulet"); break;
+                case "South East Zone": inventory.AddItem("GoldOre",2); break;
+            }
+        }
         private bool CanUnlock => prerequisiteZone == null || prerequisiteZone.IsUnlocked;
 
         public void Configure(int cost, bool startsUnlocked, SpriteRenderer renderer, Collider2D collider, Transform point)
@@ -39,19 +74,19 @@ namespace SurvivorFarm.Runtime.Gameplay
             Restore(startsUnlocked);
         }
 
-        public string GetInteractionLabel(FarmTool selectedTool)
+        public override string GetInteractionLabel(FarmTool selectedTool)
         {
-            if (unlocked)
+            if (!IsAvailable)
             {
                 return string.Empty;
             }
 
             return CanUnlock
-                ? $"Interactuar: desbloquear zona por {unlockCost} oro"
+                ? $"{RegionDescription} · abrir por {unlockCost} oro"
                 : "Bloqueado: abre una zona vecina primero";
         }
 
-        public void SetHighlighted(bool highlighted)
+        public override void SetHighlighted(bool highlighted)
         {
             if (blockerRenderer == null || unlocked)
             {
@@ -63,9 +98,9 @@ namespace SurvivorFarm.Runtime.Gameplay
                 : new Color(0.05f, 0.06f, 0.05f, 0.68f);
         }
 
-        public void Interact(FarmTool selectedTool, PlayerInventory inventory)
+        public override void Interact(FarmTool selectedTool, PlayerInventory inventory)
         {
-            if (unlocked)
+            if (!IsAvailable)
             {
                 return;
             }
@@ -83,8 +118,9 @@ namespace SurvivorFarm.Runtime.Gameplay
             }
 
             unlocked = true;
+            GrantDiscovery(inventory);
             ApplyVisuals();
-            FarmNotificationCenter.Show("Zona desbloqueada.");
+            FarmNotificationCenter.Show(RegionDescription + ": recompensa de descubrimiento recibida.");
         }
 
         public void Restore(bool isUnlocked)
@@ -97,18 +133,18 @@ namespace SurvivorFarm.Runtime.Gameplay
         {
             if (blockerRenderer != null)
             {
-                blockerRenderer.enabled = !unlocked;
+                blockerRenderer.enabled = !openExploration && !unlocked;
                 blockerRenderer.color = new Color(0.05f, 0.06f, 0.05f, 0.68f);
             }
 
             if (blockerCollider != null)
             {
-                blockerCollider.enabled = !unlocked;
+                blockerCollider.enabled = !openExploration && !unlocked;
             }
 
             if (interactionPoint != null)
             {
-                interactionPoint.gameObject.SetActive(!unlocked);
+                interactionPoint.gameObject.SetActive(!openExploration && !unlocked);
             }
         }
     }

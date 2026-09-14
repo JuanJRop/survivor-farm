@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SurvivorFarm.Runtime.Gameplay
 {
-    public sealed class DungeonChest : MonoBehaviour, IWorldInteractable
+    public sealed class DungeonChest : WorldInteractable
     {
         [SerializeField] private SpriteRenderer bodyRenderer;
         [SerializeField] private SpriteRenderer lidRenderer;
@@ -16,10 +16,25 @@ namespace SurvivorFarm.Runtime.Gameplay
         [SerializeField] private int magicSeedsReward;
 
         private bool opened;
+        private bool originalArt;
+        private int ironReward, goldReward, rubyReward, foodReward;
+        public System.Func<bool> Unlocked;
+        public string PersistentId => name;
 
-        public Transform Transform => transform;
-        public bool IsAvailable => !opened && gameObject.activeInHierarchy;
+        public override bool IsAvailable => !opened && gameObject.activeInHierarchy;
         public bool IsOpened => opened;
+
+        public void ConfigureExpedition(SpriteRenderer visual, int coins, int iron, int gold, int ruby, int food)
+        {
+            bodyRenderer = visual;
+            if (lidRenderer != null) lidRenderer.gameObject.SetActive(false);
+            lidRenderer = null; originalArt = true;
+            coinsReward = coins; ironReward = iron; goldReward = gold; rubyReward = ruby; foodReward = food;
+            woodReward = stoneReward = commonSeedsReward = mineralSeedsReward = magicSeedsReward = 0;
+            ApplyVisuals();
+        }
+
+        protected override float HighlightScale => 1.12f;
 
         public void Configure(
             SpriteRenderer body,
@@ -42,19 +57,14 @@ namespace SurvivorFarm.Runtime.Gameplay
             ApplyVisuals();
         }
 
-        public string GetInteractionLabel(FarmTool selectedTool)
+        public override string GetInteractionLabel(FarmTool selectedTool)
         {
-            return opened ? "Cofre abierto" : "Interactuar: abrir cofre";
+            return opened ? "Cofre abierto" : Unlocked != null && !Unlocked() ? "Cofre sellado: vence al Custodio" : "Interactuar: abrir cofre";
         }
 
-        public void SetHighlighted(bool highlighted)
+        public override void Interact(FarmTool selectedTool, PlayerInventory inventory)
         {
-            transform.localScale = highlighted ? Vector3.one * 1.12f : Vector3.one;
-        }
-
-        public void Interact(FarmTool selectedTool, PlayerInventory inventory)
-        {
-            if (opened)
+            if (!IsAvailable || inventory == null || Unlocked != null && !Unlocked())
             {
                 return;
             }
@@ -62,15 +72,19 @@ namespace SurvivorFarm.Runtime.Gameplay
             opened = true;
             if (inventory != null)
             {
-                inventory.AddCoins(coinsReward);
-                inventory.AddWood(woodReward);
-                inventory.AddStone(stoneReward);
-                inventory.AddSeeds(SeedRarity.Common, commonSeedsReward);
-                inventory.AddSeeds(SeedRarity.Mineral, mineralSeedsReward);
-                inventory.AddSeeds(SeedRarity.Magic, magicSeedsReward);
+                ResourceFlyweights.Item(ItemKind.Coins).Grant(inventory, coinsReward);
+                ResourceFlyweights.Item(ItemKind.Wood).Grant(inventory, woodReward);
+                ResourceFlyweights.Item(ItemKind.Stone).Grant(inventory, stoneReward);
+                inventory.GetComponent<AdventureProgress>()?.AddIron(ironReward);
+                inventory.AddItem("GoldOre", goldReward);
+                inventory.AddItem("Ruby", rubyReward);
+                if (rubyReward > 0) inventory.AddEquipment("Gem");
+                inventory.AddFood(foodReward);
+                if (commonSeedsReward > 0) inventory.AddFruit(Mathf.Min(commonSeedsReward, 4));
+                if (mineralSeedsReward > 0 || magicSeedsReward > 0) inventory.AddFood(2);
             }
 
-            FarmNotificationCenter.Show($"Cofre abierto: +{coinsReward} oro, +{woodReward} madera, +{stoneReward} piedra.");
+            FarmNotificationCenter.Show(originalArt ? $"Botin: {coinsReward} monedas, {ironReward} hierro, {goldReward} oro bruto, {rubyReward} rubi, {foodReward} raciones." : $"Cofre abierto: +{coinsReward} oro, +{woodReward} madera, +{stoneReward} piedra.");
             ApplyVisuals();
         }
 
@@ -82,6 +96,7 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         private void ApplyVisuals()
         {
+            if (originalArt) { if (bodyRenderer != null) bodyRenderer.color = opened ? new Color(.45f, .5f, .5f) : Color.white; return; }
             Color closedBody = new Color(0.54f, 0.30f, 0.12f);
             Color openBody = new Color(0.23f, 0.16f, 0.09f);
 

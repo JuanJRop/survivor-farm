@@ -31,10 +31,21 @@ namespace SurvivorFarm.Runtime.World
         private static Sprite uiHudSprite;
         private static Dictionary<FarmTool, Sprite> toolSprites;
 
-        public static void Build()
+        private sealed class FarmSceneSections
         {
-            Camera camera = EnsureCamera();
-            GameObject outdoorRoot = new GameObject("Outdoor World");
+            public Transform Root { get; set; }
+            public Transform Controllers { get; set; }
+            public Transform Player { get; set; }
+            public Transform World { get; set; }
+            public Transform Ui { get; set; }
+            public Transform Prefabs { get; set; }
+        }
+
+        public static void Build(bool loadSavedGame = true)
+        {
+            FarmSceneSections sections = CreateSceneSections();
+            Camera camera = EnsureCamera(sections.Controllers);
+            GameObject outdoorRoot = CreateChild(sections.World, "Outdoor World");
             BuildGround(outdoorRoot.transform);
             BuildStartingSquare(outdoorRoot.transform);
             BuildBaseHouse(outdoorRoot.transform);
@@ -43,15 +54,17 @@ namespace SurvivorFarm.Runtime.World
             LandUnlockZone dungeonZone = BuildLandUnlockZones(outdoorRoot.transform);
             DungeonEntrance dungeonEntrance = BuildDungeonExterior(outdoorRoot.transform);
             ShopEntrance shopEntrance = BuildShopExterior(outdoorRoot.transform);
-            GameObject shopInterior = BuildShopInterior(out Transform outsideSpawn, out Transform insideSpawn);
-            GameObject player = BuildPlayer();
-            GameObject dungeonInterior = BuildDungeonInterior(player.transform, dungeonEntrance, out Transform dungeonOutsideSpawn, out Transform dungeonInsideSpawn, out DungeonEnemyPool dungeonEnemyPool);
+            GameObject shopInterior = BuildShopInterior(sections.World, out Transform outsideSpawn, out Transform insideSpawn);
+            GameObject player = BuildPlayer(sections.Player);
+            GameObject dungeonInterior = BuildDungeonInterior(sections.World, player.transform, dungeonEntrance, out Transform dungeonOutsideSpawn, out Transform dungeonInsideSpawn, out DungeonEnemyPool dungeonEnemyPool);
             camera.GetComponent<CameraFollowTarget>()?.SetTarget(player.transform);
             if (camera.GetComponent<CameraFollowTarget>() == null)
             {
                 camera.gameObject.AddComponent<CameraFollowTarget>().SetTarget(player.transform);
             }
             BuildUi(
+                sections.Ui,
+                sections.Controllers,
                 player.GetComponent<PlayerToolbelt>(),
                 player.GetComponent<PlayerInventory>(),
                 player.GetComponent<PlayerToolUpgradeController>(),
@@ -80,6 +93,7 @@ namespace SurvivorFarm.Runtime.World
                 dungeonEnemyPool);
 
             BuildSaveSystem(
+                sections.Controllers,
                 player.transform,
                 player.GetComponent<PlayerInventory>(),
                 player.GetComponent<PlayerSurvivalStats>(),
@@ -89,10 +103,39 @@ namespace SurvivorFarm.Runtime.World
                 player.GetComponent<PlayerCraftingController>(),
                 questSystem,
                 shopEntrance,
-                dungeonEntrance);
+                dungeonEntrance,
+                loadSavedGame);
         }
 
-        private static Camera EnsureCamera()
+        private static FarmSceneSections CreateSceneSections()
+        {
+            GameObject root = new GameObject("Survivor Farm - Main");
+            return new FarmSceneSections
+            {
+                Root = root.transform,
+                Controllers = CreateSection(root.transform, "00 Controladores"),
+                Player = CreateSection(root.transform, "01 Player"),
+                World = CreateSection(root.transform, "02 Mundo"),
+                Ui = CreateSection(root.transform, "03 UI"),
+                Prefabs = CreateSection(root.transform, "04 Prefabs del Mundo")
+            };
+        }
+
+        private static Transform CreateSection(Transform parent, string name)
+        {
+            GameObject section = new GameObject(name);
+            section.transform.SetParent(parent, false);
+            return section.transform;
+        }
+
+        private static GameObject CreateChild(Transform parent, string name)
+        {
+            GameObject child = new GameObject(name);
+            child.transform.SetParent(parent, false);
+            return child;
+        }
+
+        private static Camera EnsureCamera(Transform parent)
         {
             Camera camera = Camera.main;
             if (camera == null)
@@ -102,6 +145,8 @@ namespace SurvivorFarm.Runtime.World
                 camera = cameraObject.AddComponent<Camera>();
                 cameraObject.AddComponent<AudioListener>();
             }
+
+            camera.transform.SetParent(parent, true);
 
             camera.orthographic = true;
             camera.orthographicSize = 6f;
@@ -114,7 +159,7 @@ namespace SurvivorFarm.Runtime.World
         {
             GameObject ground = new GameObject("Farm Ground");
             ground.transform.SetParent(parent);
-            ground.transform.position = new Vector3(0f, -4f, 1f);
+            ground.transform.position = new Vector3(0f, 0f, 1f);
             ground.transform.localScale = new Vector3(25f, 25f, 1f);
 
             SpriteRenderer renderer = ground.AddComponent<SpriteRenderer>();
@@ -127,7 +172,7 @@ namespace SurvivorFarm.Runtime.World
         {
             GameObject startSquare = new GameObject("Starting Unlocked Square");
             startSquare.transform.SetParent(parent);
-            startSquare.transform.position = new Vector3(0f, -4f, 0.5f);
+            startSquare.transform.position = new Vector3(0f, 0f, 0.5f);
             startSquare.transform.localScale = new Vector3(7.85f, 7.85f, 1f);
 
             SpriteRenderer renderer = startSquare.AddComponent<SpriteRenderer>();
@@ -184,15 +229,15 @@ namespace SurvivorFarm.Runtime.World
 
             Vector2[] zoneCenters =
             {
-                new Vector2(0f, -4f),
-                new Vector2(0f, 4f),
-                new Vector2(0f, -12f),
-                new Vector2(-8f, -4f),
-                new Vector2(8f, -4f),
-                new Vector2(-8f, 4f),
-                new Vector2(8f, 4f),
-                new Vector2(-8f, -12f),
-                new Vector2(8f, -12f)
+                Vector2.zero,
+                new Vector2(0f, 8f),
+                new Vector2(0f, -8f),
+                new Vector2(-8f, 0f),
+                new Vector2(8f, 0f),
+                new Vector2(-8f, 8f),
+                new Vector2(8f, 8f),
+                new Vector2(-8f, -8f),
+                new Vector2(8f, -8f)
             };
 
             foreach (Vector2 center in zoneCenters)
@@ -219,7 +264,7 @@ namespace SurvivorFarm.Runtime.World
 
         private static void CreateTillableCell(Transform parent, Vector2 position)
         {
-            if (Vector2.Distance(position, new Vector2(0f, -4f)) < 1.7f)
+            if (Vector2.Distance(position, Vector2.zero) < 1.7f)
             {
                 return;
             }
@@ -252,30 +297,30 @@ namespace SurvivorFarm.Runtime.World
             GameObject parent = new GameObject("Harvestable Resources");
             parent.transform.SetParent(parentTransform);
 
-            CreateTree(parent.transform, new Vector2(-2.85f, -2.1f), 2, 4);
-            CreateTree(parent.transform, new Vector2(-2.75f, -5.95f), 2, 4);
-            CreateRock(parent.transform, new Vector2(2.7f, -2.05f), 2, 4);
-            CreateRock(parent.transform, new Vector2(2.85f, -5.85f), 2, 4);
+            CreateTree(parent.transform, new Vector2(-2.85f, 1.9f), 2, 4);
+            CreateTree(parent.transform, new Vector2(-2.75f, -1.95f), 2, 4);
+            CreateRock(parent.transform, new Vector2(2.7f, 1.95f), 2, 4);
+            CreateRock(parent.transform, new Vector2(2.85f, -1.85f), 2, 4);
 
-            CreateTree(parent.transform, new Vector2(-9.25f, -2.5f), 4, 7);
-            CreateTree(parent.transform, new Vector2(-8.6f, -5.55f), 5, 8);
-            CreateTree(parent.transform, new Vector2(-6.55f, -3.85f), 4, 7);
+            CreateTree(parent.transform, new Vector2(-9.25f, 1.5f), 4, 7);
+            CreateTree(parent.transform, new Vector2(-8.6f, -1.55f), 5, 8);
+            CreateTree(parent.transform, new Vector2(-6.55f, 0.15f), 4, 7);
 
-            CreateRock(parent.transform, new Vector2(8.85f, -2.25f), 4, 7);
-            CreateRock(parent.transform, new Vector2(9.65f, -5.55f), 5, 8);
-            CreateRock(parent.transform, new Vector2(6.65f, -5.1f), 4, 7);
+            CreateRock(parent.transform, new Vector2(8.85f, 1.75f), 4, 7);
+            CreateRock(parent.transform, new Vector2(9.65f, -1.55f), 5, 8);
+            CreateRock(parent.transform, new Vector2(6.65f, -1.1f), 4, 7);
 
-            CreateTree(parent.transform, new Vector2(-1.6f, 5.1f), 3, 6);
-            CreateRock(parent.transform, new Vector2(1.75f, 5.25f), 3, 6);
+            CreateTree(parent.transform, new Vector2(-1.6f, 9.1f), 3, 6);
+            CreateRock(parent.transform, new Vector2(1.75f, 9.25f), 3, 6);
 
-            CreateTree(parent.transform, new Vector2(-9.2f, 4.85f), 6, 10);
-            CreateTree(parent.transform, new Vector2(-6.7f, 2.7f), 5, 9);
-            CreateRock(parent.transform, new Vector2(8.7f, 4.9f), 6, 10);
-            CreateRock(parent.transform, new Vector2(6.65f, 2.65f), 5, 9);
-            CreateRock(parent.transform, new Vector2(-8.7f, -12.6f), 5, 9);
-            CreateTree(parent.transform, new Vector2(-6.6f, -10.75f), 4, 8);
-            CreateRock(parent.transform, new Vector2(8.6f, -12.7f), 5, 9);
-            CreateTree(parent.transform, new Vector2(6.55f, -10.75f), 4, 8);
+            CreateTree(parent.transform, new Vector2(-9.2f, 8.85f), 6, 10);
+            CreateTree(parent.transform, new Vector2(-6.7f, 6.7f), 5, 9);
+            CreateRock(parent.transform, new Vector2(8.7f, 8.9f), 6, 10);
+            CreateRock(parent.transform, new Vector2(6.65f, 6.65f), 5, 9);
+            CreateRock(parent.transform, new Vector2(-8.7f, -8.6f), 5, 9);
+            CreateTree(parent.transform, new Vector2(-6.6f, -6.75f), 4, 8);
+            CreateRock(parent.transform, new Vector2(8.6f, -8.7f), 5, 9);
+            CreateTree(parent.transform, new Vector2(6.55f, -6.75f), 4, 8);
         }
 
         private static LandUnlockZone BuildLandUnlockZones(Transform parent)
@@ -283,14 +328,14 @@ namespace SurvivorFarm.Runtime.World
             GameObject zoneRoot = new GameObject("Land Unlock Zones");
             zoneRoot.transform.SetParent(parent);
 
-            CreateUnlockZone(zoneRoot.transform, "North Zone", new Vector2(0f, 4f), new Vector2(0f, 0.15f), 20, null);
-            LandUnlockZone west = CreateUnlockZone(zoneRoot.transform, "West Zone", new Vector2(-8f, -4f), new Vector2(-4.15f, -4f), 20, null);
-            LandUnlockZone east = CreateUnlockZone(zoneRoot.transform, "East Zone", new Vector2(8f, -4f), new Vector2(4.15f, -4f), 20, null);
-            LandUnlockZone south = CreateUnlockZone(zoneRoot.transform, "South Zone", new Vector2(0f, -12f), new Vector2(0f, -8.15f), 20, null);
-            CreateUnlockZone(zoneRoot.transform, "North West Zone", new Vector2(-8f, 4f), new Vector2(-4.15f, 0.15f), 35, west);
-            LandUnlockZone dungeonZone = CreateUnlockZone(zoneRoot.transform, "North East Zone", new Vector2(8f, 4f), new Vector2(4.15f, 0.15f), 45, east);
-            CreateUnlockZone(zoneRoot.transform, "South West Zone", new Vector2(-8f, -12f), new Vector2(-4.15f, -8.15f), 35, south);
-            CreateUnlockZone(zoneRoot.transform, "South East Zone", new Vector2(8f, -12f), new Vector2(4.15f, -8.15f), 35, east);
+            CreateUnlockZone(zoneRoot.transform, "North Zone", new Vector2(0f, 8f), new Vector2(0f, 4.15f), 20, null);
+            LandUnlockZone west = CreateUnlockZone(zoneRoot.transform, "West Zone", new Vector2(-8f, 0f), new Vector2(-4.15f, 0f), 20, null);
+            LandUnlockZone east = CreateUnlockZone(zoneRoot.transform, "East Zone", new Vector2(8f, 0f), new Vector2(4.15f, 0f), 20, null);
+            LandUnlockZone south = CreateUnlockZone(zoneRoot.transform, "South Zone", new Vector2(0f, -8f), new Vector2(0f, -4.15f), 20, null);
+            CreateUnlockZone(zoneRoot.transform, "North West Zone", new Vector2(-8f, 8f), new Vector2(-4.15f, 4.15f), 35, west);
+            LandUnlockZone dungeonZone = CreateUnlockZone(zoneRoot.transform, "North East Zone", new Vector2(8f, 8f), new Vector2(4.15f, 4.15f), 45, east);
+            CreateUnlockZone(zoneRoot.transform, "South West Zone", new Vector2(-8f, -8f), new Vector2(-4.15f, -4.15f), 35, south);
+            CreateUnlockZone(zoneRoot.transform, "South East Zone", new Vector2(8f, -8f), new Vector2(4.15f, -4.15f), 35, east);
             return dungeonZone;
         }
 
@@ -338,7 +383,7 @@ namespace SurvivorFarm.Runtime.World
         {
             GameObject entrance = new GameObject("Dungeon Entrance");
             entrance.transform.SetParent(parent);
-            entrance.transform.position = new Vector3(8f, 4.6f, 0f);
+            entrance.transform.position = new Vector3(8f, 8.6f, 0f);
 
             GameObject doorway = new GameObject("Dungeon Doorway");
             doorway.transform.SetParent(entrance.transform);
@@ -365,6 +410,7 @@ namespace SurvivorFarm.Runtime.World
         }
 
         private static GameObject BuildDungeonInterior(
+            Transform parent,
             Transform player,
             DungeonEntrance entrance,
             out Transform outsideSpawn,
@@ -372,6 +418,7 @@ namespace SurvivorFarm.Runtime.World
             out DungeonEnemyPool enemyPool)
         {
             GameObject dungeon = new GameObject("Dungeon Interior");
+            dungeon.transform.SetParent(parent, false);
             dungeon.SetActive(false);
 
             GameObject floor = new GameObject("Dungeon Floor");
@@ -411,7 +458,8 @@ namespace SurvivorFarm.Runtime.World
             dungeonExit.Configure(entrance);
 
             GameObject outsidePoint = new GameObject("Dungeon Outside Spawn");
-            outsidePoint.transform.position = new Vector3(8f, 2.45f, 0f);
+            outsidePoint.transform.SetParent(parent, false);
+            outsidePoint.transform.position = new Vector3(8f, 6.45f, 0f);
             outsideSpawn = outsidePoint.transform;
 
             GameObject insidePoint = new GameObject("Dungeon Inside Spawn");
@@ -433,7 +481,7 @@ namespace SurvivorFarm.Runtime.World
                 CreateDungeonSpawnPoint(dungeon.transform, "East Golem Spawn", new Vector2(6.1f, 1.05f))
             };
 
-            BasicEnemyAI[] enemyPrefabs =
+            EnemyAIBase[] enemyPrefabs =
             {
                 CreateEnemyPrefab("Limo", new Color(0.72f, 0.16f, 0.18f), 3, 1, 2.1f, 0.75f, 1.25f, 2),
                 CreateEnemyPrefab("Murcielago", new Color(0.36f, 0.24f, 0.62f), 2, 1, 2.9f, 0.68f, 0.95f, 3),
@@ -583,7 +631,7 @@ namespace SurvivorFarm.Runtime.World
         {
             GameObject shop = new GameObject("Shop Entrance");
             shop.transform.SetParent(parent);
-            shop.transform.position = new Vector3(8f, -4.9f, 0f);
+            shop.transform.position = new Vector3(8f, -0.9f, 0f);
 
             GameObject baseObject = new GameObject("Shop Square");
             baseObject.transform.SetParent(shop.transform);
@@ -618,9 +666,10 @@ namespace SurvivorFarm.Runtime.World
             return shop.AddComponent<ShopEntrance>();
         }
 
-        private static GameObject BuildShopInterior(out Transform outsideSpawn, out Transform insideSpawn)
+        private static GameObject BuildShopInterior(Transform parent, out Transform outsideSpawn, out Transform insideSpawn)
         {
             GameObject interior = new GameObject("Shop Interior");
+            interior.transform.SetParent(parent, false);
             interior.SetActive(false);
 
             GameObject floor = new GameObject("Shop Floor");
@@ -660,7 +709,8 @@ namespace SurvivorFarm.Runtime.World
             exitRenderer.sortingOrder = 1;
 
             GameObject outsidePoint = new GameObject("Shop Outside Spawn");
-            outsidePoint.transform.position = new Vector3(6.55f, -4.9f, 0f);
+            outsidePoint.transform.SetParent(parent, false);
+            outsidePoint.transform.position = new Vector3(6.55f, -0.9f, 0f);
             outsideSpawn = outsidePoint.transform;
 
             GameObject insidePoint = new GameObject("Shop Inside Spawn");
@@ -694,12 +744,19 @@ namespace SurvivorFarm.Runtime.World
             canopyRenderer.sprite = CircleSprite;
             canopyRenderer.color = new Color(0.16f, 0.45f, 0.18f);
             canopyRenderer.sortingOrder = 3;
+            WorldSpriteDepth trunkDepth = tree.AddComponent<WorldSpriteDepth>();
+            trunkDepth.Visual = trunkRenderer;
+            WorldSpriteDepth canopyDepth = tree.AddComponent<WorldSpriteDepth>();
+            canopyDepth.Visual = canopyRenderer;
+            canopyDepth.GroundOffset = -0.05f;
 
             CircleCollider2D collider = tree.AddComponent<CircleCollider2D>();
             collider.radius = 0.72f;
 
-            HarvestableResource resource = tree.AddComponent<HarvestableResource>();
-            resource.Configure(HarvestableResource.ResourceKind.Tree, canopyRenderer, trunkRenderer, amount, coins);
+            TreeResource resource = tree.AddComponent<TreeResource>();
+            resource.Configure(canopyRenderer, trunkRenderer, amount, coins);
+            TreeOcclusionFader.Ensure(tree);
+            ResourceSpawnPoint.Attach(resource);
         }
 
         private static void CreateRock(Transform parent, Vector2 position, int amount = 3, int coins = 5)
@@ -713,25 +770,32 @@ namespace SurvivorFarm.Runtime.World
             renderer.sprite = CircleSprite;
             renderer.color = new Color(0.45f, 0.47f, 0.48f);
             renderer.sortingOrder = 2;
+            WorldSpriteDepth depth = rock.AddComponent<WorldSpriteDepth>();
+            depth.Visual = renderer;
 
             CircleCollider2D collider = rock.AddComponent<CircleCollider2D>();
             collider.radius = 0.65f;
 
-            HarvestableResource resource = rock.AddComponent<HarvestableResource>();
-            resource.Configure(HarvestableResource.ResourceKind.Rock, renderer, null, amount, coins);
+            RockResource resource = rock.AddComponent<RockResource>();
+            resource.Configure(renderer, null, amount, coins);
+            ResourceSpawnPoint.Attach(resource);
         }
 
-        private static GameObject BuildPlayer()
+        private static GameObject BuildPlayer(Transform parent)
         {
             GameObject player = new GameObject("Player Base");
+            player.transform.SetParent(parent, false);
             player.tag = "Player";
-            player.transform.position = new Vector3(0f, -4f, 0f);
+            player.transform.position = new Vector3(-0.47f, 0.83f, 0f);
             player.transform.localScale = new Vector3(1f, 1f, 1f);
 
             SpriteRenderer renderer = player.AddComponent<SpriteRenderer>();
             renderer.sprite = CircleSprite;
             renderer.color = Color.white;
             renderer.sortingOrder = 5;
+            WorldSpriteDepth depth = player.AddComponent<WorldSpriteDepth>();
+            depth.Visual = renderer;
+            depth.GroundOffset = -0.4f;
 
             Rigidbody2D body = player.AddComponent<Rigidbody2D>();
             body.gravityScale = 0f;
@@ -754,6 +818,7 @@ namespace SurvivorFarm.Runtime.World
         }
 
         private static void BuildSaveSystem(
+            Transform parent,
             Transform player,
             PlayerInventory inventory,
             PlayerSurvivalStats survivalStats,
@@ -763,15 +828,22 @@ namespace SurvivorFarm.Runtime.World
             PlayerCraftingController crafting,
             TutorialQuestSystem questSystem,
             ShopEntrance shopEntrance,
-            DungeonEntrance dungeonEntrance)
+            DungeonEntrance dungeonEntrance,
+            bool loadSavedGame)
         {
             GameObject saveObject = new GameObject("Game Save System");
+            saveObject.transform.SetParent(parent, false);
             GameSaveSystem saveSystem = saveObject.AddComponent<GameSaveSystem>();
             saveSystem.Configure(player, inventory, survivalStats, movement, toolbelt, toolUpgrades, crafting, questSystem, shopEntrance, dungeonEntrance);
-            saveSystem.TryLoadGame();
+            if (loadSavedGame)
+            {
+                saveSystem.TryLoadGame();
+            }
         }
 
         private static void BuildUi(
+            Transform parent,
+            Transform controllersParent,
             PlayerToolbelt toolbelt,
             PlayerInventory inventory,
             PlayerToolUpgradeController toolUpgrades,
@@ -783,9 +855,10 @@ namespace SurvivorFarm.Runtime.World
             out SimpleShopSystem shopSystem,
             out TutorialQuestSystem questSystem)
         {
-            EnsureEventSystem();
+            EnsureEventSystem(controllersParent);
 
             GameObject canvasObject = new GameObject("Farm HUD");
+            canvasObject.transform.SetParent(parent, false);
             Canvas canvas = canvasObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
@@ -808,7 +881,7 @@ namespace SurvivorFarm.Runtime.World
             notificationRect.anchoredPosition = new Vector2(0f, -32f);
             notificationRect.sizeDelta = new Vector2(850f, 80f);
 
-            BuildToolSelector(canvasObject.transform, toolbelt, out Text tool, out Image toolIcon);
+            BuildToolSelector(canvasObject.transform, toolbelt, out Text tool, out Image toolIcon, out Image swordFrame, out Image bowFrame, out Image hoeFrame);
             BuildSurvivalHud(canvasObject.transform, out Image[] heartIcons, out Image hungerFill, out Text hungerText);
             BuildInventory(canvasObject.transform, inventory, out Text[] slotTexts, out Image[] slotIcons);
             BuildInventoryPanel(canvasObject.transform, inventory, toolUpgrades, crafting);
@@ -816,7 +889,7 @@ namespace SurvivorFarm.Runtime.World
             BuildAttackButton(canvasObject.transform, combat);
             questSystem = BuildQuestHud(canvasObject.transform);
             Image brightnessOverlay = BuildBrightnessOverlay(canvasObject.transform);
-            movement?.SetMovementMode(PlayerMovementController.MobileMovementMode.TapToMove);
+            movement?.SetMovementMode(PlayerMovementController.MobileMovementMode.KeyboardAndMouse);
             BuildOptionsMenu(canvasObject.transform, movement, brightnessOverlay);
             shopSystem = BuildShopPanel(canvasObject.transform, inventory, toolUpgrades, crafting);
 
@@ -833,19 +906,16 @@ namespace SurvivorFarm.Runtime.World
                 heartIcons,
                 hungerFill,
                 hungerText);
+            center.ConfigureFloatingInteraction(interactionButton, interactionText);
             center.enabled = true;
-
-            if (toolbelt != null)
-            {
-                toolbelt.ToolChanged += RefreshToolSelector;
-                RefreshToolSelector(toolbelt.SelectedTool);
-            }
 
             if (inventory != null)
             {
-                inventory.InventoryChanged += () => RefreshInventory(inventory);
                 RefreshInventory(inventory);
             }
+            center.ConfigureGameplayBindings(inventory, toolbelt, slotTexts, slotIcons,
+                System.Array.ConvertAll((FarmTool[])System.Enum.GetValues(typeof(FarmTool)), GetToolSprite));
+            center.ConfigureWeaponFrames(swordFrame, bowFrame, hoeFrame);
 
             if (survivalStats != null)
             {
@@ -853,43 +923,44 @@ namespace SurvivorFarm.Runtime.World
                 RefreshSurvival(survivalStats);
             }
 
-            FarmNotificationCenter.SetPrompt("Empieza talando, picando y cavando pasto con la pala.");
+            FarmNotificationCenter.SetPrompt("Explora y reconstruye el pueblo.");
         }
 
-        private static void EnsureEventSystem()
+        private static void EnsureEventSystem(Transform parent)
         {
-            if (Object.FindFirstObjectByType<EventSystem>() != null)
+            EventSystem existing = Object.FindFirstObjectByType<EventSystem>();
+            if (existing != null)
             {
+                existing.transform.SetParent(parent, true);
                 return;
             }
 
             GameObject eventSystemObject = new GameObject("EventSystem");
+            eventSystemObject.transform.SetParent(parent, false);
             eventSystemObject.AddComponent<EventSystem>();
             eventSystemObject.AddComponent<StandaloneInputModule>();
         }
 
-        private static void BuildToolSelector(Transform parent, PlayerToolbelt toolbelt, out Text toolName, out Image toolIcon)
+        private static void BuildToolSelector(Transform parent, PlayerToolbelt toolbelt, out Text toolName, out Image toolIcon, out Image swordFrame, out Image bowFrame, out Image hoeFrame)
         {
             GameObject selector = new GameObject("Mobile Weapon Selector");
             selector.transform.SetParent(parent, false);
             RectTransform selectorRect = selector.AddComponent<RectTransform>();
-            selectorRect.anchorMin = new Vector2(0f, 0f);
-            selectorRect.anchorMax = new Vector2(0f, 0f);
-            selectorRect.anchoredPosition = new Vector2(150f, 138f);
-            selectorRect.sizeDelta = new Vector2(230f, 170f);
+            selectorRect.anchorMin = new Vector2(0.5f, 0f);
+            selectorRect.anchorMax = new Vector2(0.5f, 0f);
+            selectorRect.pivot = new Vector2(0.5f, 0f);
+            selectorRect.anchoredPosition = new Vector2(0f, 26f);
+            selectorRect.sizeDelta = new Vector2(160f, 108f);
 
             Image background = selector.AddComponent<Image>();
             ApplyPanelSprite(background);
-            background.color = new Color(0.10f, 0.13f, 0.11f, 0.86f);
+            background.color = new Color(0.05f, 0.05f, 0.04f, 0.82f);
 
-            Button previous = CreateButton(selector.transform, "Previous Tool", "<", new Vector2(-92f, 0f), new Vector2(48f, 66f));
-            Button next = CreateButton(selector.transform, "Next Tool", ">", new Vector2(92f, 0f), new Vector2(48f, 66f));
-
-            if (toolbelt != null)
-            {
-                previous.onClick.AddListener(toolbelt.SelectPrevious);
-                next.onClick.AddListener(toolbelt.SelectNext);
-            }
+            Button swordButton = CreateWeaponSlotButton(selector.transform, "Sword Slot", FarmTool.Sword, new Vector2(-36f, 18f), toolbelt, out swordFrame);
+            Button bowButton = CreateWeaponSlotButton(selector.transform, "Bow Slot", FarmTool.Bow, new Vector2(36f, 18f), toolbelt, out bowFrame);
+            hoeFrame = null;
+            SetButtonTextSize(swordButton, 15);
+            SetButtonTextSize(bowButton, 15);
 
             GameObject iconObject = new GameObject("Selected Tool Icon");
             iconObject.transform.SetParent(selector.transform, false);
@@ -898,15 +969,62 @@ namespace SurvivorFarm.Runtime.World
             RectTransform iconRect = toolIcon.rectTransform;
             iconRect.anchorMin = new Vector2(0.5f, 0.5f);
             iconRect.anchorMax = new Vector2(0.5f, 0.5f);
-            iconRect.anchoredPosition = new Vector2(0f, 12f);
-            iconRect.sizeDelta = new Vector2(76f, 76f);
+            iconRect.anchoredPosition = Vector2.zero;
+            iconRect.sizeDelta = Vector2.zero;
+            iconObject.SetActive(false);
 
-            toolName = CreateText(selector.transform, "Selected Tool Name", 18, TextAnchor.UpperCenter);
+            toolName = CreateText(selector.transform, "Selected Tool Name", 17, TextAnchor.UpperCenter);
             RectTransform nameRect = toolName.rectTransform;
-            nameRect.anchorMin = new Vector2(0.5f, 0f);
-            nameRect.anchorMax = new Vector2(0.5f, 0f);
-            nameRect.anchoredPosition = new Vector2(0f, 24f);
-            nameRect.sizeDelta = new Vector2(150f, 34f);
+            nameRect.anchorMin = new Vector2(0.5f, 1f);
+            nameRect.anchorMax = new Vector2(0.5f, 1f);
+            nameRect.anchoredPosition = new Vector2(0f, -8f);
+            nameRect.sizeDelta = new Vector2(170f, 28f);
+        }
+
+        private static Button CreateWeaponSlotButton(Transform parent, string name, FarmTool tool, Vector2 position, PlayerToolbelt toolbelt, out Image frame)
+        {
+            GameObject slotObject = new GameObject(name);
+            slotObject.transform.SetParent(parent, false);
+
+            frame = slotObject.AddComponent<Image>();
+            ApplySlotSprite(frame);
+            frame.color = new Color(1f, 1f, 1f, 0.82f);
+
+            Button button = slotObject.AddComponent<Button>();
+            button.targetGraphic = frame;
+            if (toolbelt != null)
+            {
+                button.onClick.AddListener(() => toolbelt.Select(tool));
+            }
+
+            RectTransform rect = frame.rectTransform;
+            rect.anchorMin = new Vector2(0.5f, 0f);
+            rect.anchorMax = new Vector2(0.5f, 0f);
+            rect.pivot = new Vector2(0.5f, 0f);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = new Vector2(74f, 74f);
+
+            GameObject iconObject = new GameObject("Weapon Icon");
+            iconObject.transform.SetParent(slotObject.transform, false);
+            Image icon = iconObject.AddComponent<Image>();
+            icon.sprite = GetToolSprite(tool);
+            icon.preserveAspect = true;
+            icon.raycastTarget = false;
+            RectTransform iconRect = icon.rectTransform;
+            iconRect.anchorMin = new Vector2(0.5f, 0.5f);
+            iconRect.anchorMax = new Vector2(0.5f, 0.5f);
+            iconRect.anchoredPosition = new Vector2(0f, 5f);
+            iconRect.sizeDelta = new Vector2(44f, 44f);
+
+            Text hotkey = CreateText(slotObject.transform, tool + " Key", 14, TextAnchor.LowerRight);
+            hotkey.text = tool == FarmTool.Sword ? "1" : tool == FarmTool.Bow ? "2" : "3";
+            RectTransform keyRect = hotkey.rectTransform;
+            keyRect.anchorMin = Vector2.zero;
+            keyRect.anchorMax = Vector2.one;
+            keyRect.offsetMin = new Vector2(4f, 2f);
+            keyRect.offsetMax = new Vector2(-6f, -4f);
+
+            return button;
         }
 
         private static void BuildInventory(Transform parent, PlayerInventory inventory, out Text[] slotTexts, out Image[] slotIcons)
@@ -968,11 +1086,11 @@ namespace SurvivorFarm.Runtime.World
             controllerObject.transform.SetParent(parent, false);
             InventoryPanelSystem inventoryPanelSystem = controllerObject.AddComponent<InventoryPanelSystem>();
 
-            Button inventoryButton = CreateButton(parent, "Inventory Button", "Inv", new Vector2(-158f, -48f), new Vector2(82f, 54f));
+            Button inventoryButton = CreateButton(parent, "Inventory Button", "Inv", new Vector2(-108f, -308f), new Vector2(76f, 42f));
             RectTransform buttonRect = (RectTransform)inventoryButton.transform;
             buttonRect.anchorMin = new Vector2(1f, 1f);
             buttonRect.anchorMax = new Vector2(1f, 1f);
-            SetButtonTextSize(inventoryButton, 20);
+            SetButtonTextSize(inventoryButton, 17);
             inventoryButton.onClick.AddListener(inventoryPanelSystem.Toggle);
 
             GameObject panel = new GameObject("Full Inventory Panel");
@@ -991,11 +1109,13 @@ namespace SurvivorFarm.Runtime.World
             title.text = "Inventario";
             SetPanelChildRect(title.rectTransform, new Vector2(0f, 238f), new Vector2(330f, 44f));
 
-            Text content = CreateText(panel.transform, "Inventory Content", 21, TextAnchor.UpperLeft);
+            Text content = CreateText(panel.transform, "Inventory Content", 19, TextAnchor.UpperLeft);
             content.color = new Color(0.95f, 0.95f, 0.88f);
             SetPanelChildRect(content.rectTransform, new Vector2(0f, 18f), new Vector2(315f, 390f));
 
-            Button closeButton = CreateButton(panel.transform, "Close Inventory", "Cerrar", new Vector2(0f, -232f), new Vector2(170f, 48f));
+            Button eatButton = CreateButton(panel.transform, "Eat Food", "Comer", new Vector2(-90f, -232f), new Vector2(155f, 48f));
+            eatButton.onClick.AddListener(inventoryPanelSystem.EatFood);
+            Button closeButton = CreateButton(panel.transform, "Close Inventory", "Cerrar", new Vector2(90f, -232f), new Vector2(155f, 48f));
             SetButtonTextSize(closeButton, 21);
             closeButton.onClick.AddListener(inventoryPanelSystem.Close);
 
@@ -1010,13 +1130,23 @@ namespace SurvivorFarm.Runtime.World
             rootRect.anchorMin = new Vector2(0f, 1f);
             rootRect.anchorMax = new Vector2(0f, 1f);
             rootRect.pivot = new Vector2(0f, 1f);
-            rootRect.anchoredPosition = new Vector2(18f, -56f);
-            rootRect.sizeDelta = new Vector2(330f, 116f);
+            rootRect.anchoredPosition = new Vector2(18f, -18f);
+            rootRect.sizeDelta = new Vector2(372f, 112f);
 
             Image hudBackground = root.AddComponent<Image>();
             ApplyHudSprite(hudBackground);
-            hudBackground.color = new Color(1f, 1f, 1f, 0.72f);
+            hudBackground.color = new Color(0.06f, 0.055f, 0.045f, 0.92f);
             hudBackground.raycastTarget = false;
+
+            Text healthLabel = CreateText(root.transform, "Health Label", 17, TextAnchor.MiddleLeft);
+            healthLabel.text = "Vida";
+            healthLabel.fontStyle = FontStyle.Bold;
+            AddTextOutline(healthLabel);
+            RectTransform healthLabelRect = healthLabel.rectTransform;
+            healthLabelRect.anchorMin = new Vector2(0f, 1f);
+            healthLabelRect.anchorMax = new Vector2(0f, 1f);
+            healthLabelRect.anchoredPosition = new Vector2(82f, -27f);
+            healthLabelRect.sizeDelta = new Vector2(74f, 28f);
 
             heartIcons = new Image[8];
             for (int i = 0; i < heartIcons.Length; i++)
@@ -1026,50 +1156,18 @@ namespace SurvivorFarm.Runtime.World
                 Image heart = heartObject.AddComponent<Image>();
                 heart.sprite = HeartSprite;
                 heart.color = new Color(0.92f, 0.18f, 0.20f, 1f);
+                heart.preserveAspect = true;
                 heartIcons[i] = heart;
 
                 RectTransform heartRect = heart.rectTransform;
                 heartRect.anchorMin = new Vector2(0f, 1f);
                 heartRect.anchorMax = new Vector2(0f, 1f);
-                heartRect.anchoredPosition = new Vector2(16f + i * 34f, -14f);
-                heartRect.sizeDelta = new Vector2(30f, 30f);
+                heartRect.anchoredPosition = new Vector2(148f + i * 26f, -19f);
+                heartRect.sizeDelta = new Vector2(24f, 24f);
             }
 
-            GameObject hungerBackgroundObject = new GameObject("Hunger Background");
-            hungerBackgroundObject.transform.SetParent(root.transform, false);
-            Image hungerBackground = hungerBackgroundObject.AddComponent<Image>();
-            ApplyBarSprite(hungerBackground);
-            hungerBackground.color = new Color(1f, 1f, 1f, 0.94f);
-
-            RectTransform hungerBackgroundRect = hungerBackground.rectTransform;
-            hungerBackgroundRect.anchorMin = new Vector2(0f, 1f);
-            hungerBackgroundRect.anchorMax = new Vector2(0f, 1f);
-            hungerBackgroundRect.anchoredPosition = new Vector2(126f, -66f);
-            hungerBackgroundRect.sizeDelta = new Vector2(210f, 24f);
-
-            GameObject hungerFillObject = new GameObject("Hunger Fill");
-            hungerFillObject.transform.SetParent(hungerBackgroundObject.transform, false);
-            hungerFill = hungerFillObject.AddComponent<Image>();
-            hungerFill.sprite = SquareSprite;
-            hungerFill.type = Image.Type.Filled;
-            hungerFill.fillMethod = Image.FillMethod.Horizontal;
-            hungerFill.fillOrigin = 0;
-            hungerFill.fillAmount = 1f;
-            hungerFill.color = new Color(0.30f, 0.72f, 0.30f, 1f);
-
-            RectTransform hungerFillRect = hungerFill.rectTransform;
-            hungerFillRect.anchorMin = Vector2.zero;
-            hungerFillRect.anchorMax = Vector2.one;
-            hungerFillRect.offsetMin = new Vector2(3f, 3f);
-            hungerFillRect.offsetMax = new Vector2(-3f, -3f);
-
-            hungerText = CreateText(root.transform, "Hunger Label", 16, TextAnchor.MiddleLeft);
-            hungerText.text = "Hambre 100%";
-            RectTransform hungerTextRect = hungerText.rectTransform;
-            hungerTextRect.anchorMin = new Vector2(0f, 1f);
-            hungerTextRect.anchorMax = new Vector2(0f, 1f);
-            hungerTextRect.anchoredPosition = new Vector2(58f, -66f);
-            hungerTextRect.sizeDelta = new Vector2(110f, 30f);
+            hungerFill = null;
+            hungerText = null;
         }
 
         private static void BuildInteractionButton(
@@ -1078,16 +1176,29 @@ namespace SurvivorFarm.Runtime.World
             out Text interactionText,
             out Button interactionButton)
         {
-            interactionButton = CreateButton(parent, "Interact Button", "Interactuar", new Vector2(0f, -122f), new Vector2(220f, 64f));
+            interactionButton = CreateButton(parent, "Interact Button", "Interactuar", new Vector2(0f, -122f), new Vector2(128f, 60f));
             RectTransform buttonRect = (RectTransform)interactionButton.transform;
             buttonRect.anchorMin = new Vector2(0.5f, 0.5f);
             buttonRect.anchorMax = new Vector2(0.5f, 0.5f);
             buttonRect.pivot = new Vector2(0.5f, 0.5f);
 
+            Image buttonImage = interactionButton.GetComponent<Image>();
+            if (buttonImage != null)
+            {
+                buttonImage.color = new Color(0.08f, 0.06f, 0.05f, 0.94f);
+            }
+
             interactionText = interactionButton.GetComponentInChildren<Text>();
             if (interactionText != null)
             {
-                interactionText.fontSize = 24;
+                interactionText.fontSize = 18;
+                interactionText.resizeTextForBestFit = true;
+                interactionText.resizeTextMinSize = 12;
+                interactionText.resizeTextMaxSize = 18;
+                interactionText.alignment = TextAnchor.MiddleCenter;
+                interactionText.color = new Color(1f, 0.88f, 0.68f, 1f);
+                interactionText.fontStyle = FontStyle.Bold;
+                AddTextOutline(interactionText);
             }
 
             if (interactor != null)
@@ -1105,10 +1216,19 @@ namespace SurvivorFarm.Runtime.World
             attackRect.anchorMin = new Vector2(1f, 0f);
             attackRect.anchorMax = new Vector2(1f, 0f);
 
+            Image attackImage = attackButton.GetComponent<Image>();
+            if (attackImage != null)
+            {
+                attackImage.color = new Color(0.08f, 0.06f, 0.05f, 0.92f);
+            }
+
             Text text = attackButton.GetComponentInChildren<Text>();
             if (text != null)
             {
                 text.fontSize = 22;
+                text.color = new Color(1f, 0.88f, 0.68f, 1f);
+                text.fontStyle = FontStyle.Bold;
+                AddTextOutline(text);
             }
 
             GameObject cooldownObject = new GameObject("Attack Cooldown Fill");
@@ -1139,25 +1259,42 @@ namespace SurvivorFarm.Runtime.World
             questObject.transform.SetParent(parent, false);
             TutorialQuestSystem questSystem = questObject.AddComponent<TutorialQuestSystem>();
 
-            GameObject panel = new GameObject("Quest Panel");
+            GameObject panel = new GameObject("Mission");
             panel.transform.SetParent(parent, false);
             Image panelImage = panel.AddComponent<Image>();
             ApplyHudSprite(panelImage);
-            panelImage.color = new Color(1f, 1f, 1f, 0.86f);
+            panelImage.color = new Color(0.045f, 0.055f, 0.038f, 0.95f);
 
             RectTransform panelRect = panelImage.rectTransform;
-            panelRect.anchorMin = new Vector2(0f, 1f);
-            panelRect.anchorMax = new Vector2(0f, 1f);
-            panelRect.anchoredPosition = new Vector2(178f, -180f);
-            panelRect.sizeDelta = new Vector2(330f, 58f);
+            panelRect.anchorMin = new Vector2(1f, 1f);
+            panelRect.anchorMax = new Vector2(1f, 1f);
+            panelRect.pivot = new Vector2(1f, 1f);
+            panelRect.anchoredPosition = new Vector2(-12f, -104f);
+            panelRect.sizeDelta = new Vector2(384f, 126f);
 
-            Text questText = CreateText(panel.transform, "Quest Text", 17, TextAnchor.MiddleLeft);
-            questText.color = new Color(0.96f, 0.94f, 0.78f);
+            GameObject iconObject = new GameObject("Quest Icon");
+            iconObject.transform.SetParent(panel.transform, false);
+            Image icon = iconObject.AddComponent<Image>();
+            icon.sprite = LoadBackpackIcon("Quest");
+            icon.preserveAspect = true;
+            icon.raycastTarget = false;
+            RectTransform iconRect = icon.rectTransform;
+            iconRect.anchorMin = iconRect.anchorMax = iconRect.pivot = new Vector2(0f, 1f);
+            iconRect.anchoredPosition = new Vector2(12f, -12f);
+            iconRect.sizeDelta = new Vector2(32f, 32f);
+
+            Text questText = CreateText(panel.transform, "Quest Text", 15, TextAnchor.UpperLeft);
+            questText.color = new Color(1f, 0.93f, 0.76f);
+            questText.fontStyle = FontStyle.Bold;
+            questText.resizeTextForBestFit = true;
+            questText.resizeTextMinSize = 11;
+            questText.resizeTextMaxSize = 15;
+            questText.lineSpacing = 0.92f;
+            AddTextOutline(questText);
             RectTransform textRect = questText.rectTransform;
-            textRect.anchorMin = Vector2.zero;
-            textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(12f, 4f);
-            textRect.offsetMax = new Vector2(-10f, -4f);
+            textRect.anchorMin = textRect.anchorMax = textRect.pivot = new Vector2(0f, 1f);
+            textRect.anchoredPosition = new Vector2(52f, -10f);
+            textRect.sizeDelta = new Vector2(318f, 108f);
 
             questSystem.Configure(questText);
             return questSystem;
@@ -1191,10 +1328,11 @@ namespace SurvivorFarm.Runtime.World
             controllerObject.transform.SetParent(parent, false);
             MobileOptionsMenu options = controllerObject.AddComponent<MobileOptionsMenu>();
 
-            Button optionsButton = CreateButton(parent, "Options Button", "Opc", new Vector2(-62f, -48f), new Vector2(86f, 54f));
+            Button optionsButton = CreateButton(parent, "Options Button", "Opc", new Vector2(-36f, -308f), new Vector2(66f, 42f));
             RectTransform optionsButtonRect = (RectTransform)optionsButton.transform;
             optionsButtonRect.anchorMin = new Vector2(1f, 1f);
             optionsButtonRect.anchorMax = new Vector2(1f, 1f);
+            SetButtonTextSize(optionsButton, 17);
 
             GameObject panel = new GameObject("Options Panel");
             panel.transform.SetParent(parent, false);
@@ -1330,9 +1468,9 @@ namespace SurvivorFarm.Runtime.World
             SetButtonTextSize(upgradePickaxe, 18);
             upgradePickaxe.onClick.AddListener(shopSystem.UpgradePickaxe);
 
-            Button upgradeShovel = CreateButton(panel.transform, "Upgrade Shovel", "Pala", new Vector2(128f, -140f), new Vector2(112f, 42f));
-            SetButtonTextSize(upgradeShovel, 18);
-            upgradeShovel.onClick.AddListener(shopSystem.UpgradeShovel);
+            Button upgradeHoe = CreateButton(panel.transform, "Upgrade Hoe", "Azada", new Vector2(128f, -140f), new Vector2(112f, 42f));
+            SetButtonTextSize(upgradeHoe, 18);
+            upgradeHoe.onClick.AddListener(shopSystem.UpgradeHoe);
 
             Text upgradeHint = CreateText(panel.transform, "Upgrade Hint", 15, TextAnchor.MiddleCenter);
             upgradeHint.text = "Nv.2: 15 oro, 4 madera, 4 piedra | Nv.3: 35 oro, 8 madera, 8 piedra";
@@ -1410,6 +1548,15 @@ namespace SurvivorFarm.Runtime.World
             return text;
         }
 
+        private static void AddTextOutline(Text text)
+        {
+            if (text == null || text.GetComponent<Outline>() != null) return;
+            Outline outline = text.gameObject.AddComponent<Outline>();
+            outline.effectColor = new Color(0.04f, 0.025f, 0.015f, 0.92f);
+            outline.effectDistance = new Vector2(1.25f, -1.25f);
+            outline.useGraphicAlpha = true;
+        }
+
         private static Button CreateButton(Transform parent, string name, string label, Vector2 position, Vector2 size)
         {
             GameObject buttonObject = new GameObject(name);
@@ -1438,12 +1585,6 @@ namespace SurvivorFarm.Runtime.World
             text.text = label;
 
             return button;
-        }
-
-        private static void RefreshToolSelector(FarmTool tool)
-        {
-            FarmNotificationCenter.SetTool(PlayerToolbelt.GetDisplayName(tool));
-            FarmNotificationCenter.SetToolIcon(GetToolSprite(tool));
         }
 
         private static void RefreshInventory(PlayerInventory inventory)
@@ -1479,7 +1620,9 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (uiPanelSprite == null)
                 {
-                    uiPanelSprite = LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/dialogue box.png") ?? SquareSprite;
+                    uiPanelSprite = LoadBackpackIcon("Panel") ??
+                        LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/dialogue box.png", "dialogue box_0") ??
+                        SquareSprite;
                 }
 
                 return uiPanelSprite;
@@ -1492,7 +1635,9 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (uiButtonSprite == null)
                 {
-                    uiButtonSprite = LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/button.png") ?? SquareSprite;
+                    uiButtonSprite = LoadBackpackIcon("Panel") ??
+                        LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/button.png", "button_0") ??
+                        SquareSprite;
                 }
 
                 return uiButtonSprite;
@@ -1505,7 +1650,9 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (uiSlotSprite == null)
                 {
-                    uiSlotSprite = LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/Inventory/Slots.png") ?? SquareSprite;
+                    uiSlotSprite = LoadBackpackIcon("Slot") ??
+                        LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/Inventory/Slots.png", "Slots_0") ??
+                        SquareSprite;
                 }
 
                 return uiSlotSprite;
@@ -1518,7 +1665,9 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (uiBarSprite == null)
                 {
-                    uiBarSprite = LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/Bars.png") ?? SquareSprite;
+                    uiBarSprite = LoadBackpackIcon("HungerFrame") ??
+                        LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/Bars.png", "Bars_0") ??
+                        SquareSprite;
                 }
 
                 return uiBarSprite;
@@ -1531,7 +1680,7 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (uiHudSprite == null)
                 {
-                    uiHudSprite = LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/HUD.png") ?? UiPanelSprite;
+                    uiHudSprite = UiPanelSprite;
                 }
 
                 return uiHudSprite;
@@ -1545,8 +1694,7 @@ namespace SurvivorFarm.Runtime.World
 
         private static void ApplyInventoryPanelSprite(Image image)
         {
-            Sprite sprite = LoadPackageSprite("Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/UI/Inventory/inventory.png") ?? UiPanelSprite;
-            ApplyUiSprite(image, sprite);
+            ApplyUiSprite(image, UiPanelSprite);
         }
 
         private static void ApplyButtonSprite(Image image)
@@ -1576,19 +1724,50 @@ namespace SurvivorFarm.Runtime.World
             image.type = border.x + border.y + border.z + border.w > 0f ? Image.Type.Sliced : Image.Type.Simple;
         }
 
-        private static Sprite LoadPackageSprite(string assetPath)
+        private static Sprite LoadBackpackIcon(string iconName)
+        {
+            return Resources.Load<Sprite>($"BackpackIcons/{iconName}");
+        }
+
+        private static Sprite LoadPackageSprite(string assetPath, string spriteName = null)
         {
 #if UNITY_EDITOR
             UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+            Sprite firstSprite = null;
+            Sprite firstSubSprite = null;
+
             for (int i = 0; i < assets.Length; i++)
             {
                 if (assets[i] is Sprite sprite)
                 {
-                    return sprite;
+                    if (!string.IsNullOrEmpty(spriteName) && sprite.name == spriteName)
+                    {
+                        return sprite;
+                    }
+
+                    if (firstSprite == null)
+                    {
+                        firstSprite = sprite;
+                    }
+
+                    if (firstSubSprite == null && IsTextureSubSprite(sprite))
+                    {
+                        firstSubSprite = sprite;
+                    }
                 }
             }
-#endif
+
+            return firstSubSprite != null ? firstSubSprite : firstSprite;
+#else
             return null;
+#endif
+        }
+
+        private static bool IsTextureSubSprite(Sprite sprite)
+        {
+            Texture2D texture = sprite.texture;
+            Rect rect = sprite.rect;
+            return texture != null && (rect.width < texture.width || rect.height < texture.height);
         }
 
         private static Sprite SquareSprite
@@ -1628,7 +1807,7 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (seedSprite == null)
                 {
-                    seedSprite = CreateSprite("Seed Icon", 48, (x, y) =>
+                    seedSprite = LoadBackpackIcon("CommonSeeds") ?? CreateSprite("Seed Icon", 48, (x, y) =>
                     {
                         bool seedA = Vector2.Distance(new Vector2(x, y), new Vector2(17f, 18f)) <= 6f;
                         bool seedB = Vector2.Distance(new Vector2(x, y), new Vector2(29f, 27f)) <= 6f;
@@ -1647,7 +1826,7 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (mineralSeedSprite == null)
                 {
-                    mineralSeedSprite = CreateSprite("Mineral Seed Icon", 48, (x, y) =>
+                    mineralSeedSprite = LoadBackpackIcon("MineralSeeds") ?? CreateSprite("Mineral Seed Icon", 48, (x, y) =>
                     {
                         Vector2 point = new Vector2(x, y);
                         bool seed = Vector2.Distance(point, new Vector2(24f, 24f)) <= 12f;
@@ -1666,7 +1845,7 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (magicSeedSprite == null)
                 {
-                    magicSeedSprite = CreateSprite("Magic Seed Icon", 48, (x, y) =>
+                    magicSeedSprite = LoadBackpackIcon("MagicSeeds") ?? CreateSprite("Magic Seed Icon", 48, (x, y) =>
                     {
                         Vector2 point = new Vector2(x, y);
                         bool core = Vector2.Distance(point, new Vector2(24f, 24f)) <= 10f;
@@ -1686,7 +1865,7 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (woodSprite == null)
                 {
-                    woodSprite = CreateSprite("Wood Icon", 48, (x, y) =>
+                    woodSprite = LoadBackpackIcon("Wood") ?? CreateSprite("Wood Icon", 48, (x, y) =>
                     {
                         bool log = x >= 11 && x <= 37 && y >= 17 && y <= 30;
                         bool ring = Vector2.Distance(new Vector2(x, y), new Vector2(13f, 23f)) <= 7f;
@@ -1704,7 +1883,7 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (stoneSprite == null)
                 {
-                    stoneSprite = CreateSprite("Stone Icon", 48, (x, y) =>
+                    stoneSprite = LoadBackpackIcon("Stone") ?? CreateSprite("Stone Icon", 48, (x, y) =>
                     {
                         Vector2 point = new Vector2(x, y);
                         bool body = Vector2.Distance(point, new Vector2(24f, 23f)) <= 15f;
@@ -1723,7 +1902,7 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (fruitSprite == null)
                 {
-                    fruitSprite = CreateSprite("Fruit Icon", 48, (x, y) =>
+                    fruitSprite = LoadBackpackIcon("Fruit") ?? CreateSprite("Fruit Icon", 48, (x, y) =>
                     {
                         Vector2 point = new Vector2(x, y);
                         bool fruit = Vector2.Distance(point, new Vector2(24f, 21f)) <= 13f;
@@ -1747,7 +1926,7 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (coinSprite == null)
                 {
-                    coinSprite = CreateSprite("Coin Icon", 48, (x, y) =>
+                    coinSprite = LoadBackpackIcon("Coin") ?? CreateSprite("Coin Icon", 48, (x, y) =>
                     {
                         float distance = Vector2.Distance(new Vector2(x, y), new Vector2(24f, 24f));
                         if (distance <= 15f)
@@ -1769,7 +1948,7 @@ namespace SurvivorFarm.Runtime.World
             {
                 if (heartSprite == null)
                 {
-                    heartSprite = CreateSprite("Heart Icon", 48, (x, y) =>
+                    heartSprite = LoadBackpackIcon("Heart") ?? CreateSprite("Heart Icon", 48, (x, y) =>
                     {
                         Vector2 point = new Vector2(x, y);
                         bool leftLobe = Vector2.Distance(point, new Vector2(16f, 31f)) <= 10f;
@@ -1783,7 +1962,7 @@ namespace SurvivorFarm.Runtime.World
             }
         }
 
-        private static Sprite GetToolSprite(FarmTool tool)
+        public static Sprite GetToolSprite(FarmTool tool)
         {
             if (toolSprites == null)
             {
@@ -1801,6 +1980,12 @@ namespace SurvivorFarm.Runtime.World
 
         private static Sprite CreateToolSprite(FarmTool tool)
         {
+            Sprite packageIcon = LoadBackpackIcon(tool.ToString());
+            if (packageIcon != null)
+            {
+                return packageIcon;
+            }
+
             return CreateSprite($"{tool} Icon", 48, (x, y) =>
             {
                 switch (tool)

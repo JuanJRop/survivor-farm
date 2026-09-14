@@ -8,60 +8,55 @@ namespace SurvivorFarm.Runtime.Player
     {
         [SerializeField] private int maxHealth = 5;
         [SerializeField] private int currentHealth = 5;
-        [SerializeField] private float maxHunger = 100f;
-        [SerializeField] private float currentHunger = 100f;
-        [SerializeField] private float hungerDrainPerSecond = 0.35f;
-        [SerializeField] private int starvationDamage = 1;
-        [SerializeField] private float starvationDamageInterval = 4f;
-
-        private float nextStarvationDamageTime;
+        private float invulnerableUntil;
+        private float blockedDamage;
+        private void Awake()
+        {
+            if (GetComponent<PlayerRespawnController>() == null) gameObject.AddComponent<PlayerRespawnController>();
+        }
+        public void Revive()
+        {
+            Restore(maxHealth,maxHealth,1f);
+            invulnerableUntil = Time.time + 3f;
+        }
 
         public int MaxHealth => maxHealth;
         public int CurrentHealth => currentHealth;
-        public float HungerPercent => maxHunger <= 0f ? 0f : Mathf.Clamp01(currentHunger / maxHunger);
+        // Legacy saves and callers still carry satiety; it no longer affects gameplay.
+        public float HungerPercent => 1f;
 
         public event Action StatsChanged;
 
         private void Start()
         {
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-            currentHunger = Mathf.Clamp(currentHunger, 0f, maxHunger);
+            if (currentHealth <= 0) Revive();
             NotifyChanged();
         }
 
-        private void Update()
+        public void AdvanceNeeds(float seconds) { }
+
+        public void TakeDamage(int amount, bool starvation = false)
         {
-            if (currentHealth <= 0)
+            if (starvation || amount <= 0 || currentHealth <= 0 || Time.time < invulnerableUntil)
             {
                 return;
             }
 
-            float previousHunger = currentHunger;
-            currentHunger = Mathf.Max(0f, currentHunger - hungerDrainPerSecond * Time.deltaTime);
-
-            if (currentHunger <= 0f && Time.time >= nextStarvationDamageTime)
+            if(!starvation)
             {
-                TakeDamage(starvationDamage);
-                nextStarvationDamageTime = Time.time + starvationDamageInterval;
+                blockedDamage += amount*(GetComponent<PlayerInventory>()?.ArmorReduction ?? 0);
+                int blocked=Mathf.FloorToInt(blockedDamage);blockedDamage-=blocked;amount-=blocked;
+                if(amount<=0){FarmNotificationCenter.Show("Tu armadura absorbió el golpe.");return;}
             }
-            else if (!Mathf.Approximately(previousHunger, currentHunger))
-            {
-                NotifyChanged();
-            }
-        }
-
-        public void TakeDamage(int amount)
-        {
-            if (amount <= 0 || currentHealth <= 0)
-            {
-                return;
-            }
-
             currentHealth = Mathf.Max(0, currentHealth - amount);
+            GetComponent<SurvivorFarm.Runtime.Gameplay.GameFeelFeedback>()?.Pulse("−"+amount,transform.position,true);
+            GetComponent<PlayerCharacterAnimator>()?.PlayNamedAction(currentHealth <= 0 ? "Dead" : "Damage");
             NotifyChanged();
 
             if (currentHealth <= 0)
             {
+                FindFirstObjectByType<TutorialQuestSystem>()?.NotifyDeath();
                 FarmNotificationCenter.Show("Te quedaste sin vida.");
             }
         }
@@ -89,17 +84,7 @@ namespace SurvivorFarm.Runtime.Player
             NotifyChanged();
         }
 
-        public void RestoreHunger(float amount)
-        {
-            if (amount <= 0f)
-            {
-                return;
-            }
-
-            currentHunger = Mathf.Min(maxHunger, currentHunger + amount);
-            nextStarvationDamageTime = Time.time + starvationDamageInterval;
-            NotifyChanged();
-        }
+        public void RestoreHunger(float amount) { }
 
         public void Restore(int savedHealth, float hungerPercent)
         {
@@ -110,8 +95,6 @@ namespace SurvivorFarm.Runtime.Player
         {
             maxHealth = Mathf.Max(1, savedMaxHealth);
             currentHealth = Mathf.Clamp(savedHealth, 0, maxHealth);
-            currentHunger = Mathf.Clamp01(hungerPercent) * maxHunger;
-            nextStarvationDamageTime = Time.time + starvationDamageInterval;
             NotifyChanged();
         }
 

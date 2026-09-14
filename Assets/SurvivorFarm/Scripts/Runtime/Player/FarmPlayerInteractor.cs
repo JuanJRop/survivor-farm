@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using SurvivorFarm.Runtime.Gameplay;
@@ -16,6 +17,7 @@ namespace SurvivorFarm.Runtime.Player
         private PlayerCharacterAnimator characterAnimator;
         private IWorldInteractable highlightedInteractable;
         private Camera mainCamera;
+        private SpriteRenderer[] indicatorRenderers = new SpriteRenderer[0];
 
         private void Awake()
         {
@@ -28,6 +30,11 @@ namespace SurvivorFarm.Runtime.Player
 
         private void Update()
         {
+            if (InventoryPanelSystem.IsOpen || AdventureWindow.IsOpen || Time.timeScale == 0f)
+            {
+                FarmNotificationCenter.SetInteractionButton(false, "Interactuar");
+                return;
+            }
             IWorldInteractable nearest = FindNearestInteractable(transform.position, interactionRadius);
             if (!ReferenceEquals(nearest, highlightedInteractable))
             {
@@ -37,6 +44,7 @@ namespace SurvivorFarm.Runtime.Player
                 }
 
                 highlightedInteractable = nearest;
+                indicatorRenderers = nearest != null ? nearest.Transform.GetComponentsInChildren<SpriteRenderer>() : new SpriteRenderer[0];
 
                 if (highlightedInteractable != null)
                 {
@@ -45,33 +53,26 @@ namespace SurvivorFarm.Runtime.Player
             }
 
             FarmTool selectedTool = toolbelt != null ? toolbelt.SelectedTool : FarmTool.Sword;
+            FarmTool interactionTool = highlightedInteractable != null
+                ? ResolveInteractionTool(highlightedInteractable, selectedTool)
+                : selectedTool;
             FarmNotificationCenter.SetPrompt(highlightedInteractable != null
-                ? highlightedInteractable.GetInteractionLabel(selectedTool)
-                : "Tala arboles, pica rocas o cava pasto con la pala");
-            if (highlightedInteractable != null)
-            {
-                if (mainCamera == null)
-                {
-                    mainCamera = Camera.main;
-                }
-
-                FarmNotificationCenter.SetInteractionButtonAtWorldPosition(
-                    true,
-                    "Interactuar",
-                    highlightedInteractable.Transform.position + interactionButtonWorldOffset,
-                    mainCamera);
-            }
-            else
-            {
-                FarmNotificationCenter.SetInteractionButton(false, "Interactuar");
-            }
-
-            if (highlightedInteractable != null && Input.GetKeyDown(KeyCode.E))
-            {
+                ? highlightedInteractable.GetInteractionLabel(interactionTool)
+                : "Explora y reconstruye Raízclara.");
+            if (mainCamera == null) mainCamera = Camera.main;
+            FarmNotificationCenter.SetInteractionButtonAtWorldPosition(highlightedInteractable != null,
+                highlightedInteractable != null ? highlightedInteractable.GetInteractionLabel(interactionTool).Replace("Interactuar: ", "") : "Interactuar",
+                highlightedInteractable != null ? GetIndicatorPosition(highlightedInteractable) : Vector3.zero, mainCamera);
+            if (highlightedInteractable != null && (Input.GetKeyDown(KeyCode.E) || (Input.GetMouseButtonDown(1) && !IsPointerOverUi(-1))))
                 PerformInteraction();
-            }
+        }
 
-            HandleTouchInteraction();
+        private Vector3 GetIndicatorPosition(IWorldInteractable target)
+        {
+            Vector3 position = target.Transform.position + interactionButtonWorldOffset;
+            foreach (var visual in indicatorRenderers)
+                if (visual != null && visual.enabled && visual.gameObject.activeInHierarchy && visual.sprite != null) position.y = Mathf.Max(position.y, visual.bounds.max.y + 0.25f);
+            return position;
         }
 
         private void OnDisable()
@@ -87,170 +88,71 @@ namespace SurvivorFarm.Runtime.Player
 
         public void PerformInteraction()
         {
-            if (highlightedInteractable == null)
+            if (InventoryPanelSystem.IsOpen || Time.timeScale == 0f || highlightedInteractable == null ||
+                highlightedInteractable.Transform == null || !highlightedInteractable.IsAvailable ||
+                Vector2.Distance(transform.position, highlightedInteractable.Transform.position) > interactionRadius)
             {
                 return;
             }
 
-            movement?.StopMovement();
             FarmTool selectedTool = toolbelt != null ? toolbelt.SelectedTool : FarmTool.Sword;
-            characterAnimator?.PlayToolAction(selectedTool);
-            highlightedInteractable.Interact(selectedTool, inventory);
+            if (highlightedInteractable is FarmingPlot) return;
+            movement?.StopMovement();
+            FarmTool interactionTool = ResolveInteractionTool(highlightedInteractable, selectedTool);
+            if (!Supports(highlightedInteractable, interactionTool) || AdventureWindow.IsOpen || IsPointerOverUi(-1)) return;
+            if (characterAnimator != null && characterAnimator.MovementLocked) return;
+            characterAnimator?.FaceWorldPosition(highlightedInteractable.Transform.position);
+            highlightedInteractable.Interact(interactionTool, inventory);
+            FarmNotificationCenter.PulseInteraction();
         }
 
-        private static IWorldInteractable FindNearestInteractable(Vector3 position, float radius)
+        public static bool Supports(IWorldInteractable target, FarmTool tool)
         {
-            FarmingPlot[] plots = FindObjectsByType<FarmingPlot>(FindObjectsSortMode.None);
-            HarvestableResource[] resources = FindObjectsByType<HarvestableResource>(FindObjectsSortMode.None);
-            LandUnlockZone[] unlockZones = FindObjectsByType<LandUnlockZone>(FindObjectsSortMode.None);
-            DungeonEntrance[] dungeonEntrances = FindObjectsByType<DungeonEntrance>(FindObjectsSortMode.None);
-            DungeonExit[] dungeonExits = FindObjectsByType<DungeonExit>(FindObjectsSortMode.None);
-            BaseHouse[] houses = FindObjectsByType<BaseHouse>(FindObjectsSortMode.None);
-            DungeonChest[] chests = FindObjectsByType<DungeonChest>(FindObjectsSortMode.None);
-            IWorldInteractable nearest = null;
-            float nearestDistance = radius * radius;
-
-            foreach (LandUnlockZone unlockZone in unlockZones)
-            {
-                if (!unlockZone.IsAvailable)
-                {
-                    continue;
-                }
-
-                float distance = (unlockZone.Transform.position - position).sqrMagnitude;
-                if (distance <= nearestDistance)
-                {
-                    nearest = unlockZone;
-                    nearestDistance = distance;
-                }
-            }
-
-            if (nearest != null)
-            {
-                return nearest;
-            }
-
-            foreach (DungeonExit dungeonExit in dungeonExits)
-            {
-                if (!dungeonExit.IsAvailable)
-                {
-                    continue;
-                }
-
-                float distance = (dungeonExit.Transform.position - position).sqrMagnitude;
-                if (distance <= nearestDistance)
-                {
-                    nearest = dungeonExit;
-                    nearestDistance = distance;
-                }
-            }
-
-            foreach (DungeonEntrance dungeonEntrance in dungeonEntrances)
-            {
-                if (!dungeonEntrance.IsAvailable)
-                {
-                    continue;
-                }
-
-                float distance = (dungeonEntrance.Transform.position - position).sqrMagnitude;
-                if (distance <= nearestDistance)
-                {
-                    nearest = dungeonEntrance;
-                    nearestDistance = distance;
-                }
-            }
-
-            foreach (BaseHouse house in houses)
-            {
-                if (!house.IsAvailable)
-                {
-                    continue;
-                }
-
-                float distance = (house.Transform.position - position).sqrMagnitude;
-                if (distance <= nearestDistance)
-                {
-                    nearest = house;
-                    nearestDistance = distance;
-                }
-            }
-
-            foreach (DungeonChest chest in chests)
-            {
-                if (!chest.IsAvailable)
-                {
-                    continue;
-                }
-
-                float distance = (chest.Transform.position - position).sqrMagnitude;
-                if (distance <= nearestDistance)
-                {
-                    nearest = chest;
-                    nearestDistance = distance;
-                }
-            }
-
-            foreach (FarmingPlot plot in plots)
-            {
-                float distance = (plot.Transform.position - position).sqrMagnitude;
-                if (distance <= nearestDistance)
-                {
-                    nearest = plot;
-                    nearestDistance = distance;
-                }
-            }
-
-            foreach (HarvestableResource resource in resources)
-            {
-                if (!resource.IsAvailable)
-                {
-                    continue;
-                }
-
-                float distance = (resource.Transform.position - position).sqrMagnitude;
-                if (distance <= nearestDistance)
-                {
-                    nearest = resource;
-                    nearestDistance = distance;
-                }
-            }
-
-            return nearest;
+            if(target==null || !target.IsAvailable)return false;
+            if(target is FarmingPlot)return false;
+            if(target is AnimalResource)return tool==FarmTool.Sword || tool==FarmTool.Bow;
+            if(target is HarvestableResource resource)return resource.SupportsTool(tool);
+            if(target is ValleyInteraction story)return story.SupportsTool(tool);
+            return true;
         }
 
-        private void HandleTouchInteraction()
+        private static FarmTool ResolveInteractionTool(IWorldInteractable target, FarmTool selectedTool)
         {
-            if (mainCamera == null)
+            if (target is HarvestableResource resource && !(target is AnimalResource))
             {
-                mainCamera = Camera.main;
+                if (resource.SupportsTool(FarmTool.Axe)) return FarmTool.Axe;
+                if (resource.SupportsTool(FarmTool.Pickaxe)) return FarmTool.Pickaxe;
             }
 
-            if (mainCamera == null)
+            if (target is ValleyInteraction story && !string.IsNullOrEmpty(story.Id))
             {
-                return;
+                if (story.Id.StartsWith("wood:")) return FarmTool.Axe;
+                if (story.Id.StartsWith("stone:") || story.Id == "secret" || story.Id == "seal") return FarmTool.Pickaxe;
             }
 
-            if (Input.touchCount > 0)
-            {
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Began && !IsPointerOverUi(touch.fingerId))
-                {
-                    TryMoveAtScreenPosition(touch.position);
-                }
-            }
-            else if (Input.GetMouseButtonDown(0) && !IsPointerOverUi(-1))
-            {
-                TryMoveAtScreenPosition(Input.mousePosition);
-            }
+            if (target is IronVein) return FarmTool.Pickaxe;
+
+            return selectedTool;
         }
-
-        private void TryMoveAtScreenPosition(Vector2 screenPosition)
+        public FarmingPlot SelectedPlot {get;private set;}
+        IWorldInteractable FindNearestInteractable(Vector3 position, float radius)
         {
-            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(screenPosition);
-            if (movement != null)
+            FarmTool selectedTool=toolbelt!=null?toolbelt.SelectedTool:FarmTool.Sword;
+            SelectedPlot=null;
+            if(IsPointerOverUi(-1))return null;
+            WorldInteractable[] interactables = FindObjectsByType<WorldInteractable>(FindObjectsSortMode.None);
+            if(mainCamera!=null)
             {
-                movement.MoveToWorldPosition(worldPosition);
+                Vector3 pointer=mainCamera.ScreenToWorldPoint(Input.mousePosition);pointer.z=0;
+                IWorldInteractable pointed = interactables
+                    .Where(t=>!(t is FarmingPlot)&&Supports(t,ResolveInteractionTool(t,selectedTool))&&Vector2.Distance(position,t.Transform.position)<=radius&&Vector2.Distance(pointer,t.Transform.position)<.65f)
+                    .OrderBy(t=>(t.Transform.position-pointer).sqrMagnitude).FirstOrDefault();
+                if(pointed!=null)return pointed;
             }
+            IWorldInteractable nearestObject = interactables
+                .Where(t=>!(t is FarmingPlot)&&Supports(t,ResolveInteractionTool(t,selectedTool))&&Vector2.Distance(position,t.Transform.position)<=radius)
+                .OrderBy(t=>(t.Transform.position-position).sqrMagnitude).FirstOrDefault();
+            return nearestObject;
         }
 
         private static bool IsPointerOverUi(int pointerId)

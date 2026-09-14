@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68d0619aa7cee74eb4f66b21a2a27a6, type: 3}
+  m_Name: SproutSlimeAnimations
+  m_EditorClassIdentifier: SurvivorFarm.Runtime::SurvivorFarm.Runtime.Player.PlayerAnimationLibrary
+  Clips:
+  - Name: Idle
+    Atlas: {fileID: 2800000, guid: df954898df021c249b626c6e6c87f63b, type: 3}
+    Width: 16
+    Height: 32
+    Frames: 2
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 7
+    Loop: 1
+  - Name: Walk
+    Atlas: {fileID: 2800000, guid: dda54a6783a277d47a3d6d9881f0f134, type: 3}
+    Width: 16
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 7
+    Loop: 1
+  - Name: Attack
+    Atlas: {fileID: 2800000, guid: dda54a6783a277d47a3d6d9881f0f134, type: 3}
+    Width: 16
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 7
+    Loop: 0
+  - Name: Damage
+    Atlas: {fileID: 2800000, guid: 57c8e035cada3bb4ea9d191485be21da, type: 3}
+    Width: 16
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 7
+    Loop: 0
+  - Name: Dead
+    Atlas: {fileID: 2800000, guid: dd2092de174ded04598fbe9c3cacec60, type: 3}
+    Width: 16
+    Height: 32
+    Frames: 8
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 7
+    Loop: 0

@@ -2,6 +2,9 @@ using SurvivorFarm.Runtime.Gameplay;
 using SurvivorFarm.Runtime.UI;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace SurvivorFarm.Runtime.Player
 {
@@ -16,20 +19,31 @@ namespace SurvivorFarm.Runtime.Player
         private PlayerToolbelt toolbelt;
         private PlayerMovementController movement;
         private PlayerCharacterAnimator characterAnimator;
-        private Text attackButtonText;
-        private Image cooldownFill;
+        private PlayerInventory inventory;
+        [SerializeField] private Text attackButtonText;
+        [SerializeField] private Image cooldownFill;
         private float nextAttackTime;
+        private float activeCooldown;
+        private CombatFeelRangeCue swordCue;
+        private Coroutine bowRelease;
+        public int ProgressionDamage => (GetComponent<AdventureProgress>()?.Data.temperedBlade == true ? 2 : 0) + EquipmentItems.DamageBonusFor(inventory, FarmTool.Sword) + ((GetComponent<PlayerCraftingController>()?.WeaponLevel ?? 1)-1);
+        public int PetDamageBonus => GetComponent<PlayerPetController>()?.DamageBonus ?? 0;
+        public int GetAttackDamage(FarmTool tool) => tool == FarmTool.Sword
+            ? swordDamage + PetDamageBonus + ProgressionDamage
+            : tool == FarmTool.Bow ? arrowDamage + PetDamageBonus + EquipmentItems.DamageBonusFor(inventory, tool) : 0;
 
         private void Awake()
         {
             toolbelt = GetComponent<PlayerToolbelt>();
             movement = GetComponent<PlayerMovementController>();
             characterAnimator = GetComponent<PlayerCharacterAnimator>();
+            inventory = GetComponent<PlayerInventory>();
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (SurvivorFarm.Runtime.UI.InventoryPanelSystem.IsOpen) return;
+            if (Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
             {
                 Attack();
             }
@@ -46,9 +60,16 @@ namespace SurvivorFarm.Runtime.Player
 
         public void Attack()
         {
+            AttackTarget(null);
+        }
+
+        public void AttackTarget(IDamageable preferredTarget)
+        {
+            if (InventoryPanelSystem.IsOpen || Time.timeScale == 0f) return;
+            var survival = GetComponent<PlayerSurvivalStats>();
+            if (survival != null && survival.CurrentHealth <= 0) return;
             if (Time.time < nextAttackTime)
             {
-                FarmNotificationCenter.Show($"Ataque recargando {nextAttackTime - Time.time:0.0}s.");
                 return;
             }
 
@@ -59,61 +80,115 @@ namespace SurvivorFarm.Runtime.Player
                 return;
             }
 
+            if (characterAnimator != null && characterAnimator.MovementLocked) return;
             movement?.StopMovement();
-            bool attacked;
-
+            float range = selectedTool == FarmTool.Sword ? swordRange : bowRange;
+            IDamageable target = preferredTarget ?? FindNearestTarget(range);
+            var clip = characterAnimator != null && characterAnimator.Library != null ? characterAnimator.Library.Find(PlayerCharacterAnimator.ToolClip(selectedTool)) : null;
+            float clipDuration = clip != null && clip.FramesPerSecond > 0f ? clip.Frames / clip.FramesPerSecond : 0f;
+            activeCooldown = Mathf.Max(attackCooldown, clipDuration);
+            nextAttackTime = Time.time + activeCooldown;
+            characterAnimator?.PlayAction(PlayerCharacterAnimator.ToolClip(selectedTool), 0, ValidTarget(target) ? (Vector3?)target.Transform.position : null);
             if (selectedTool == FarmTool.Sword)
             {
-                attacked = SwingSword();
+                PerformSwordAreaAttack();
+                return;
             }
-            else
+            if (!ValidTarget(target) ||
+                (target.Transform.position - transform.position).sqrMagnitude > range * range ||
+                !HasClearPath(target))
             {
-                attacked = ShootArrow();
+                FarmNotificationCenter.Show("No hay un objetivo al alcance.");
+                return;
             }
 
-            if (attacked)
-            {
-                characterAnimator?.PlayToolAction(selectedTool);
-                nextAttackTime = Time.time + attackCooldown;
-            }
+            int damage = GetAttackDamage(FarmTool.Bow);
+            if (clipDuration > 0f)
+                bowRelease = StartCoroutine(ReleaseArrow(target, target.SpawnGeneration, damage, clipDuration * 0.55f));
+            else ShootArrow(target, damage);
         }
 
-        private bool SwingSword()
+        private void PerformSwordAreaAttack()
         {
-            BasicEnemyAI enemy = FindNearestEnemy(swordRange);
-            if (enemy == null)
+            if (swordCue == null) swordCue = GetComponent<CombatFeelRangeCue>() ?? gameObject.AddComponent<CombatFeelRangeCue>();
+            swordCue.Show(transform.position, swordRange);
+            var targets = new HashSet<IDamageable>();
+            foreach (var collider in Physics2D.OverlapCircleAll(transform.position, swordRange))
             {
-                FarmNotificationCenter.Show("No hay enemigos cerca.");
+                var candidate = collider.GetComponentInParent<IDamageable>();
+                if (!ValidTarget(candidate) || candidate.Transform.IsChildOf(transform)) continue;
+                if (Vector2.Distance(transform.position, candidate.Transform.position) > swordRange || !HasClearPath(candidate, true)) continue;
+                targets.Add(candidate);
+            }
+            int damage = GetAttackDamage(FarmTool.Sword);
+            foreach (var candidate in targets)
+                if (ValidTarget(candidate)) candidate.TakeDamage(damage, inventory);
+        }
+
+        private bool HasClearPath(IDamageable target, bool swordArea = false)
+        {
+            RaycastHit2D[] hits = Physics2D.LinecastAll(transform.position, target.Transform.position);
+            foreach (RaycastHit2D hit in hits)
+            {
+                if (hit.collider.isTrigger || hit.transform.IsChildOf(transform) ||
+                    hit.transform.IsChildOf(target.Transform))
+                {
+                    continue;
+                }
+
+                if (swordArea && hit.collider.GetComponentInParent<EnemyAIBase>() != null) continue;
+
                 return false;
             }
 
-            enemy.TakeDamage(swordDamage);
-            FarmNotificationCenter.Show("Golpeaste con la espada.");
             return true;
         }
 
-        private bool ShootArrow()
-        {
-            BasicEnemyAI enemy = FindNearestEnemy(bowRange);
-            if (enemy == null)
-            {
-                FarmNotificationCenter.Show("No hay enemigos en rango.");
-                return false;
-            }
+        private static bool ValidTarget(IDamageable target) => target != null &&
+            !(target is Object instance && instance == null) && target.Transform != null && target.IsAlive;
 
+        private IEnumerator ReleaseArrow(IDamageable target, int generation, int damage, float delay)
+        {
+            float releaseAt = Time.time + delay;
+            while (true)
+            {
+                var stats = GetComponent<PlayerSurvivalStats>();
+                if (stats != null && stats.CurrentHealth <= 0 || characterAnimator == null ||
+                    characterAnimator.CurrentClip != PlayerCharacterAnimator.ToolClip(FarmTool.Bow)) break;
+                if (Time.time >= releaseAt)
+                {
+                    if (ValidTarget(target) && target.SpawnGeneration == generation &&
+                        (target.Transform.position - transform.position).sqrMagnitude <= bowRange * bowRange && HasClearPath(target))
+                        ShootArrow(target, damage);
+                    break;
+                }
+                yield return null;
+            }
+            bowRelease = null;
+        }
+
+        private void OnDisable()
+        {
+            if (bowRelease != null) StopCoroutine(bowRelease);
+            bowRelease = null;
+            if (swordCue != null) swordCue.enabled = false;
+        }
+
+        private void OnEnable() { if (swordCue != null) swordCue.enabled = true; }
+
+        private void ShootArrow(IDamageable target, int damage)
+        {
             GameObject arrowObject = new GameObject("Arrow Projectile");
             arrowObject.transform.position = transform.position;
-            arrowObject.transform.localScale = new Vector3(0.38f, 0.12f, 1f);
+            arrowObject.transform.localScale = Vector3.one * 0.65f;
 
             SpriteRenderer renderer = arrowObject.AddComponent<SpriteRenderer>();
-            renderer.sprite = CreateArrowSprite();
-            renderer.color = new Color(0.92f, 0.84f, 0.58f);
+            renderer.sprite = CombatFeelVisuals.Arrow;
+            renderer.color = Color.white;
             renderer.sortingOrder = 8;
 
             ArrowProjectile projectile = arrowObject.AddComponent<ArrowProjectile>();
-            projectile.Configure(enemy, arrowDamage);
-            FarmNotificationCenter.Show("Disparaste una flecha.");
-            return true;
+            projectile.Configure(target, damage, inventory);
         }
 
         private void RefreshAttackUi()
@@ -129,27 +204,32 @@ namespace SurvivorFarm.Runtime.Player
             if (cooldownFill != null)
             {
                 cooldownFill.enabled = !ready;
-                cooldownFill.fillAmount = attackCooldown <= 0f ? 0f : Mathf.Clamp01(remaining / attackCooldown);
+                cooldownFill.fillAmount = activeCooldown <= 0f ? 0f : Mathf.Clamp01(remaining / activeCooldown);
             }
         }
 
-        private BasicEnemyAI FindNearestEnemy(float range)
+        private IDamageable FindNearestTarget(float range)
         {
-            BasicEnemyAI[] enemies = FindObjectsByType<BasicEnemyAI>(FindObjectsSortMode.None);
-            BasicEnemyAI nearest = null;
+            Collider2D[] candidates = Physics2D.OverlapCircleAll(transform.position, range);
+            IDamageable nearest = null;
             float nearestDistance = range * range;
+            Camera camera = Camera.main;
+            Vector2 aim = camera != null ? (Vector2)(camera.ScreenToWorldPoint(Input.mousePosition) - transform.position) : Vector2.zero;
 
-            foreach (BasicEnemyAI enemy in enemies)
+            foreach (Collider2D candidate in candidates)
             {
-                if (!enemy.gameObject.activeInHierarchy)
+                IDamageable target = candidate.GetComponentInParent<IDamageable>();
+                if (!ValidTarget(target) || target.Transform.IsChildOf(transform))
                 {
                     continue;
                 }
 
-                float distance = (enemy.transform.position - transform.position).sqrMagnitude;
-                if (distance <= nearestDistance)
+                Vector2 offset=target.Transform.position-transform.position;
+                if(aim.sqrMagnitude>.01f && Vector2.Angle(aim,offset)>50f)continue;
+                float distance = offset.sqrMagnitude;
+                if (distance <= nearestDistance && HasClearPath(target))
                 {
-                    nearest = enemy;
+                    nearest = target;
                     nearestDistance = distance;
                 }
             }
@@ -157,23 +237,5 @@ namespace SurvivorFarm.Runtime.Player
             return nearest;
         }
 
-        private static Sprite CreateArrowSprite()
-        {
-            Texture2D texture = new Texture2D(24, 8, TextureFormat.RGBA32, false);
-            texture.filterMode = FilterMode.Point;
-
-            for (int y = 0; y < 8; y++)
-            {
-                for (int x = 0; x < 24; x++)
-                {
-                    bool shaft = y >= 3 && y <= 4 && x <= 18;
-                    bool head = x >= 18 && Mathf.Abs(y - 3.5f) <= 23 - x;
-                    texture.SetPixel(x, y, shaft || head ? Color.white : Color.clear);
-                }
-            }
-
-            texture.Apply();
-            return Sprite.Create(texture, new Rect(0f, 0f, 24f, 8f), new Vector2(0.5f, 0.5f), 24f);
-        }
     }
 }

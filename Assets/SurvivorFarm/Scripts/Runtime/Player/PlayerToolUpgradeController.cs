@@ -34,6 +34,7 @@ namespace SurvivorFarm.Runtime.Player
                     return axeLevel;
                 case FarmTool.Pickaxe:
                     return pickaxeLevel;
+                case FarmTool.Hoe:
                 case FarmTool.Shovel:
                     return shovelLevel;
                 default:
@@ -68,11 +69,17 @@ namespace SurvivorFarm.Runtime.Player
 
         public void UpgradeShovel()
         {
-            TryUpgrade(FarmTool.Shovel);
+            UpgradeHoe();
+        }
+
+        public void UpgradeHoe()
+        {
+            TryUpgrade(FarmTool.Hoe);
         }
 
         public bool TryUpgrade(FarmTool tool)
         {
+            if (tool != FarmTool.Axe && tool != FarmTool.Pickaxe) return false;
             int currentLevel = GetToolLevel(tool);
             if (currentLevel >= MaxToolLevel)
             {
@@ -102,7 +109,14 @@ namespace SurvivorFarm.Runtime.Player
 
         public string GetUpgradeSummary()
         {
-            return $"Hacha Nv.{axeLevel} | Pico Nv.{pickaxeLevel} | Pala Nv.{shovelLevel}";
+            return $"Hacha Nv.{axeLevel} | Pico Nv.{pickaxeLevel}";
+        }
+
+        public bool GetNextCost(FarmTool tool, out int wood, out int stone, out int coins)
+        {
+            if (tool != FarmTool.Axe && tool != FarmTool.Pickaxe) { wood=stone=coins=0; return false; }
+            int level=GetToolLevel(tool);var cost=GetUpgradeCost(level+1);
+            wood=cost.wood;stone=cost.stone;coins=cost.coins;return level<MaxToolLevel;
         }
 
         public string GetNextCostText(FarmTool tool)
@@ -136,6 +150,7 @@ namespace SurvivorFarm.Runtime.Player
                 case FarmTool.Pickaxe:
                     pickaxeLevel = clampedLevel;
                     break;
+                case FarmTool.Hoe:
                 case FarmTool.Shovel:
                     shovelLevel = clampedLevel;
                     break;

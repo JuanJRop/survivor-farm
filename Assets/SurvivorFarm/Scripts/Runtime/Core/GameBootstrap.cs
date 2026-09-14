@@ -19,7 +19,7 @@ namespace SurvivorFarm.Runtime.Core
         {
             Debug.Log($"{projectName} started.");
 
-            if (!buildFarmPrototypeOnStart || FindFirstObjectByType<FarmingPlot>() != null)
+            if (!buildFarmPrototypeOnStart || FindFirstObjectByType<Player.PlayerInventory>() != null)
             {
                 return;
             }

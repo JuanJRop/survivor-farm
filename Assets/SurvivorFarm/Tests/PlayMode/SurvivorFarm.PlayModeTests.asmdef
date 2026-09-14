@@ -1,0 +1,6 @@
+{
+  "name": "SurvivorFarm.PlayModeTests",
+  "references": ["SurvivorFarm.Runtime", "Unity.ugui"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

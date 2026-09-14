@@ -3,29 +3,25 @@ using UnityEngine;
 
 namespace SurvivorFarm.Runtime.Gameplay
 {
-    public sealed class DungeonExit : MonoBehaviour, IWorldInteractable
+    public sealed class DungeonExit : WorldInteractable
     {
         [SerializeField] private DungeonEntrance entrance;
 
-        public Transform Transform => transform;
-        public bool IsAvailable => entrance != null && entrance.IsInsideDungeon;
+        public override bool IsAvailable => entrance != null && entrance.IsInsideDungeon;
+
+        protected override float HighlightScale => 1.12f;
 
         public void Configure(DungeonEntrance dungeonEntrance)
         {
             entrance = dungeonEntrance;
         }
 
-        public string GetInteractionLabel(FarmTool selectedTool)
+        public override string GetInteractionLabel(FarmTool selectedTool)
         {
             return "Interactuar: salir de mazmorra";
         }
 
-        public void SetHighlighted(bool highlighted)
-        {
-            transform.localScale = highlighted ? Vector3.one * 1.12f : Vector3.one;
-        }
-
-        public void Interact(FarmTool selectedTool, PlayerInventory inventory)
+        public override void Interact(FarmTool selectedTool, PlayerInventory inventory)
         {
             entrance?.ExitDungeon();
         }

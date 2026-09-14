@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using SurvivorFarm.Runtime.Gameplay;
+using SurvivorFarm.Runtime.Player;
 
 namespace SurvivorFarm.Runtime.UI
 {
@@ -16,26 +18,141 @@ namespace SurvivorFarm.Runtime.UI
         [SerializeField] private Image[] healthHeartIcons = new Image[0];
         [SerializeField] private Image hungerFill;
         [SerializeField] private Text hungerText;
+        [SerializeField] private Image swordWeaponFrame;
+        [SerializeField] private Image bowWeaponFrame;
+        [SerializeField] private Image hoeToolFrame;
         [SerializeField] private float notificationDuration = 3f;
         [SerializeField] private Vector2 interactionScreenOffset = new Vector2(0f, 54f);
+        [SerializeField] private bool fixedInteractionButton;
+
+        public void UseFixedInteractionButton(bool value) => fixedInteractionButton = value;
+        public void ConfigureFloatingInteraction(Button button, Text label)
+        {
+            interactionButton = button;
+            interactionButtonText = label;
+            interactionButtonRect = button.GetComponent<RectTransform>();
+            canvasRect = button.transform.parent as RectTransform;
+            fixedInteractionButton = false;
+            interactionScreenOffset = Vector2.zero;
+        }
+
+        public static void PulseInteraction()
+        {
+            if (instance != null && instance.interactionButton != null)
+                instance.interactionButton.GetComponent<InteractionPromptAnimation>()?.Press();
+        }
 
         private float hideNotificationAt;
         private RectTransform canvasRect;
         private RectTransform interactionButtonRect;
-        private Text[] inventorySlotTexts = new Text[0];
-        private Image[] inventorySlotIcons = new Image[0];
+        [SerializeField] private Text[] inventorySlotTexts = new Text[0];
+        [SerializeField] private Image[] inventorySlotIcons = new Image[0];
+        [SerializeField] private PlayerInventory inventory;
+        [SerializeField] private PlayerToolbelt toolbelt;
+        [SerializeField] private Sprite[] toolSprites = new Sprite[0];
 
         private void Awake()
         {
             instance = this;
+            interactionButtonRect = interactionButton != null ? interactionButton.GetComponent<RectTransform>() : null;
+            canvasRect = interactionButton != null ? interactionButton.GetComponentInParent<Canvas>()?.GetComponent<RectTransform>() : null;
+        }
+
+        private void OnEnable()
+        {
+            Subscribe();
+        }
+
+        private void OnDisable()
+        {
+            if (inventory != null) inventory.InventoryChanged -= RefreshInventoryCounts;
+            if (toolbelt != null) toolbelt.ToolChanged -= RefreshSelectedTool;
+        }
+
+        public void ConfigureGameplayBindings(PlayerInventory sourceInventory, PlayerToolbelt sourceToolbelt,
+            Text[] counts, Image[] icons, Sprite[] tools)
+        {
+            OnDisable();
+            inventory = sourceInventory;
+            toolbelt = sourceToolbelt;
+            inventorySlotTexts = counts;
+            inventorySlotIcons = icons;
+            toolSprites = tools;
+            Subscribe();
+        }
+
+        public void ConfigureWeaponFrames(Image swordFrame, Image bowFrame, Image hoeFrame = null)
+        {
+            swordWeaponFrame = swordFrame;
+            bowWeaponFrame = bowFrame;
+            hoeToolFrame = hoeFrame;
+            if (toolbelt != null)
+            {
+                RefreshSelectedTool(toolbelt.SelectedTool);
+            }
+        }
+
+        private void Subscribe()
+        {
+            if (inventory != null)
+            {
+                inventory.InventoryChanged -= RefreshInventoryCounts;
+                inventory.InventoryChanged += RefreshInventoryCounts;
+                RefreshInventoryCounts();
+            }
+            if (toolbelt != null)
+            {
+                toolbelt.ToolChanged -= RefreshSelectedTool;
+                toolbelt.ToolChanged += RefreshSelectedTool;
+                RefreshSelectedTool(toolbelt.SelectedTool);
+            }
+        }
+
+        private void RefreshSelectedTool(FarmTool tool)
+        {
+            if (toolText != null) toolText.text = PlayerToolbelt.GetDisplayName(tool);
+            int index = (int)tool;
+            if (toolIcon != null && index >= 0 && index < toolSprites.Length)
+                toolIcon.sprite = toolSprites[index];
+
+            SetWeaponFrameSelected(swordWeaponFrame, tool == FarmTool.Sword);
+            SetWeaponFrameSelected(bowWeaponFrame, tool == FarmTool.Bow);
+            SetWeaponFrameSelected(hoeToolFrame, tool == FarmTool.Hoe);
+        }
+
+        private static void SetWeaponFrameSelected(Image frame, bool selected)
+        {
+            if (frame == null)
+            {
+                return;
+            }
+
+            frame.color = selected
+                ? new Color(1f, 0.78f, 0.36f, 1f)
+                : new Color(1f, 1f, 1f, 0.82f);
+            frame.rectTransform.localScale = selected ? Vector3.one * 1.06f : Vector3.one;
+        }
+
+        private void RefreshInventoryCounts()
+        {
+            int[] counts = { inventory.CommonSeeds, inventory.MineralSeeds, inventory.MagicSeeds,
+                inventory.Wood, inventory.Stone, inventory.Fruit, inventory.Coins };
+            for (int i = 0; i < inventorySlotTexts.Length && i < counts.Length; i++)
+            {
+                bool visible = counts[i] > 0;
+                if (inventorySlotTexts[i] != null) inventorySlotTexts[i].text = visible ? counts[i].ToString() : string.Empty;
+                if (i < inventorySlotIcons.Length && inventorySlotIcons[i] != null) inventorySlotIcons[i].enabled = visible;
+            }
         }
 
         private void Update()
         {
-            if (notificationText != null && notificationText.enabled && Time.time >= hideNotificationAt)
+            if(notificationText != null)
             {
-                notificationText.enabled = false;
+                var canvas=notificationText.GetComponentInParent<Canvas>();
+                if(canvas!=null){var rect=notificationText.rectTransform;rect.SetParent(canvas.transform,false);rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,1);rect.anchoredPosition=new Vector2(0,-104);rect.sizeDelta=new Vector2(440,110);notificationText.alignment=TextAnchor.UpperCenter;notificationText.fontSize=16;notificationText.raycastTarget=false;}
             }
+            if(notificationText!=null)notificationText.enabled=Time.time<hideNotificationAt&&(!InventoryPanelSystem.IsOpen||ConstructionSystem.IsPlacing);
         }
 
         public static void Bind(
@@ -205,20 +322,9 @@ namespace SurvivorFarm.Runtime.UI
                     : new Color(0.18f, 0.08f, 0.08f, 0.72f);
             }
 
-            float clampedHunger = Mathf.Clamp01(hungerPercent);
-            if (center.hungerFill != null)
-            {
-                center.hungerFill.fillAmount = clampedHunger;
-                center.hungerFill.color = Color.Lerp(
-                    new Color(0.78f, 0.24f, 0.12f, 1f),
-                    new Color(0.30f, 0.72f, 0.30f, 1f),
-                    clampedHunger);
-            }
+            if (center.hungerFill != null) center.hungerFill.transform.parent.gameObject.SetActive(false);
+            if (center.hungerText != null) center.hungerText.gameObject.SetActive(false);
 
-            if (center.hungerText != null)
-            {
-                center.hungerText.text = $"Hambre {Mathf.RoundToInt(clampedHunger * 100f)}%";
-            }
         }
 
         public static void SetInteractionButton(bool visible, string label)
@@ -233,12 +339,19 @@ namespace SurvivorFarm.Runtime.UI
             FarmNotificationCenter center = EnsureInstance();
             center.SetInteractionButtonLabel(label);
 
+            if (center.fixedInteractionButton)
+            {
+                center.SetInteractionVisible(visible);
+                return;
+            }
+
             if (!visible || camera == null || center.interactionButtonRect == null || center.canvasRect == null)
             {
                 center.SetInteractionVisible(false);
                 return;
             }
 
+            center.canvasRect = center.interactionButtonRect.parent as RectTransform;
             Vector3 screenPosition = camera.WorldToScreenPoint(worldPosition);
             if (screenPosition.z < 0f)
             {
@@ -247,6 +360,7 @@ namespace SurvivorFarm.Runtime.UI
             }
 
             screenPosition += (Vector3)center.interactionScreenOffset;
+            screenPosition.y += Mathf.Sin(Time.unscaledTime * 3f) * 1.5f;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 center.canvasRect,
                 screenPosition,
@@ -302,6 +416,7 @@ namespace SurvivorFarm.Runtime.UI
             if (interactionButton != null)
             {
                 interactionButton.gameObject.SetActive(visible);
+                if (fixedInteractionButton) interactionButton.interactable = visible;
             }
         }
     }

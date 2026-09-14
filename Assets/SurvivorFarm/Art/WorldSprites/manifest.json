@@ -1,0 +1,688 @@
+{
+  "entries": [
+    {
+      "name": "Grass",
+      "source": "Farm and Tileset/Tileset/Tileset Grass Spring.png",
+      "box": [
+        88,
+        24,
+        104,
+        40
+      ],
+      "ppu": 32,
+      "pivot": 0.5
+    },
+    {
+      "name": "Tuft",
+      "source": "Farm and Tileset/Tileset/Tileset Grass Spring.png",
+      "box": [
+        144,
+        64,
+        160,
+        80
+      ],
+      "ppu": 32,
+      "pivot": 0.5
+    },
+    {
+      "name": "Path",
+      "source": "Farm and Tileset/Tileset/Tileset Grass Spring.png",
+      "box": [
+        88,
+        152,
+        104,
+        168
+      ],
+      "ppu": 32,
+      "pivot": 0.5
+    },
+    {
+      "name": "PathLeft",
+      "source": "Farm and Tileset/Tileset/Tileset Grass Spring.png",
+      "box": [
+        64,
+        152,
+        80,
+        168
+      ],
+      "ppu": 32,
+      "pivot": 0.5
+    },
+    {
+      "name": "PathRight",
+      "source": "Farm and Tileset/Tileset/Tileset Grass Spring.png",
+      "box": [
+        112,
+        152,
+        128,
+        168
+      ],
+      "ppu": 32,
+      "pivot": 0.5
+    },
+    {
+      "name": "PathTop",
+      "source": "Farm and Tileset/Tileset/Tileset Grass Spring.png",
+      "box": [
+        88,
+        128,
+        104,
+        144
+      ],
+      "ppu": 32,
+      "pivot": 0.5
+    },
+    {
+      "name": "PathBottom",
+      "source": "Farm and Tileset/Tileset/Tileset Grass Spring.png",
+      "box": [
+        88,
+        176,
+        104,
+        192
+      ],
+      "ppu": 32,
+      "pivot": 0.5
+    },
+    {
+      "name": "House",
+      "source": "Exterior/Houses/Tiny House.png",
+      "box": [
+        80,
+        368,
+        160,
+        480
+      ],
+      "ppu": 32,
+      "pivot": 0.12
+    },
+    {
+      "name": "Shop",
+      "source": "Exterior/Houses/NPCS houses/Blacksmith.png",
+      "box": [
+        80,
+        0,
+        224,
+        96
+      ],
+      "ppu": 32,
+      "pivot": 0.12
+    },
+    {
+      "name": "Tree",
+      "source": "Farm and Tileset/Tree/Common/No Shadow/Maple Tree.png",
+      "box": [
+        0,
+        48,
+        32,
+        96
+      ],
+      "ppu": 24,
+      "pivot": 0.12
+    },
+    {
+      "name": "Rock",
+      "source": "Farm and Tileset/Props/Spring/Ground stones.png",
+      "box": [
+        32,
+        0,
+        48,
+        16
+      ],
+      "ppu": 16,
+      "pivot": 0.3
+    },
+    {
+      "name": "Soil",
+      "source": "Farm and Tileset/Tileset/Tilled Soil and wet soil.png",
+      "box": [
+        16,
+        0,
+        64,
+        48
+      ],
+      "ppu": 44,
+      "pivot": 0.5
+    },
+    {
+      "name": "WetSoil",
+      "source": "Farm and Tileset/Tileset/Tilled Soil and wet soil.png",
+      "box": [
+        16,
+        64,
+        64,
+        112
+      ],
+      "ppu": 44,
+      "pivot": 0.5
+    },
+    {
+      "name": "Well",
+      "source": "Exterior/Well .png",
+      "box": [
+        0,
+        0,
+        32,
+        48
+      ],
+      "ppu": 24,
+      "pivot": 0.15
+    },
+    {
+      "name": "Chest",
+      "source": "Exterior/shipping box.png",
+      "box": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "ppu": 24,
+      "pivot": 0.15
+    },
+    {
+      "name": "Floor",
+      "source": "Farm and Tileset/Tileset/Tileset House.png",
+      "box": [
+        272,
+        0,
+        288,
+        16
+      ],
+      "ppu": 32,
+      "pivot": 0.5
+    },
+    {
+      "name": "Counter",
+      "source": "Interior/Tables and desks.png",
+      "box": [
+        128,
+        192,
+        176,
+        224
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Clerk",
+      "source": "Character and Portrait/Character/Pre-made/Josh/Idle.png",
+      "box": [
+        32,
+        0,
+        64,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.15
+    },
+    {
+      "name": "Sign",
+      "source": "UI/HUD.png",
+      "box": [
+        112,
+        32,
+        128,
+        48
+      ],
+      "ppu": 24,
+      "pivot": 0.5
+    },
+    {
+      "name": "Crop0",
+      "source": "Farm Crops/Spring/Carrot.png",
+      "box": [
+        16,
+        0,
+        32,
+        16
+      ],
+      "ppu": 20,
+      "pivot": 0.3
+    },
+    {
+      "name": "Crop1",
+      "source": "Farm Crops/Spring/Carrot.png",
+      "box": [
+        32,
+        0,
+        48,
+        16
+      ],
+      "ppu": 20,
+      "pivot": 0.3
+    },
+    {
+      "name": "Crop2",
+      "source": "Farm Crops/Spring/Carrot.png",
+      "box": [
+        48,
+        0,
+        64,
+        16
+      ],
+      "ppu": 20,
+      "pivot": 0.3
+    },
+    {
+      "name": "Crop3",
+      "source": "Farm Crops/Spring/Carrot.png",
+      "box": [
+        64,
+        0,
+        80,
+        16
+      ],
+      "ppu": 20,
+      "pivot": 0.3
+    },
+    {
+      "name": "Crop4",
+      "source": "Farm Crops/Spring/Carrot.png",
+      "box": [
+        80,
+        0,
+        96,
+        16
+      ],
+      "ppu": 20,
+      "pivot": 0.3
+    },
+    {
+      "name": "DeerIdle0_0",
+      "source": "Forest Animals/Deer/Male/Idle.png",
+      "box": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerIdle0_1",
+      "source": "Forest Animals/Deer/Male/Idle.png",
+      "box": [
+        32,
+        0,
+        64,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerIdle1_0",
+      "source": "Forest Animals/Deer/Male/Idle.png",
+      "box": [
+        0,
+        32,
+        32,
+        64
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerIdle1_1",
+      "source": "Forest Animals/Deer/Male/Idle.png",
+      "box": [
+        32,
+        32,
+        64,
+        64
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerIdle2_0",
+      "source": "Forest Animals/Deer/Male/Idle.png",
+      "box": [
+        0,
+        64,
+        32,
+        96
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerIdle2_1",
+      "source": "Forest Animals/Deer/Male/Idle.png",
+      "box": [
+        32,
+        64,
+        64,
+        96
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk0_0",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk0_1",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        32,
+        0,
+        64,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk0_2",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        64,
+        0,
+        96,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk0_3",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        96,
+        0,
+        128,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk1_0",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        0,
+        32,
+        32,
+        64
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk1_1",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        32,
+        32,
+        64,
+        64
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk1_2",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        64,
+        32,
+        96,
+        64
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk1_3",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        96,
+        32,
+        128,
+        64
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk2_0",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        0,
+        64,
+        32,
+        96
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk2_1",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        32,
+        64,
+        64,
+        96
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk2_2",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        64,
+        64,
+        96,
+        96
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "DeerWalk2_3",
+      "source": "Forest Animals/Deer/Male/Walk.png",
+      "box": [
+        96,
+        64,
+        128,
+        96
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken0_0",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken0_1",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        16,
+        0,
+        32,
+        16
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken0_2",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        32,
+        0,
+        48,
+        16
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken0_3",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        48,
+        0,
+        64,
+        16
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken1_0",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        0,
+        16,
+        16,
+        32
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken1_1",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        16,
+        16,
+        32,
+        32
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken1_2",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        32,
+        16,
+        48,
+        32
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken1_3",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        48,
+        16,
+        64,
+        32
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken2_0",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        0,
+        32,
+        16,
+        48
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken2_1",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        16,
+        32,
+        32,
+        48
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken2_2",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        32,
+        32,
+        48,
+        48
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "Chicken2_3",
+      "source": "Farm Animals/Chicken/Chicken White.png",
+      "box": [
+        48,
+        32,
+        64,
+        48
+      ],
+      "ppu": 24,
+      "pivot": 0.2
+    },
+    {
+      "name": "SlimeIdle0",
+      "source": "Enemy/Sprout Slime/Blue/Idle.png",
+      "box": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "SlimeWalk0",
+      "source": "Enemy/Sprout Slime/Blue/Walk.png",
+      "box": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    },
+    {
+      "name": "SlimeWalk1",
+      "source": "Enemy/Sprout Slime/Blue/Walk.png",
+      "box": [
+        32,
+        0,
+        64,
+        32
+      ],
+      "ppu": 32,
+      "pivot": 0.2
+    }
+  ]
+}

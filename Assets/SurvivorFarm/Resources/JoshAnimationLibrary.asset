@@ -1,0 +1,555 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68d0619aa7cee74eb4f66b21a2a27a6, type: 3}
+  m_Name: JoshAnimationLibrary
+  m_EditorClassIdentifier: SurvivorFarm.Runtime::SurvivorFarm.Runtime.Player.PlayerAnimationLibrary
+  Clips:
+  - Name: Axe
+    Atlas: {fileID: 2800000, guid: 10837df8ef99acf4495a91d33abc2584, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Bicycle/Run Bicycle
+    Atlas: {fileID: 2800000, guid: 09b39aa5dad7eda4396f5b69d9615292, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Bicycle/Run
+    Atlas: {fileID: 2800000, guid: b351fa1bc3e9d624bb29287f6967649b, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Bow
+    Atlas: {fileID: 2800000, guid: 8e4e66600f4f33245b866ed8db8c2a65, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 7
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 16
+    Loop: 0
+  - Name: Broomstick/Run Broomstick
+    Atlas: {fileID: 2800000, guid: 996cdf77937890d499cffdf2beb2a740, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Broomstick/Run
+    Atlas: {fileID: 2800000, guid: a926f6136a78d2f418ae212f99841c29, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Catching Insect
+    Atlas: {fileID: 2800000, guid: 1908a8829bee9294d92f61440bff382c, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Climbing
+    Atlas: {fileID: 2800000, guid: 916fca6cfa01aa344b0304e2e011f9b8, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 5
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Damage
+    Atlas: {fileID: 2800000, guid: f3d84409146170f4bb47c93b4011a8db, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Dead
+    Atlas: {fileID: 2800000, guid: c7b0cdc976bd7cf44a6e541f5e04689f, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Fishing/Captured Fish
+    Atlas: {fileID: 2800000, guid: 09a1492fef83fd643a7e8db4d03952d3, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Fishing/Captured No Fish
+    Atlas: {fileID: 2800000, guid: 295b7930f0828474391f43fa78f391ea, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Fishing/Casting
+    Atlas: {fileID: 2800000, guid: adddd8525d2d01243944ad56054dab12, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 15
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Fishing/Hooked
+    Atlas: {fileID: 2800000, guid: 7d8e76dc4e9acab45bd5d3a5ba84ad1a, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 8
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Fishing/Roll
+    Atlas: {fileID: 2800000, guid: b90e5d38df989e241b5a90797afc5f77, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Fishing/Wait Idle
+    Atlas: {fileID: 2800000, guid: 1a27f6e6845a2af46a92328f665de54e, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 5
+    Loop: 1
+  - Name: Flute/Flute
+    Atlas: {fileID: 2800000, guid: f51ff080d6ef5e241925e01d301586d0, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 2
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Hoe
+    Atlas: {fileID: 2800000, guid: d728dc4983cd61c4b971da8b59fce39c, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Horse/Horse Idle
+    Atlas: {fileID: 2800000, guid: d4cc6dfcb25c0e849a88c9032644597a, type: 3}
+    Width: 32
+    Height: 48
+    Frames: 2
+    Directions: 3
+    HorizontalDirections: 1
+    Pivot: {x: 0.5, y: 0.25}
+    FramesPerSecond: 5
+    Loop: 1
+  - Name: Horse/Horse Run
+    Atlas: {fileID: 2800000, guid: 6ff7f90f6d89245418506580b9f24b37, type: 3}
+    Width: 32
+    Height: 48
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.25}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Idle
+    Atlas: {fileID: 2800000, guid: 0a9de0dc08e7da44e99e33c7b06916f9, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 5
+    Loop: 1
+  - Name: Magic/Healer
+    Atlas: {fileID: 2800000, guid: 041debdb277f52a4aba883d32ca8e83a, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Magic/Magic Fire
+    Atlas: {fileID: 2800000, guid: 232e04484866e4a4dba4647696f4b63b, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Magic/Magic Poison
+    Atlas: {fileID: 2800000, guid: 412cefa826dd47d4d804583a7af0b0e4, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Magic/Magic Water
+    Atlas: {fileID: 2800000, guid: 9f8668dcd92937541a9c2a6ad78d60fa, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Petting
+    Atlas: {fileID: 2800000, guid: 82d4295dbafe0f7498d4fb480e3da4e7, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Pick Up Itens/Idle Box
+    Atlas: {fileID: 2800000, guid: 20825696dc8e39c46b72f4713f6a3d50, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 5
+    Loop: 1
+  - Name: Pick Up Itens/Idle
+    Atlas: {fileID: 2800000, guid: 0ff699395caeb5a4a86abce203e754d5, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 5
+    Loop: 1
+  - Name: Pick Up Itens/Pick Up Itens Box
+    Atlas: {fileID: 2800000, guid: b60b66447e8fb5e4eb71364d8e29782a, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: PickUp
+    Atlas: {fileID: 2800000, guid: 1083db15583ea6b4489403f808c93376, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Pick Up Itens/Run Box
+    Atlas: {fileID: 2800000, guid: 7fc36891b3eed5946a1049c259db15f6, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 8
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Pick Up Itens/Run
+    Atlas: {fileID: 2800000, guid: 60726eb777ba10d48821d2dd89fb78de, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 8
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Pick Up Itens/Walk Box
+    Atlas: {fileID: 2800000, guid: d570a545621f12d44a56eef18195e23e, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Pick Up Itens/Walk
+    Atlas: {fileID: 2800000, guid: 8d555989a8d97ea408ada030c87b9093, type: 3}
+    Width: 64
+    Height: 64
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Pickaxe
+    Atlas: {fileID: 2800000, guid: 18c9b0093b40ab649a2413c3c4bf1629, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Run
+    Atlas: {fileID: 2800000, guid: 860d0b42804292044963198c8f014eb2, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 8
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Shovel
+    Atlas: {fileID: 2800000, guid: 522dddc917a8a644db7655dbbc0cb8bb, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 5
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Sickle
+    Atlas: {fileID: 2800000, guid: 49b83243e1189f34dbacebc6cd9daca8, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Sitting
+    Atlas: {fileID: 2800000, guid: e1509434ca852814783d7f9b80dd7b55, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 1
+    Directions: 3
+    HorizontalDirections: 1
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Sleep
+    Atlas: {fileID: 2800000, guid: e1ddffd1c817e3e4fb78b75b71e41c44, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 2
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 5
+    Loop: 1
+  - Name: Swim/Coming out of the water
+    Atlas: {fileID: 2800000, guid: 0bfba4fa06f0be748aec968debf5915f, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 3
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Swim/Idle
+    Atlas: {fileID: 2800000, guid: 23e35c9aa3ac05b4188caa9a190218ed, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 5
+    Loop: 1
+  - Name: Swim/submerged
+    Atlas: {fileID: 2800000, guid: 02a233f1dd095f648ae8a6e3bdf3134b, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Swim/Swim
+    Atlas: {fileID: 2800000, guid: 52069ddccce3aa24c93fa0001dd8837e, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Sword
+    Atlas: {fileID: 2800000, guid: 266cc06a3d625c74ab9616210e151da4, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 10
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 22
+    Loop: 0
+  - Name: Plant
+    Atlas: {fileID: 2800000, guid: d4e0e92f77515fa4e818951fa7b8c237, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 5
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0
+  - Name: Umbrella/Idle Umbrella
+    Atlas: {fileID: 2800000, guid: 4bae34576bb38454aae2099e043fa015, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 5
+    Loop: 1
+  - Name: Umbrella/Idle
+    Atlas: {fileID: 2800000, guid: f7882290a9dc3ee4492c18cf20e7dd26, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 4
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 5
+    Loop: 1
+  - Name: Umbrella/Run Umbrella
+    Atlas: {fileID: 2800000, guid: adb021ec0ad2dca4da5c7ea6871d89ad, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 8
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Umbrella/Run
+    Atlas: {fileID: 2800000, guid: aa950342403810344b375460a43c1f36, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 8
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Umbrella/Walk Umbrella
+    Atlas: {fileID: 2800000, guid: 2fae57d19b04ae041954df3ae6b270c3, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Umbrella/Walk
+    Atlas: {fileID: 2800000, guid: db9912c00233e144798d5f1386a8c34e, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 1
+  - Name: Walk
+    Atlas: {fileID: 2800000, guid: 95b562cef37b1c44a85f7668c8fd49b0, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 6
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 9
+    Loop: 1
+  - Name: Watering
+    Atlas: {fileID: 2800000, guid: 9a88eb02b1106a34ca55acd1c3b4957b, type: 3}
+    Width: 32
+    Height: 32
+    Frames: 8
+    Directions: 3
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 12
+    Loop: 0

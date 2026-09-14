@@ -33,7 +33,7 @@ namespace SurvivorFarm.Runtime.UI
             brightnessText = brightnessValue;
             languageText = languageValue;
             mobilityText = mobilityValue;
-            movement?.SetMovementMode(PlayerMovementController.MobileMovementMode.TapToMove);
+            movement?.SetMovementMode(PlayerMovementController.MobileMovementMode.KeyboardAndMouse);
             Refresh();
         }
 
@@ -77,7 +77,7 @@ namespace SurvivorFarm.Runtime.UI
 
         public void UseTapMovement()
         {
-            SetMovementMode(PlayerMovementController.MobileMovementMode.TapToMove);
+            SetMovementMode(PlayerMovementController.MobileMovementMode.KeyboardAndMouse);
         }
 
         private void SetMovementMode(PlayerMovementController.MobileMovementMode mode)
@@ -116,7 +116,7 @@ namespace SurvivorFarm.Runtime.UI
 
             if (mobilityText != null && movement != null)
             {
-                mobilityText.text = "Tocar destino";
+                mobilityText.text = "WASD + ratón";
             }
         }
     }

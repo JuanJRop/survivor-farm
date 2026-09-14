@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 784a17facc494b4484c1a325c403f185, type: 3}
+  m_Name: VillageNpcArt
+  m_EditorClassIdentifier:
+  Entries:
+  - Id: village:elder
+    Idle: {fileID: 2800000, guid: 717ccdb8aedf746479636549ae347073, type: 3}
+    Walk: {fileID: 2800000, guid: 5f14ba2413326fe46aa0ff6ad71db11a, type: 3}
+    Work: {fileID: 2800000, guid: 717ccdb8aedf746479636549ae347073, type: 3}
+  - Id: village:blacksmith
+    Idle: {fileID: 2800000, guid: d1c87f7629c0c9a4d86c55bcbc821956, type: 3}
+    Walk: {fileID: 2800000, guid: 72e08fe9252bd5842ac38bbddc042b1d, type: 3}
+    Work: {fileID: 2800000, guid: d7a9f74e047c68b45b6eaccc6daf40ba, type: 3}
+  - Id: village:farmer
+    Idle: {fileID: 2800000, guid: 81bbb3a16ecba7742bbf40f3e48b9f57, type: 3}
+    Walk: {fileID: 2800000, guid: 7b681e4ac9923dd43a5c3889519667bc, type: 3}
+    Work: {fileID: 2800000, guid: 6c18cbff3c3e83d46b8ba37164cb4c06, type: 3}
+  - Id: village:merchant
+    Idle: {fileID: 2800000, guid: 0a9de0dc08e7da44e99e33c7b06916f9, type: 3}
+    Walk: {fileID: 2800000, guid: 95b562cef37b1c44a85f7668c8fd49b0, type: 3}
+    Work: {fileID: 2800000, guid: 0a9de0dc08e7da44e99e33c7b06916f9, type: 3}
+  - Id: village:guard
+    Idle: {fileID: 2800000, guid: 5504620f4606c2c4795a330906e3fc9c, type: 3}
+    Walk: {fileID: 2800000, guid: 571405786eb47b4458abf4efee5e979e, type: 3}
+    Work: {fileID: 2800000, guid: 9bfd8be59ca660248b8f3ce74c7b3101, type: 3}

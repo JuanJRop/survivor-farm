@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a03ccad94c51f1b8a9fe31f15a387e5, type: 3}
+  m_Name: ResourceDefinition_Wood_5_9_1
+  m_EditorClassIdentifier: SurvivorFarm.Runtime::SurvivorFarm.Runtime.Gameplay.ResourceDefinition
+  reward: {fileID: 11400000, guid: e8bd1c1a12927db40badb79a7b250a98, type: 2}
+  harvestAmount: 5
+  coinReward: 9
+  maxHealth: 1
+  animation: {fileID: 0}
