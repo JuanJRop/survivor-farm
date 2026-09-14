@@ -15,6 +15,7 @@ namespace SurvivorFarm.Runtime.UI
         private GameObject canvasRoot,hud,overlay;
         private RectTransform card;
         private Text phase,objective,resources,core,controls,bossText,title,description;
+        private Text comboText;
         private Image coreFill,bossFill;
         private GameObject bossPanel;
         private Button ready;
@@ -45,6 +46,7 @@ namespace SurvivorFarm.Runtime.UI
             resources=Label(stock,"",15,Paper);resources.alignment=TextAnchor.MiddleLeft;Inset(resources.rectTransform,14,6);
             var hints=Rect(hud.transform,"Controles",new Vector2(.5f,0),new Vector2(0,90),new Vector2(690,28));
             controls=Label(hints,"",14,Paper);controls.gameObject.AddComponent<Shadow>().effectDistance=new Vector2(1,-1);
+            comboText=Label(Panel(hud.transform,"Combo de espada",new Vector2(.5f,0),new Vector2(0,121),new Vector2(234,29)),"",15,Gold);
             ready=Button(hud.transform,"Listo para la noche",new Vector2(1,1),new Vector2(-12,-112),new Vector2(198,34),session.PrepareNow);
             var bossRect=Panel(hud.transform,"Jefe",new Vector2(.5f,1),new Vector2(0,-82),new Vector2(490,69));
             bossPanel=bossRect.gameObject;bossText=Label(bossRect,"",17,Paper);bossText.rectTransform.offsetMin=new Vector2(10,18);bossText.rectTransform.offsetMax=new Vector2(-10,-4);
@@ -82,6 +84,10 @@ namespace SurvivorFarm.Runtime.UI
             core.text=$"POZO   {session.Core.Health} / {session.Core.Maximum}";
             coreFill.fillAmount=session.Core.Health/(float)session.Core.Maximum;
             var player=session.Player;
+            var combo=player.GetComponent<ComboController>();
+            bool sword=player.GetComponent<PlayerToolbelt>()?.SelectedTool==FarmTool.Sword;
+            comboText.transform.parent.gameObject.SetActive(sword&&!ConstructionSystem.IsPlacing);
+            comboText.text=combo!=null&&combo.StepNumber>0?$"CORTE {combo.StepNumber} / 3"+(combo.StepNumber==3?" · REMATE":" · CLIC para seguir"):"CLIC · 1 → 2 → 3 REMATE";
             resources.text=$"Madera {player.Wood}    Piedra {player.Stone}    Hierro {player.GetComponent<AdventureProgress>().Data.iron}\nFruta {player.Fruit}    Raciones {player.Food} [Q]    Semillas {player.CommonSeeds}";
             ready.gameObject.SetActive(session.Phase==SlicePhase.Day);
             controls.text=ConstructionSystem.IsPlacing?"CLIC colocar   ·   R girar   ·   CLIC DERECHO / ESC cancelar":
@@ -119,9 +125,10 @@ namespace SurvivorFarm.Runtime.UI
             }
             else if(session.IsPaused)
             {
-                AddButton("Volver a la granja",-334,()=>session.Pause(false));
-                AddButton(AudioListener.volume>0?"Silenciar audio":"Activar audio",-391,()=>{AudioListener.volume=AudioListener.volume>0?0:1;RefreshOverlay();});
-                AddButton("Volver al inicio",-448,session.ReturnToTitle);
+                AddButton("Volver a la granja",-292,()=>session.Pause(false));
+                AddButton(AudioListener.volume>0?"Silenciar audio":"Activar audio",-342,()=>{AudioListener.volume=AudioListener.volume>0?0:1;RefreshOverlay();});
+                AddButton(CombatTimeFeedback.ReducedMotion?"Impacto de cámara: reducido":"Impacto de cámara: normal",-392,()=>{CombatTimeFeedback.ReducedMotion=!CombatTimeFeedback.ReducedMotion;RefreshOverlay();});
+                AddButton("Volver al inicio",-442,session.ReturnToTitle);
             }
             else
             {

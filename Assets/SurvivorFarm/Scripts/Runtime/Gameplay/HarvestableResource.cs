@@ -37,6 +37,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         private PlayerSurvivalStats activeGatherStats;
         private string activeGatherClip;
         private const float GatherReach = 1.35f;
+        private int lastFeedbackFrame = -1;
 
         public override bool IsAvailable => !harvested && isActiveAndEnabled;
         public bool IsHarvested => harvested;
@@ -227,7 +228,11 @@ namespace SurvivorFarm.Runtime.Gameplay
                 nextGatherHitAt += gatherHitInterval;
             }
             // A delayed frame advances work but emits only one visual impact.
-            if (hit) hurtFlashEndsAt = Time.time + 0.1f;
+            if (hit)
+            {
+                hurtFlashEndsAt = Time.time + 0.1f;
+                PlayHarvestImpact(activeGatherInventory);
+            }
 
             FarmNotificationCenter.SetPrompt($"{GatherPresentText} {GetProgressText()}");
             if (!finished)
@@ -286,6 +291,8 @@ namespace SurvivorFarm.Runtime.Gameplay
 
             currentHealth = Mathf.Max(0, CurrentHealth - damage);
             hurtFlashEndsAt = Time.time + 0.15f;
+            if (this is AnimalResource) HitFeedback.Report(gameObject, inventory, damage, currentHealth == 0);
+            else PlayHarvestImpact(inventory);
             if (currentHealth > 0)
             {
                 return;
@@ -303,9 +310,20 @@ namespace SurvivorFarm.Runtime.Gameplay
             inventory?.RecordGathered(finalHarvestAmount);
             ResourceFlyweights.Item(ItemKind.Coins).Grant(inventory, finalCoinReward);
             string rewardText = $"+{finalHarvestAmount} {RewardName}";
+            inventory.GetComponent<GameFeelFeedback>()?.Pulse(rewardText, transform.position);
             FarmNotificationCenter.Show(finalCoinReward > 0 ? $"{rewardText}, +{finalCoinReward} oro" : rewardText);
             RaiseHarvestEvent();
             Depleted?.Invoke(this);
+        }
+
+        private void PlayHarvestImpact(PlayerInventory inventory)
+        {
+            if (lastFeedbackFrame == Time.frameCount) return;
+            lastFeedbackFrame = Time.frameCount;
+            bool tree = this is TreeResource;
+            Vector3 point = transform.position + Vector3.up * .35f;
+            inventory?.GetComponent<AudioFeedback>()?.Play(tree ? CombatSound.Chop : CombatSound.Mine, point, .8f);
+            CombatHitParticles.Spawn(point, transform.parent, tree ? ImpactSurface.Leaves : ImpactSurface.Stone, false, false);
         }
 
         public void Spawn(Vector3 position)

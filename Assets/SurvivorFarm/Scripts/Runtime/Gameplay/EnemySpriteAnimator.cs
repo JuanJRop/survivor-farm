@@ -51,7 +51,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             PlayAction("Attack", duration);
         }
 
-        public void PlayHurt() { if (!dead) PlayAction("Damage", .24f); }
+        public void PlayHurt(float duration = .24f) { if (!dead) PlayAction("Damage", duration); }
         public void PlayDeath() { dead = true; PlayAction("Dead", .5f); }
         public void CancelAttack()
         {

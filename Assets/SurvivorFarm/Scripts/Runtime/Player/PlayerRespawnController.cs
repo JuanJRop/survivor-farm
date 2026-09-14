@@ -33,6 +33,7 @@ namespace SurvivorFarm.Runtime.Player
             GetComponent<PlayerMovementController>()?.StopMovement();
             if(overlay==null) BuildMenu();
             overlay.SetActive(true); MenuOpen=true;
+            GetComponent<CombatTimeFeedback>()?.Cancel();
             previousTimeScale=Time.timeScale;ownsPause=true;Time.timeScale=0;
         }
         private void Hide()

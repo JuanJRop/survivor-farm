@@ -13,6 +13,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         private bool collected;
         private float spawnedAt;
         private Vector3 restPosition;
+        private bool landed;
         public int Amount => amount;
         public ItemDefinition Item => item;
         public bool IsUncollected => !collected && gameObject.activeSelf;
@@ -27,6 +28,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             var renderer = visual != null ? visual.GetComponent<SpriteRenderer>() : null;
             if(renderer != null && renderer.bounds.size.x > .001f) visual.localScale *= .65f / renderer.bounds.size.x;
             collected = false;
+            landed = false;
             spawnedAt = Time.time;
             restPosition = visual != null ? visual.localPosition : Vector3.zero;
         }
@@ -50,6 +52,8 @@ namespace SurvivorFarm.Runtime.Gameplay
         {
             if (visual == null) return;
             float age = Time.time - spawnedAt;
+            if (!landed && age >= .4f)
+            { landed = true; AudioFeedback.PlayAt(CombatSound.Drop, transform.position, .45f); }
             float bounce = age < 0.4f ? Mathf.Sin(age / 0.4f * Mathf.PI) * 0.28f : Mathf.Sin(age * 4f) * 0.04f;
             visual.localPosition = restPosition + Vector3.up * bounce;
         }

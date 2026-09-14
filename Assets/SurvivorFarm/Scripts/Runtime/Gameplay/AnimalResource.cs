@@ -48,7 +48,6 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         public void TakeDamage(int amount, PlayerInventory source)
         {
-            if(IsAvailable && amount>0) VisibleHitFeedback.Play(gameObject);
             ApplyDamage(amount, source);
         }
 

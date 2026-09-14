@@ -67,7 +67,9 @@ namespace SurvivorFarm.Runtime.Gameplay
         {
             if(!IsAlive||amount<=0)return;
             health=Mathf.Max(0,health-amount);Refresh();VisibleHitFeedback.Play(gameObject);
-            player?.GetComponent<GameFeelFeedback>()?.Pulse("−"+amount,transform.position,true);
+            player?.GetComponent<GameFeelFeedback>()?.Pulse("−"+amount,transform.position,true,false,false);
+            player?.GetComponent<AudioFeedback>()?.Play(health<=0?CombatSound.Break:CombatSound.Chop,transform.position,.7f);
+            CombatHitParticles.Spawn(transform.position,transform.parent,ImpactSurface.Wood,false,health<=0);
             if(health>0)return;
             if(IsCore)PortfolioSession.Instance?.Lose("El pozo ha caído. La granja necesita sus defensas.");
             else construction?.RemoveDestroyed(data);
@@ -108,7 +110,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             {
                 var arrow=new GameObject("Ballesta · flecha");arrow.transform.position=transform.position;
                 var art=arrow.AddComponent<SpriteRenderer>();art.sprite=CombatFeelVisuals.Arrow;art.sortingOrder=15000;
-                arrow.AddComponent<ArrowProjectile>().Configure(nearest,2,player);
+                arrow.AddComponent<ArrowProjectile>().Configure(nearest,2,player,false);
             }
         }
         private bool Clear(IDamageable target)

@@ -13,12 +13,15 @@ namespace SurvivorFarm.Runtime.Player
         private string action;
         private float actionEndsAt, elapsed;
         private bool repeatAction;
+        private float meleeDuration, meleeImpact;
+        private bool heavyMelee;
         private Vector2 facing = Vector2.down;
         private int direction;
         public PlayerAnimationLibrary Library => library;
         public string CurrentClip => active != null ? active.Name : string.Empty;
         public int CurrentFrame { get; private set; }
         public int CurrentDirection => direction;
+        public int ActionVersion { get; private set; }
         public bool MovementLocked => stats != null && stats.CurrentHealth <= 0 || action != null && Time.time < actionEndsAt;
         public void Configure(SpriteRenderer renderer, string characterName, string fallbackName)
         { spriteRenderer = renderer; Initialize(); }
@@ -59,13 +62,23 @@ namespace SurvivorFarm.Runtime.Player
         {
             var clip = library != null ? library.Find(name) : null;
             if (clip == null || stats != null && stats.CurrentHealth <= 0 && name != "Dead") return;
+            ActionVersion++; meleeDuration = 0;
             if (target.HasValue) FaceWorldPosition(target.Value);
             GetComponent<PlayerMovementController>()?.StopMovement();
             action = name; repeatAction = duration > clip.Frames / clip.FramesPerSecond;
             actionEndsAt = Time.time + Mathf.Max(duration, clip.Frames / clip.FramesPerSecond);
             Switch(name, true); Render();
         }
-        public void CancelAction() { action = null; actionEndsAt = 0; Switch("Idle",true); Render(); }
+        public void PlayMeleeAction(float duration, float impactFraction, bool heavy, Vector3? target = null)
+        {
+            PlayAction("Sword", 0, target);
+            if (action != "Sword") return;
+            meleeDuration = Mathf.Max(.15f, duration);
+            meleeImpact = Mathf.Clamp(impactFraction, .15f, .8f);
+            heavyMelee = heavy; repeatAction = false;
+            actionEndsAt = Time.time + meleeDuration;
+        }
+        public void CancelAction() { ActionVersion++; meleeDuration = 0; action = null; actionEndsAt = 0; Switch("Idle",true); Render(); }
         private void Switch(string name, bool restart)
         {
             if (library == null || !restart && CurrentClip == name) return;
@@ -77,6 +90,16 @@ namespace SurvivorFarm.Runtime.Player
             if (active == null || spriteRenderer == null) return;
             direction = Mathf.Abs(facing.x) > Mathf.Abs(facing.y) ? 2 : facing.y > 0 ? 1 : 0;
             int frame = Mathf.FloorToInt(elapsed * active.FramesPerSecond);
+            if (action == "Sword" && meleeDuration > 0)
+            {
+                float phase = Mathf.Clamp01(elapsed / meleeDuration);
+                // Reuse authored frames with a held anticipation and snappy third downswing.
+                float hold = heavyMelee ? .21f : 0f;
+                float pose = phase <= meleeImpact ? Mathf.Lerp(0, .55f,
+                    Mathf.Clamp01((phase - hold) / (meleeImpact - hold))) :
+                    Mathf.Lerp(.55f, 1f, (phase - meleeImpact) / (1f - meleeImpact));
+                frame = Mathf.FloorToInt(pose * active.Frames);
+            }
             bool loop = active.Loop || action != null && repeatAction;
             CurrentFrame = loop ? frame % active.Frames : Mathf.Min(frame, active.Frames - 1);
             spriteRenderer.sprite = library.Frame(active,direction,CurrentFrame);

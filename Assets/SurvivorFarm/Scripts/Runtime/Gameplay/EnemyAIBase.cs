@@ -44,27 +44,9 @@ namespace SurvivorFarm.Runtime.Gameplay
         [SerializeField, Min(0.01f)] private float knockbackDuration = 0.18f;
         private Vector2 knockbackVelocity;
         private float knockbackRemaining;
-        private Material normalMaterial;
-        private static Material flashMaterial;
-        private static Material FlashMaterial
-        {
-            get
-            {
-                if (flashMaterial == null)
-                {
-                    var shader = Resources.Load<Shader>("CombatHitFlash");
-                    if (shader != null) flashMaterial = new Material(shader) { hideFlags = HideFlags.DontSave };
-                }
-                return flashMaterial;
-            }
-        }
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void ResetFlashMaterial()
-        {
-            if (flashMaterial != null) Destroy(flashMaterial);
-            flashMaterial = null;
-        }
+        private float activeKnockbackDuration;
+        public virtual bool IsElite => false;
+        protected virtual float KnockbackResistance => 1f;
         private readonly RaycastHit2D[] knockbackHits = new RaycastHit2D[24];
         public void ConfigureLoot(EnemyLootPickup prefab) => lootPrefab = prefab;
         public EnemyLootPickup LootPrefab => lootPrefab;
@@ -205,7 +187,7 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         private void RestoreHitVisual()
         {
-            if (bodyRenderer != null && normalMaterial != null) bodyRenderer.sharedMaterial = normalMaterial;
+            GetComponent<VisibleHitFeedback>()?.ResetFlash();
         }
 
         public virtual void TakeDamage(int amount)
@@ -221,15 +203,17 @@ namespace SurvivorFarm.Runtime.Gameplay
             }
 
             int finalDamage = Mathf.Max(1, amount);
+            bool heavy = HitFeedback.IsHeavy(gameObject, source);
             strikeAt = -1;
-            nextAttackTime = Time.time + knockbackDuration;
+            activeKnockbackDuration = heavy ? Mathf.Max(.32f, knockbackDuration * 1.4f) : knockbackDuration;
+            nextAttackTime = Time.time + activeKnockbackDuration;
             Vector2 away = (Vector2)transform.position - (source != null ? (Vector2)source.transform.position : target != null ? (Vector2)target.position : (Vector2)transform.position - Vector2.down);
-            knockbackVelocity = (away.sqrMagnitude > 0.0001f ? away.normalized : Vector2.up) * knockbackDistance / Mathf.Max(0.01f, knockbackDuration);
-            knockbackRemaining = knockbackDuration;
+            knockbackVelocity = (away.sqrMagnitude > 0.0001f ? away.normalized : Vector2.up) *
+                knockbackDistance * (heavy ? 1.25f : .65f) * KnockbackResistance / Mathf.Max(.01f, activeKnockbackDuration);
+            knockbackRemaining = activeKnockbackDuration;
             currentHealth -= finalDamage;
-            source?.GetComponent<GameFeelFeedback>()?.Pulse("−"+finalDamage,transform.position,true);
             hurtFlashEndsAt = Time.time + hurtFlashDuration;
-            VisibleHitFeedback.Play(gameObject);
+            HitFeedback.Report(gameObject, source, finalDamage, currentHealth <= 0, IsElite);
             FarmGameEvents.RaiseEnemyDamaged();
             if(!Core.PortfolioSession.Active)FarmNotificationCenter.Show($"{enemyName} recibio {finalDamage} de dano.");
             if (currentHealth <= 0)
@@ -247,7 +231,7 @@ namespace SurvivorFarm.Runtime.Gameplay
                 return;
             }
 
-            spriteAnimation?.PlayHurt();
+            spriteAnimation?.PlayHurt(heavy ? .32f : .18f);
             ApplyVisuals();
         }
 
@@ -275,7 +259,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             float step = Mathf.Min(Time.deltaTime, knockbackRemaining);
             knockbackRemaining -= step;
             // Quadratic ease-out keeps total travel constant while softening the end of the bounce.
-            float duration = Mathf.Max(0.01f, knockbackDuration);
+            float duration = Mathf.Max(0.01f, activeKnockbackDuration);
             Vector2 displacement = knockbackVelocity * step * ((2f * knockbackRemaining + step) / duration);
             float distance = displacement.magnitude;
             if (distance <= 0f) return;
@@ -398,8 +382,6 @@ namespace SurvivorFarm.Runtime.Gameplay
         {
             if (bodyRenderer != null)
             {
-                if (normalMaterial == null) normalMaterial = bodyRenderer.sharedMaterial;
-                bodyRenderer.sharedMaterial = Time.time < hurtFlashEndsAt && FlashMaterial != null ? FlashMaterial : normalMaterial;
                 Color warning = CombatStyle == EnemyCombatStyle.Legacy ? new Color(1f, .4f, .1f) : new Color(1f, .85f, .7f);
                 bodyRenderer.color = Time.time < hurtFlashEndsAt ? Color.Lerp(Color.white, hurtColor, 0.25f) : IsPreparingAttack ? warning : bodyColor;
             }

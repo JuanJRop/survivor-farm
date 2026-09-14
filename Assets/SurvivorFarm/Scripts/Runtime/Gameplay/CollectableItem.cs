@@ -29,6 +29,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             collected = true;
             inventory.GetComponent<PlayerCharacterAnimator>()?.PlayNamedAction("PickUp");
             Definition.Grant(inventory, Amount);
+            inventory.GetComponent<AudioFeedback>()?.Play(CombatSound.Pickup, transform.position);
             inventory.RecordGathered(Amount);
             FarmNotificationCenter.Show(GetPickupMessage());
             Destroy(gameObject);

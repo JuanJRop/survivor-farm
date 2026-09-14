@@ -30,6 +30,13 @@ fruta; dos frutas producen una ración en las recetas. Las reparaciones cuestan
 dos maderas y recuperan seis puntos de estructura. Las marcas del jefe muestran
 el área que dañará; su recuperación permite daño doble.
 
+La espada encadena **corte → retorno → remate**. Haz clic de nuevo durante la
+recuperación o en los 0,6 s siguientes. El tercer golpe hace daño ×2 +1 y tiene
+impacto más fuerte; acabar con un demoledor así permite un remate visual breve.
+En pausa puedes reducir shake, zoom y cámara lenta con «Impacto de cámara».
+Los sonidos y partículas distinguen combate, madera, piedra, cajas y loot.
+Detalle técnico y validación: `Design/Development/COMBAT-POLISH-2026-09-14.md`.
+
 La demo guarda automáticamente durante la preparación, en ranuras `portfolio_*`
 separadas de la campaña histórica. Continuar recupera el comienzo de la preparación
 del día guardado con sus recursos y construcciones. Una derrota no sobrescribe ese

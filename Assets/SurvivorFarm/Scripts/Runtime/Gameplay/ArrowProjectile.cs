@@ -15,11 +15,13 @@ namespace SurvivorFarm.Runtime.Gameplay
         private int damage;
         private float destroyAt;
         private bool resolved;
+        private bool playerShot;
 
-        public void Configure(IDamageable enemyTarget, int arrowDamage, PlayerInventory attacker)
+        public void Configure(IDamageable enemyTarget, int arrowDamage, PlayerInventory attacker, bool playerControlled = true)
         {
             target = enemyTarget;
             source = attacker;
+            playerShot = playerControlled;
             targetGeneration = target != null ? target.SpawnGeneration : 0;
             damage = Mathf.Max(1, arrowDamage);
             destroyAt = Time.time + lifetime;
@@ -55,7 +57,13 @@ namespace SurvivorFarm.Runtime.Gameplay
             if (impact)
             {
                 resolved = true;
-                target.TakeDamage(damage, source);
+                var feedback = playerShot && source != null ? source.GetComponent<HitFeedback>() : null;
+                if (feedback != null)
+                {
+                    feedback.BeginStrike();
+                    feedback.ApplyDamage(target, damage, source, false);
+                }
+                else target.TakeDamage(damage, source);
                 Destroy(gameObject);
             }
         }

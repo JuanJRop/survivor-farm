@@ -33,7 +33,7 @@ namespace SurvivorFarm.Runtime.UI
             SimpleShopSystem.CloseActive();
             Close();GetComponent<InventoryPanelSystem>()?.Close();GetComponent<PlayerEquipmentWindow>()?.Close();GetComponent<CraftingWindow>()?.Close();inventory.GetComponent<ConstructionSystem>().Cancel();
             page=selected;IsOpen=true;inventory.GetComponent<PlayerMovementController>()?.StopMovement();root.gameObject.SetActive(true);root.SetAsLastSibling();
-            if(page=="Pause"){oldTimeScale=Time.timeScale;paused=true;Time.timeScale=0;}
+            if(page=="Pause"){inventory.GetComponent<CombatTimeFeedback>()?.Cancel();oldTimeScale=Time.timeScale;paused=true;Time.timeScale=0;}
             Draw();FarmUiStyle.FitWindow(root);
         }
         void Draw()

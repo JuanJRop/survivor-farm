@@ -22,7 +22,8 @@ namespace SurvivorFarm.Runtime.Gameplay
         public void TakeDamage(int amount, PlayerInventory source)
         {
             if (!IsAlive || amount <= 0 || source == null) return;
-            Health = Mathf.Max(0, Health - amount); VisibleHitFeedback.Play(gameObject);
+            Health = Mathf.Max(0, Health - amount);
+            HitFeedback.Report(gameObject, source, amount, Health == 0, false, rock ? ImpactSurface.Stone : ImpactSurface.Wood);
             if (Health > 0) return;
             if (rock) { source.AddStone(2); source.GetComponent<AdventureProgress>()?.AddIron(1); }
             else { source.AddWood(2); source.AddCoins(3); }

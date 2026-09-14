@@ -40,7 +40,7 @@ namespace SurvivorFarm.Runtime.Core
                 try{next=run.MoveNext();}catch(Exception error){Finish(false,error.ToString());yield break;}
                 if(!next)break;yield return run.Current;
             }
-            Finish(!failed,"Windows executable: title, crops, recipes, save/load, bounded raids, boss patterns, phase II, ending; staged screenshots captured. This is automated verification, not a human balance playtest.");
+            Finish(!failed,"Windows executable: title, real animated 1-2-3 combo, elite finisher, crops, recipes, save/load, bounded raids, boss patterns, phase II, ending; staged screenshots captured. This is automated verification, not a human balance playtest.");
         }
         private IEnumerator Run()
         {
@@ -50,6 +50,7 @@ namespace SurvivorFarm.Runtime.Core
             yield return new WaitForSecondsRealtime(.5f);Capture("01-title");yield return new WaitForSecondsRealtime(.3f);
             session.BeginNewGame();
             yield return new WaitForSecondsRealtime(.7f);Capture("02-day");yield return new WaitForSecondsRealtime(.3f);
+            yield return ExerciseCombo(session);
             var player=session.Player;var campaign=player.GetComponent<ValleyCampaign>();
             var plots=FindObjectsByType<FarmingPlot>(FindObjectsSortMode.None);
             foreach(var plot in plots)
@@ -99,6 +100,53 @@ namespace SurvivorFarm.Runtime.Core
             boss.TakeDamage(1000,player);Require(session.Phase==SlicePhase.Victory,"Victory missing.");
             yield return new WaitForSecondsRealtime(1.2f);Capture("07-ending");yield return new WaitForSecondsRealtime(.5f);
         }
+        private IEnumerator ExerciseCombo(PortfolioSession session)
+        {
+            // An arranged receiver fixture uses actual arrows, melee windups and damage.
+            // It is intentionally separate from the accelerated wave/state-machine check.
+            var player = session.Player;
+            var combat = player.GetComponent<PlayerCombatController>();
+            var belt = player.GetComponent<PlayerToolbelt>();
+            var campaign = player.GetComponent<ValleyCampaign>();
+            var enemy = session.Raids.Enemies[0];
+            enemy.ConfigureRaid(session, RaidRole.Brute, null);
+            enemy.ActivateFromPool(new Vector3(4, -7));
+            campaign.Teleport(new Vector3(2, -7));
+            int normal = combat.GetAttackDamage(FarmTool.Sword);
+            var final = combat.Combo.Definition.attacks[2];
+            int chainDamage = normal * 2 + Mathf.RoundToInt(normal * final.damageMultiplier) + final.bonusDamage;
+            belt.Select(FarmTool.Bow);
+            int shots = 0;
+            while (enemy.CurrentHealth > chainDamage && shots++ < 15)
+            {
+                combat.AttackTarget(enemy);
+                yield return new WaitForSeconds(.8f);
+            }
+            Require(enemy.CurrentHealth > normal * 2, "Receiver must survive the two opening cuts.");
+            belt.Select(FarmTool.Sword);
+            int beforeFinishers = player.GetComponent<HitFeedback>().FinisherCount;
+            for (int step = 0; step < 3; step++)
+            {
+                campaign.Teleport(enemy.transform.position + Vector3.left * .8f);
+                Physics2D.SyncTransforms();
+                int health = enemy.CurrentHealth;
+                combat.AttackTarget(enemy);
+                Require(enemy.CurrentHealth == health, "Melee damage occurred before the animated contact.");
+                float deadline = Time.realtimeSinceStartup + 3;
+                while (enemy.CurrentHealth == health && Time.realtimeSinceStartup < deadline) yield return null;
+                Require(enemy.CurrentHealth < health, "Animated melee did not connect.");
+                yield return null;
+                Capture("08-combo-" + (step + 1));
+                yield return new WaitForSeconds(combat.Combo.Definition.attacks[step].duration * .6f + .1f);
+            }
+            Require(!enemy.IsAlive, "Combo failed to finish the elite.");
+            Require(player.GetComponent<HitFeedback>().FinisherCount == beforeFinishers + 1, "Elite finisher missing.");
+            yield return new WaitForSecondsRealtime(.4f);
+            Require(Mathf.Approximately(Time.timeScale, 1), "Impact timing did not restore normal speed.");
+            enemy.ReturnToPool();
+            combat.CancelMelee();
+        }
+
         private void Capture(string name)
         {
             // Explicit offscreen rendering works even when the Windows QA helper is hidden.

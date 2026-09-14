@@ -38,7 +38,8 @@ namespace SurvivorFarm.Editor
             PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.resizableWindow=true;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Standalone,ScriptingImplementation.Mono2x);
             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions {scenes=new[]{Scene},
-                locationPathName="Builds/Portfolio/SurvivalFarm.exe",target=BuildTarget.StandaloneWindows64,options=BuildOptions.CompressWithLz4});
+                locationPathName="Builds/Portfolio/SurvivalFarm.exe",target=BuildTarget.StandaloneWindows64,
+                options=BuildOptions.CompressWithLz4|BuildOptions.CleanBuildCache});
             File.WriteAllText("Design/Validation/Portfolio/build.txt",$"{report.summary.result} | errors={report.summary.totalErrors} | bytes={report.summary.totalSize} | duration={report.summary.totalTime}");
             if(report.summary.result!=BuildResult.Succeeded)throw new Exception("Portfolio Windows build failed.");
         }

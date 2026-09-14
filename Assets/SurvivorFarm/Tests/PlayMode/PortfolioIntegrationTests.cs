@@ -80,7 +80,12 @@ namespace SurvivorFarm.Tests
                 {
                     session.Advance(2);
                     foreach(var enemy in session.Raids.Enemies)
-                        if(enemy.IsAlive){enemy.TakeDamage(100,player);enemy.ReturnToPool();}
+                        if(enemy.IsAlive)
+                        {
+                            Assert.That(enemy.GetComponentInChildren<SpriteRenderer>().transform.localScale.x,
+                                Is.EqualTo(enemy.Role==RaidRole.Brute?1.35f:1f).Within(.001f),"A recycled brute must recover the next role's silhouette.");
+                            enemy.TakeDamage(100,player);enemy.ReturnToPool();
+                        }
                     Assert.That(session.Raids.Alive,Is.LessThanOrEqualTo(session.Settings.maximumConcurrentEnemies));
                 }
                 if(day<3){Assert.That(session.Phase,Is.EqualTo(SlicePhase.Dawn));session.Advance(9);}

@@ -56,7 +56,8 @@ namespace SurvivorFarm.Runtime.Player
             }
             currentHealth = Mathf.Max(0, currentHealth - amount);
             if (Core.PortfolioSession.Active) GrantInvulnerability(.7f);
-            GetComponent<SurvivorFarm.Runtime.Gameplay.GameFeelFeedback>()?.Pulse("−"+amount,transform.position,true);
+            GetComponent<PlayerCombatController>()?.CancelMelee();
+            GetComponent<SurvivorFarm.Runtime.Gameplay.HitFeedback>()?.PlayerHurt(amount, currentHealth <= 0);
             GetComponent<PlayerCharacterAnimator>()?.PlayNamedAction(currentHealth <= 0 ? "Dead" : "Damage");
             NotifyChanged();
 

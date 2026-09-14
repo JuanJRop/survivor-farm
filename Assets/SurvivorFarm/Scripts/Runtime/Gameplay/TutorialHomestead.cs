@@ -79,7 +79,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         public void TakeDamage(int amount,PlayerInventory source)
         {
             if(!IsAlive||amount<=0||source!=Campaign.Inventory)return;
-            VisibleHitFeedback.Play(gameObject);health--;
+            health--;HitFeedback.Report(gameObject,source,1,health<=0,false,ImpactSurface.Wood);
             if(health>0){FarmNotificationCenter.Show("Buen golpe · "+(3-health)+" / 3 impactos");return;}
             resetAt=Time.time+2;GetComponentInChildren<SpriteRenderer>().enabled=false;
             const string key="tutorial:practice";

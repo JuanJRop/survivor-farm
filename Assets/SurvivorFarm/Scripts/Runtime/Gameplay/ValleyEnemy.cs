@@ -134,10 +134,10 @@ namespace SurvivorFarm.Runtime.Gameplay
         {
             if(!IsAlive||campaign==null||source==null||Completed||amount<=0||source!=campaign.Inventory)return;
             if(boss&&state==2)return;
-            VisibleHitFeedback.Play(gameObject);
             Vector3 away=(transform.position-source.transform.position).normalized;Vector3 next=transform.position+away*(boss?0.12f:0.45f);
             if(!Physics2D.OverlapCircleAll(next,.35f).Any(c=>!c.isTrigger&&!c.transform.IsChildOf(transform)&&!c.transform.IsChildOf(source.transform)))transform.position=next;
             engaged=true;Health=Mathf.Max(0,Health-amount*(Vulnerable?2:1));FarmGameEvents.RaiseEnemyDamaged();
+            HitFeedback.Report(gameObject, source, amount*(Vulnerable?2:1), Health==0, boss||guardian);
             if(Health==0){
                 var loot=FindObjectsByType<EnemyAIBase>(FindObjectsInactive.Include,FindObjectsSortMode.None).Select(e=>e.LootPrefab).FirstOrDefault(p=>p!=null);
                 EnemyLootPickup.Spawn(loot,transform.position,world.transform,ResourceFlyweights.Item(ItemKind.Coins),boss?15:guardian?8:2);
@@ -168,6 +168,6 @@ namespace SurvivorFarm.Runtime.Gameplay
         public ValleyEnemy Owner;int health=3;
         public Transform Transform=>transform;public bool IsAlive=>health>0&&gameObject.activeInHierarchy;public int SpawnGeneration {get;private set;}
         public void ResetBud(){health=3;SpawnGeneration++;GetComponentInChildren<SpriteRenderer>().enabled=true;GetComponent<Collider2D>().enabled=true;}
-        public void TakeDamage(int amount,PlayerInventory source){if(!IsAlive||amount<=0)return;VisibleHitFeedback.Play(gameObject);health-=amount;if(health<=0){GetComponentInChildren<SpriteRenderer>().enabled=false;GetComponent<Collider2D>().enabled=false;}}
+        public void TakeDamage(int amount,PlayerInventory source){if(!IsAlive||amount<=0)return;health-=amount;HitFeedback.Report(gameObject,source,amount,health<=0,false,ImpactSurface.Leaves);if(health<=0){GetComponentInChildren<SpriteRenderer>().enabled=false;GetComponent<Collider2D>().enabled=false;}}
     }
 }

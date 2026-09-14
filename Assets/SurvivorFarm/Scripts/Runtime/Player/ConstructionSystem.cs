@@ -237,8 +237,10 @@ namespace SurvivorFarm.Runtime.Player
             if(activeInventory==null||activeProgress==null||stats!=null&&stats.CurrentHealth<=0){ClearMining();return;}
             while(Time.time>=nextHitAt&&completedHits<MineHits)
             {
-                completedHits++;VisibleHitFeedback.Play(gameObject);
-                activeInventory.GetComponent<GameFeelFeedback>()?.Pulse("Golpe "+completedHits+"/"+MineHits,transform.position);
+                completedHits++;VisibleHitFeedback.Play(gameObject,.08f,false);
+                activeInventory.GetComponent<AudioFeedback>()?.Play(CombatSound.Mine,transform.position);
+                CombatHitParticles.Spawn(transform.position,transform.parent,ImpactSurface.Stone,false,false);
+                activeInventory.GetComponent<GameFeelFeedback>()?.Pulse("Golpe "+completedHits+"/"+MineHits,transform.position,false,false,false);
                 nextHitAt=mineStartedAt+MineDuration*(completedHits+1f)/(MineHits+1f);
             }
             FarmNotificationCenter.SetPrompt("Picando veta "+ProgressText());

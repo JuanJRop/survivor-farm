@@ -13,6 +13,8 @@ namespace SurvivorFarm.Runtime.Gameplay
         private float nextTargetChoice;
         private RaidRole role;
         public RaidRole Role => role;
+        public override bool IsElite => role == RaidRole.Brute;
+        protected override float KnockbackResistance => role == RaidRole.Brute ? .65f : 1f;
         public void ConfigureRaid(PortfolioSession owner, RaidRole archetype, EnemyProjectilePool projectiles)
         {
             session=owner;player=owner.Player.transform;role=archetype;
@@ -25,8 +27,9 @@ namespace SurvivorFarm.Runtime.Gameplay
             var art=GetComponentInChildren<SpriteRenderer>();
             if(art!=null)
             {
-                if(role==RaidRole.Brute) art.transform.localScale=Vector3.one*1.35f;
-                ConfigureVisuals(art,null,role==RaidRole.Brute?new Color(1,.72f,.5f):Color.white,role.ToString());
+                art.transform.localScale=Vector3.one*(role==RaidRole.Brute?1.35f:1f);
+                ConfigureVisuals(art,null,role==RaidRole.Brute?new Color(1,.72f,.5f):Color.white,
+                    role==RaidRole.Brute?"Demoledor":role==RaidRole.Archer?"Arquero":"Rastreador");
             }
             defense=null;nextTargetChoice=0;
         }
@@ -72,7 +75,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected override void OnDefeated(PlayerInventory inventory)
         {
             FarmGameEvents.RaiseEnemyDefeated();
-            inventory?.GetComponent<GameFeelFeedback>()?.Pulse("Eliminado",transform.position);
+            inventory?.GetComponent<GameFeelFeedback>()?.Pulse("Eliminado",transform.position,false,false,false);
         }
     }
 }

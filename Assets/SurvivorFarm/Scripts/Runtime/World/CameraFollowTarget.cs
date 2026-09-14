@@ -14,6 +14,7 @@ namespace SurvivorFarm.Runtime.World
 
         public void SetCombatFocus(Transform enemy)
         {
+            GetComponent<CameraFeedback>()?.RestoreBasePose();
             var camera = GetComponent<Camera>();
             if (enemy != null && combatFocus == null && camera != null) explorationSize = camera.orthographicSize;
             if (enemy == null && combatFocus != null && camera != null) camera.orthographicSize = explorationSize;
@@ -22,6 +23,7 @@ namespace SurvivorFarm.Runtime.World
 
         public void SetTarget(Transform newTarget)
         {
+            GetComponent<CameraFeedback>()?.RestoreBasePose();
             target = newTarget;
             if (target != null)
             {
@@ -31,6 +33,7 @@ namespace SurvivorFarm.Runtime.World
 
         private void LateUpdate()
         {
+            GetComponent<CameraFeedback>()?.RestoreBasePose();
             if (target == null)
             {
                 return;

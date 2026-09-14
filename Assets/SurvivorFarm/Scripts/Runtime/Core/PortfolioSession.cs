@@ -112,6 +112,8 @@ namespace SurvivorFarm.Runtime.Core
         public void Pause(bool pause)
         {
             if(!HasBegun||Phase==SlicePhase.Victory||Phase==SlicePhase.Defeat)return;
+            Player.GetComponent<CombatTimeFeedback>()?.Cancel();
+            if(pause)Player.GetComponent<PlayerCombatController>()?.CancelMelee();
             IsPaused=pause;Time.timeScale=pause?0:1;
             if(pause)Player.GetComponent<PlayerMovementController>()?.StopMovement();
             hud.RefreshOverlay();

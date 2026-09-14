@@ -6,6 +6,8 @@ namespace SurvivorFarm.Runtime.Gameplay
 {
     public sealed class DungeonBoss : EnemyAIBase
     {
+        public override bool IsElite => true;
+        protected override float KnockbackResistance => .15f;
         private DungeonExpedition expedition;
         private LineRenderer warning;
         private Material warningMaterial;
