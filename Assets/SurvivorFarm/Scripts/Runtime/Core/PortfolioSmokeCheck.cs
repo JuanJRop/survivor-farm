@@ -40,7 +40,7 @@ namespace SurvivorFarm.Runtime.Core
                 try{next=run.MoveNext();}catch(Exception error){Finish(false,error.ToString());yield break;}
                 if(!next)break;yield return run.Current;
             }
-            Finish(!failed,"Windows executable: title, real animated 1-2-3 combo, elite finisher, crops, recipes, save/load, bounded raids, boss patterns, phase II, ending; staged screenshots captured. This is automated verification, not a human balance playtest.");
+            Finish(!failed,"Windows executable: title, real animated 1-2-3 combo, elite finisher, continuous walls, corners, material upgrades, visual backpack, all four outer ore nodes, crops, recipes, save/load, bounded raids, boss patterns, phase II, ending; staged screenshots captured. This is automated verification, not a human balance playtest.");
         }
         private IEnumerator Run()
         {
@@ -51,6 +51,7 @@ namespace SurvivorFarm.Runtime.Core
             session.BeginNewGame();
             yield return new WaitForSecondsRealtime(.7f);Capture("02-day");yield return new WaitForSecondsRealtime(.3f);
             yield return ExerciseCombo(session);
+            yield return ExerciseFortress(session);
             var player=session.Player;var campaign=player.GetComponent<ValleyCampaign>();
             var plots=FindObjectsByType<FarmingPlot>(FindObjectsSortMode.None);
             foreach(var plot in plots)
@@ -145,6 +146,39 @@ namespace SurvivorFarm.Runtime.Core
             Require(Mathf.Approximately(Time.timeScale, 1), "Impact timing did not restore normal speed.");
             enemy.ReturnToPool();
             combat.CancelMelee();
+        }
+
+        private IEnumerator ExerciseFortress(PortfolioSession session)
+        {
+            var player=session.Player;var campaign=player.GetComponent<ValleyCampaign>();var build=player.GetComponent<ConstructionSystem>();
+            // Arranged materials only in --qa; exercise the real placement, upgrade, mining and inventory APIs.
+            player.AddWood(100);player.AddStone(100);player.GetComponent<AdventureProgress>().AddIron(15);player.AddItem("GoldOre",4);
+            player.AddPacked("Fence",2);campaign.Teleport(new Vector3(0,-10));Physics2D.SyncTransforms();
+            Require(build.BeginPacked("Fence"),"Packed wall selection failed.");
+            Require(build.PlaceSelected(new Vector2(1,-12))&&build.PlaceSelected(new Vector2(3,-12)),"Repeated placement failed.");
+            build.Rotate();Require(build.PlaceSelected(new Vector2(4,-11)),"Wall corner failed.");
+            build.Begin("StoneWall");Require(build.PlaceSelected(new Vector2(1,-12)),"Stone upgrade failed.");
+            build.Begin("ReinforcedWall");Require(build.PlaceSelected(new Vector2(3,-12)),"Reinforced upgrade failed.");
+            yield return new WaitForSecondsRealtime(.6f);Capture("09-fortress-palette");yield return new WaitForSecondsRealtime(.25f);
+            build.Cancel();
+            FindFirstObjectByType<UI.InventoryPanelSystem>().Toggle();
+            yield return new WaitForSecondsRealtime(.4f);Capture("10-backpack");yield return new WaitForSecondsRealtime(.25f);
+            FindFirstObjectByType<UI.InventoryPanelSystem>().Close();
+            foreach(var vein in FindObjectsByType<IronVein>(FindObjectsSortMode.None).OrderBy(v=>v.Index))
+            {
+                campaign.Teleport(vein.transform.position+Vector3.down);player.GetComponent<PlayerToolbelt>().Select(FarmTool.Pickaxe);
+                yield return new WaitForSecondsRealtime(.4f);
+                var oreArt=vein.transform.Find(vein.Precious?"Gem":"Iron").GetComponentInChildren<SpriteRenderer>();
+                Require(oreArt.sprite!=null&&oreArt.enabled,"Ore marking has no visible sprite.");
+                Require(oreArt.sortingOrder>vein.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder,"Ore marking is hidden behind its rock.");
+                Capture("12-ore-ready-"+vein.Index);yield return new WaitForSecondsRealtime(.2f);vein.Interact(FarmTool.Pickaxe,player);
+                yield return new WaitForSecondsRealtime(3.15f);
+                Require(!vein.IsMining,"Mining did not complete.");
+                Capture("11-exploration-"+vein.Index);yield return new WaitForSecondsRealtime(.25f);
+            }
+            player.GetComponent<PlayerToolbelt>().Select(FarmTool.Sword);
+            Require(player.GetAvailableItemCount("GoldOre")>=6,"Outer ore reward missing.");
+            campaign.Teleport(new Vector3(1,-2));
         }
 
         private void Capture(string name)

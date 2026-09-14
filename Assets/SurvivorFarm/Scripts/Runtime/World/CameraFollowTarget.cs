@@ -27,7 +27,8 @@ namespace SurvivorFarm.Runtime.World
             target = newTarget;
             if (target != null)
             {
-                transform.position = target.position + offset;
+                var p=target.position+offset;
+                transform.position = Core.PortfolioSession.Active?FarmExploration.FrameCamera(p,GetComponent<Camera>()):p;
             }
         }
 
@@ -46,7 +47,9 @@ namespace SurvivorFarm.Runtime.World
                 Vector3 midpoint = (target.position + combatFocus.position) * .5f;
                 camera.orthographicSize = Mathf.Clamp(Mathf.Max(Mathf.Abs(target.position.y - combatFocus.position.y) * .5f + 2.5f,
                     Mathf.Abs(target.position.x - combatFocus.position.x) * .5f / Mathf.Max(.5f, camera.aspect) + 2.5f), 6.4f, 9f);
-                transform.position = Vector3.Lerp(transform.position, midpoint + offset, followSpeed * Time.deltaTime);
+                var p=midpoint+offset;
+                if(Core.PortfolioSession.Active)p=FarmExploration.FrameCamera(p,camera);
+                transform.position = Vector3.Lerp(transform.position, p, followSpeed * Time.deltaTime);
                 return;
             }
             var arena = SurvivorFarm.Runtime.Gameplay.ValleyWorld.Center(5);
@@ -61,6 +64,7 @@ namespace SurvivorFarm.Runtime.World
             }
             if (arenaCamera && camera != null) { camera.orthographicSize = previousSize; arenaCamera = false; }
             Vector3 desiredPosition = target.position + offset;
+            if(Core.PortfolioSession.Active)desiredPosition=FarmExploration.FrameCamera(desiredPosition,camera);
             transform.position = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
         }
     }

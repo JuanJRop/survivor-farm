@@ -75,7 +75,7 @@ namespace SurvivorFarm.Runtime.Player
             foreach (EconomyCookingRecipe recipe in EconomyCookingRecipes.All)
                 if (TryGetRecipeDescriptor(recipe.Id, out EconomyRecipeDescriptor descriptor)) descriptors.Add(descriptor);
             if (TryGetRecipeDescriptor("Sword", out EconomyRecipeDescriptor sword)) descriptors.Add(sword);
-            foreach (string id in new[] { "Campfire", "Fence", "Trap", "Turret", "Chest", "Workbench", "Beacon", "Bed", "Cabinet", "Furnace" })
+            foreach (string id in new[] { "Campfire", "Fence", "StoneWall", "ReinforcedWall", "Trap", "Turret", "Chest", "Workbench", "Beacon", "Bed", "Cabinet", "Furnace" })
                 if (TryGetRecipeDescriptor(id, out EconomyRecipeDescriptor descriptor)) descriptors.Add(descriptor);
             foreach (EquipmentRecipe recipe in equipmentRecipes)
                 if (TryGetRecipeDescriptor(recipe.Id, out EconomyRecipeDescriptor descriptor)) descriptors.Add(descriptor);
@@ -132,6 +132,7 @@ namespace SurvivorFarm.Runtime.Player
                 AddIngredient(costs, "Wood", wood);
                 AddIngredient(costs, "Stone", stone);
                 AddIngredient(costs, "Iron", iron);
+                AddIngredient(costs, "GoldOre", FortressPieces.GoldCost(id));
                 if (id == "Campfire" || id == "Bed")
                 {
                     bool built = id == "Campfire" ? campfireBuilt : bedBuilt;

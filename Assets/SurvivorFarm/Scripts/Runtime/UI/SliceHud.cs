@@ -14,8 +14,10 @@ namespace SurvivorFarm.Runtime.UI
         private PortfolioSession session;
         private GameObject canvasRoot,hud,overlay;
         private RectTransform card;
-        private Text phase,objective,resources,core,controls,bossText,title,description;
+        private Text phase,objective,core,controls,bossText,title,description;
         private Text comboText;
+        private RectTransform stockPanel;
+        private readonly MaterialCostBadge[] stockBadges=new MaterialCostBadge[6];
         private Image coreFill,bossFill;
         private GameObject bossPanel;
         private Button ready;
@@ -42,8 +44,9 @@ namespace SurvivorFarm.Runtime.UI
             var well=Panel(hud.transform,"Estado del pozo",new Vector2(0,1),new Vector2(12,-72),new Vector2(204,58));
             core=Label(well,"",15,Paper);core.rectTransform.offsetMin=new Vector2(12,20);core.rectTransform.offsetMax=new Vector2(-12,-4);
             coreFill=Bar(well,new Vector2(12,10),new Vector2(180,5),new Color(.5f,.8f,.65f));
-            var stock=Panel(hud.transform,"Recursos",new Vector2(1,0),new Vector2(-12,12),new Vector2(325,66));
-            resources=Label(stock,"",15,Paper);resources.alignment=TextAnchor.MiddleLeft;Inset(resources.rectTransform,14,6);
+            stockPanel=Panel(hud.transform,"Recursos con iconos",new Vector2(1,0),new Vector2(-12,12),new Vector2(280,82));
+            string[] stockIds={"Wood","Stone","Iron","GoldOre","Food","CommonSeeds"};
+            for(int i=0;i<stockBadges.Length;i++)stockBadges[i]=MaterialCostBadge.Create(stockPanel,stockIds[i],10+i%3*90,7+i/3*36,82);
             var hints=Rect(hud.transform,"Controles",new Vector2(.5f,0),new Vector2(0,90),new Vector2(690,28));
             controls=Label(hints,"",14,Paper);controls.gameObject.AddComponent<Shadow>().effectDistance=new Vector2(1,-1);
             comboText=Label(Panel(hud.transform,"Combo de espada",new Vector2(.5f,0),new Vector2(0,121),new Vector2(234,29)),"",15,Gold);
@@ -81,6 +84,8 @@ namespace SurvivorFarm.Runtime.UI
                 session.Phase==SlicePhase.Night?"DEFIENDE LA GRANJA":session.Phase==SlicePhase.Dawn?"AMANECER":session.Phase==SlicePhase.Boss?"ÚLTIMA DEFENSA":"EL CUSTODIO";
             phase.text=$"DÍA {session.Day} / 3   ·   {label}"+(session.Remaining>0?$"\n{Mathf.CeilToInt(session.Remaining)/60:00}:{Mathf.CeilToInt(session.Remaining)%60:00}":"");
             objective.text=session.Objective;
+            if(!session.InCombat&&Vector2.Distance(session.Player.transform.position,session.Core.transform.position)>16)
+                objective.text="EXPLORA Y FORTIFICA\n"+Mathf.CeilToInt(Vector2.Distance(session.Player.transform.position,session.Core.transform.position))+" m hasta el pozo · regresa antes de la noche";
             core.text=$"POZO   {session.Core.Health} / {session.Core.Maximum}";
             coreFill.fillAmount=session.Core.Health/(float)session.Core.Maximum;
             var player=session.Player;
@@ -88,11 +93,13 @@ namespace SurvivorFarm.Runtime.UI
             bool sword=player.GetComponent<PlayerToolbelt>()?.SelectedTool==FarmTool.Sword;
             comboText.transform.parent.gameObject.SetActive(sword&&!ConstructionSystem.IsPlacing);
             comboText.text=combo!=null&&combo.StepNumber>0?$"CORTE {combo.StepNumber} / 3"+(combo.StepNumber==3?" · REMATE":" · CLIC para seguir"):"CLIC · 1 → 2 → 3 REMATE";
-            resources.text=$"Madera {player.Wood}    Piedra {player.Stone}    Hierro {player.GetComponent<AdventureProgress>().Data.iron}\nFruta {player.Fruit}    Raciones {player.Food} [Q]    Semillas {player.CommonSeeds}";
+            stockPanel.gameObject.SetActive(!ConstructionSystem.IsPlacing);
+            int[] counts={player.Wood,player.Stone,player.GetComponent<AdventureProgress>().Data.iron,player.GetAvailableItemCount("GoldOre"),player.Food,player.CommonSeeds};
+            for(int i=0;i<stockBadges.Length;i++)stockBadges[i].Set(counts[i],0,true);
             ready.gameObject.SetActive(session.Phase==SlicePhase.Day);
-            controls.text=ConstructionSystem.IsPlacing?"CLIC colocar   ·   R girar   ·   CLIC DERECHO / ESC cancelar":
-                session.Day==1?"E interactuar   ·   F recetas   ·   Z barricada   ·   Q curar   ·   ESPACIO esquivar":
-                "Z barricada   ·   X trampa   ·   C ballesta   ·   F mejoras   ·   Q curar   ·   ESPACIO esquivar";
+            controls.text=ConstructionSystem.IsPlacing?"":
+                session.Day==1?"E interactuar   ·   I mochila   ·   F recetas   ·   Z construir   ·   Q curar":
+                "Z construir   ·   X trampa   ·   C ballesta   ·   I mochila   ·   Q curar";
             var boss=session.Raids.Boss;
             bossPanel.SetActive(boss!=null&&(session.Phase==SlicePhase.Boss||session.Phase==SlicePhase.BossIntro));
             if(boss!=null)

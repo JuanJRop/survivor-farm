@@ -25,7 +25,6 @@ namespace SurvivorFarm.Runtime.World
 
         public void Initialize()
         {
-            if (points.Count > 0) return;
             var maps = FindObjectsByType<Tilemap>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             ground = maps.FirstOrDefault(t => t.name == "Spring Grass");
             paths = maps.FirstOrDefault(t => t.name == "Farm Paths");
@@ -33,6 +32,7 @@ namespace SurvivorFarm.Runtime.World
             camps = GetComponent<EnemyCampWorld>(); buildings = GetComponent<ConstructionSystem>(); stats = GetComponent<PlayerSurvivalStats>();
             foreach (var point in FindObjectsByType<ResourceSpawnPoint>(FindObjectsInactive.Include, FindObjectsSortMode.None).OrderBy(p => p.PersistentId))
             {
+                if(points.Contains(point))continue;
                 if (!(point.Instance is TreeResource) && !(point.Instance is RockResource)) continue;
                 if (!ground.HasTile(ground.WorldToCell(point.transform.position))) continue;
                 points.Add(point);
@@ -81,7 +81,7 @@ namespace SurvivorFarm.Runtime.World
 
         public bool CanGrowAt(ResourceSpawnPoint point, Vector3 position)
         {
-            if(Core.PortfolioSession.Active&&(Mathf.Abs(position.x)>16||position.y<-9||position.y>6))return false;
+            if(Core.PortfolioSession.Active&&!FarmExploration.Contains(position,2))return false;
             if (point == null || point.Instance == null || ground == null || Vector2.Distance(position, point.transform.position) > 6.1f ||
                 Vector2.Distance(position, transform.position) < 4 || Vector2.Distance(position, point.Instance.transform.position) < 1) return false;
             // Keep the plaza and shop approaches clear; only the village's outer green areas regrow.

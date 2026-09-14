@@ -81,7 +81,8 @@ namespace SurvivorFarm.Runtime.Gameplay
             previousPosition = transform.position;
             if (!dead && Time.time >= actionUntil)
             {
-                bool moving = movement.sqrMagnitude > .000001f;
+                // Use speed, not distance per frame: fast/headless frames must not flicker to Idle.
+                bool moving = Time.deltaTime>0 && movement.sqrMagnitude > .0004f*Time.deltaTime*Time.deltaTime;
                 if (moving) Face(movement);
                 SetState(moving ? "Walk" : "Idle");
             }

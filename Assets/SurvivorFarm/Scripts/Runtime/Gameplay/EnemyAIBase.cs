@@ -277,7 +277,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected virtual void TickEnemy()
         {
             if (pool != null && pool.Expedition != null && !pool.Expedition.CanEngage(this)) { CancelAttack(); return; }
-            Vector2 toTarget = target.position - transform.position;
+            Vector2 toTarget = AttackPoint - (Vector2)transform.position;
             float distance = toTarget.magnitude;
             if (IsPreparingAttack)
             {
@@ -312,6 +312,9 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         protected virtual bool CanMoveTo(Vector2 position) => pool == null || pool.Expedition == null || pool.Expedition.CanOccupy(this, position);
 
+        // Large structures are hit at their surface, not at an unreachable centre behind the collider.
+        protected virtual Vector2 AttackPoint => target!=null?(Vector2)target.position:(Vector2)transform.position;
+
         protected virtual void MoveTowardTarget() => MoveInDirection(target.position - transform.position);
 
         protected bool MoveInDirection(Vector2 direction)
@@ -340,7 +343,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected virtual void TryAttackTarget()
         {
             if (Time.time < nextAttackTime || !ClearAttackPath()) return;
-            attackDirection = ((Vector2)(target.position - transform.position)).normalized;
+            attackDirection = (AttackPoint - (Vector2)transform.position).normalized;
             strikeAt = Time.time + AttackWindup;
             spriteAnimation?.PlayAttack(attackDirection, AttackWindup + .2f);
         }
@@ -348,7 +351,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         private bool ClearAttackPath()
         {
             if (target == null) return false;
-            int count = Physics2D.Linecast(transform.position, target.position,
+            int count = Physics2D.Linecast(transform.position, AttackPoint,
                 new ContactFilter2D { useTriggers = false }, knockbackHits);
             if (count == knockbackHits.Length) return false;
             for (int i = 0; i < count; i++)

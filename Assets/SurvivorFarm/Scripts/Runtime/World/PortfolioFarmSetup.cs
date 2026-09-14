@@ -24,7 +24,7 @@ namespace SurvivorFarm.Runtime.World
             foreach(var item in Object.FindObjectsByType<TutorialPracticeTarget>(FindObjectsSortMode.None))item.gameObject.SetActive(false);
             foreach(var item in Object.FindObjectsByType<BaseHouse>(FindObjectsSortMode.None))item.enabled=false;
             foreach(var item in Object.FindObjectsByType<ShopEntrance>(FindObjectsSortMode.None))item.enabled=false;
-            foreach(var item in Object.FindObjectsByType<DungeonEntrance>(FindObjectsSortMode.None))item.enabled=false;
+            foreach(var item in Object.FindObjectsByType<DungeonEntrance>(FindObjectsSortMode.None))item.gameObject.SetActive(false);
             foreach(var item in Object.FindObjectsByType<LandUnlockZone>(FindObjectsSortMode.None))item.enabled=false;
             foreach(var item in Object.FindObjectsByType<RepairableBridge>(FindObjectsSortMode.None))item.enabled=false;
             campaign.enabled=false;
@@ -46,8 +46,8 @@ namespace SurvivorFarm.Runtime.World
                 plots[i].EnableForSlice(world.Art("Soil"),session.Settings.cropStages!=null&&session.Settings.cropStages.Length>0?session.Settings.cropStages:new[]{world.Art("Crop")});
             }
             var construction=player.GetComponent<ConstructionSystem>();
-            construction.AddAuthoredDefense("Fence",new Vector2(-1.3f,-5.2f),5);
-            construction.AddAuthoredDefense("Fence",new Vector2(.2f,-5.2f));
+            construction.AddAuthoredDefense("Fence",new Vector2(-1,-6),5);
+            construction.AddAuthoredDefense("Fence",new Vector2(1,-6));
             // Existing furniture logic supplies cooking; no parallel crafting system.
             construction.AddAuthoredDefense("Campfire",new Vector2(-3.8f,-2.3f));
             player.GetComponent<PlayerCraftingController>().RegisterPlacedFire();
@@ -58,10 +58,7 @@ namespace SurvivorFarm.Runtime.World
             world.Label("POZO · PROTÉGELO",VillageLayout.Well+new Vector3(0,1.3f),.065f);
             world.Label("TALLER · F",new Vector3(-5.6f,-4.4f),.07f);
             // Natural perimeter retains the existing buildings, paths, river and vegetation.
-            Wall(world.transform,new Vector3(-18,0),new Vector2(.5f,24));
-            Wall(world.transform,new Vector3(18,0),new Vector2(.5f,24));
-            Wall(world.transform,new Vector3(0,-11),new Vector2(36,.5f));
-            Wall(world.transform,new Vector3(0,8),new Vector2(36,.5f));
+            FarmExploration.Configure(world,player);
             world.gameObject.AddComponent<FarmAtmosphere>();
             return core;
         }
@@ -73,11 +70,6 @@ namespace SurvivorFarm.Runtime.World
                 Vector3 destination=new Vector3(spawn.Instance is TreeResource?-13.5f:13.5f,Mathf.Clamp(point.y,-8,6),0);
                 spawn.transform.position=destination;spawn.Instance.transform.position=destination;
             }
-        }
-        private static void Wall(Transform parent,Vector3 position,Vector2 size)
-        {
-            var wall=new GameObject("Límite de la granja");wall.transform.SetParent(parent,false);wall.transform.position=position;
-            wall.AddComponent<BoxCollider2D>().size=size;
         }
     }
 }

@@ -21,14 +21,28 @@ noche» permite adelantar la preparación. El ritmo final requiere playtests hum
 | Espacio | Esquiva, con recarga breve |
 | Q | Comer una ración |
 | F / I | Recetas y mejoras / mochila |
-| Z / X / C | Colocar barricada / trampa / ballesta automática |
-| R / clic / Esc | Girar barricada / confirmar / cancelar colocación |
+| Z / X / C | Paleta de construcción / trampa / ballesta |
+| R / clic / Esc | Girar muro / colocar otra pieza / salir de construcción |
 | Esc | Pausa |
 
 Las trampas y la ballesta se desbloquean el día 2. Cosechar devuelve semillas y
 fruta; dos frutas producen una ración en las recetas. Las reparaciones cuestan
 dos maderas y recuperan seis puntos de estructura. Las marcas del jefe muestran
 el área que dañará; su recuperación permite daño doble.
+
+La paleta permanece abierta al colocar piezas. Usa primero las que hay en la
+mochila y después los materiales indicados por los iconos. Los muros nuevos son
+módulos de 2 unidades con extremos comunes: gira con R para cerrar esquinas y
+deja un acceso. Puedes elegir piedra o reforzado y hacer clic sobre un muro
+inferior para mejorarlo (coste de pieza completa; conserva la proporción de daño).
+La mochila incluye iconos grandes, cantidades y una pestaña de construcción.
+
+El valle jugable se extiende a 64 × 36 unidades, manteniendo la granja y el río.
+Hay más madera al oeste y piedra al este. Las dos vetas de la cantera dan hierro;
+los dos salientes alejados también dan oro mineral, usado en muros reforzados.
+Cruza el puente abierto para llegar al saliente norte. E elige automáticamente el
+pico: no se exige una mejora oculta en esta demo. Las cuatro vetas se recuperan
+cada día. Regresa al pozo antes de que termine la preparación.
 
 La espada encadena **corte → retorno → remate**. Haz clic de nuevo durante la
 recuperación o en los 0,6 s siguientes. El tercer golpe hace daño ×2 +1 y tiene

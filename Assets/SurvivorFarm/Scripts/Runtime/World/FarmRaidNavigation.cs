@@ -9,7 +9,7 @@ namespace SurvivorFarm.Runtime.World
     /// Per-destination reverse breadth-first fields are shared by all attackers.</summary>
     public sealed class FarmRaidNavigation
     {
-        private const int Width=73,Height=43;
+        private const int Width=129,Height=73;
         private const float Cell=.5f;
         private readonly bool[] blocked=new bool[Width*Height];
         private readonly Dictionary<int,int[]> fields=new Dictionary<int,int[]>();
@@ -18,11 +18,11 @@ namespace SurvivorFarm.Runtime.World
         private float refreshAt;
         private int Index(Vector2 p)
         {
-            int x=Mathf.Clamp(Mathf.RoundToInt((p.x+18)/Cell),0,Width-1);
-            int y=Mathf.Clamp(Mathf.RoundToInt((p.y+12)/Cell),0,Height-1);
+            int x=Mathf.Clamp(Mathf.RoundToInt((p.x+FarmExploration.HalfWidth)/Cell),0,Width-1);
+            int y=Mathf.Clamp(Mathf.RoundToInt((p.y+FarmExploration.HalfHeight)/Cell),0,Height-1);
             return y*Width+x;
         }
-        private Vector2 Position(int index)=>new Vector2(index%Width*Cell-18,index/Width*Cell-12);
+        private Vector2 Position(int index)=>new Vector2(index%Width*Cell-FarmExploration.HalfWidth,index/Width*Cell-FarmExploration.HalfHeight);
         public void Invalidate()=>refreshAt=0;
         public Vector2 NextDirection(Vector2 from,Vector2 goal)
         {

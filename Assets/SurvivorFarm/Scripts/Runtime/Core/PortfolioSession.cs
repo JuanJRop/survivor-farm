@@ -86,7 +86,7 @@ namespace SurvivorFarm.Runtime.Core
             FarmGameEvents.SeedPlanted+=OnPlant;FarmGameEvents.CropHarvested+=OnHarvest;
         }
         public bool CanBuild(string kind) => kind != "Trap" && kind != "Turret" || Day >= 2;
-        public static bool IsDemoRecipe(string id) => id=="Food"||id=="Sword"||id=="Fence"||id=="Trap"||id=="Turret";
+        public static bool IsDemoRecipe(string id) => id=="Food"||id=="Sword"||FortressPieces.IsWall(id)||id=="Trap"||id=="Turret";
         public void BeginNewGame()
         {
             if(!IsReady||HasBegun)return;

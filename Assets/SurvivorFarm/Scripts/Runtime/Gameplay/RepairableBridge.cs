@@ -43,7 +43,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             FarmNotificationCenter.Show("Puente reparado. El bosque del norte y las ruinas ya son accesibles.");
         }
 
-        public void Restore(bool value) { repaired = value; Refresh(); }
+        public void Restore(bool value) { repaired = Core.PortfolioSession.Active || value; Refresh(); }
 
         public void RecoverLegacyPosition(Transform player)
         {

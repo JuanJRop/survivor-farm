@@ -41,5 +41,6 @@ namespace SurvivorFarm.Runtime.UI
             progress.parent.gameObject.SetActive(!stock&&required>0);
             progress.sizeDelta=new Vector2(((RectTransform)progress.parent).rect.width*(required>0?Mathf.Clamp01((float)owned/required):1),2);
         }
+        public void SetVisible(bool visible)=>count.transform.parent.gameObject.SetActive(visible);
     }
 }

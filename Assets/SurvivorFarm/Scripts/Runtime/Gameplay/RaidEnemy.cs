@@ -66,12 +66,13 @@ namespace SurvivorFarm.Runtime.Gameplay
             if(defense!=null&&defense.IsAlive)defense.TakeDamage(role==RaidRole.Brute?2:1,null);
             else base.AttackTarget(stats);
         }
+        protected override Vector2 AttackPoint=>defense!=null&&defense.IsAlive?defense.ContactPoint(transform.position):base.AttackPoint;
         protected override void MoveTowardTarget()
         {
-            Vector2 direction=session.Navigation.NextDirection(transform.position,Target.position);
+            Vector2 direction=session.Navigation.NextDirection(transform.position,defense!=null?AttackPoint:(Vector2)Target.position);
             MoveInDirection(direction);
         }
-        protected override bool CanMoveTo(Vector2 p) => Mathf.Abs(p.x)<18f&&p.y>-11f&&p.y<8f;
+        protected override bool CanMoveTo(Vector2 p) => World.FarmExploration.Contains(p,.5f);
         protected override void OnDefeated(PlayerInventory inventory)
         {
             FarmGameEvents.RaiseEnemyDefeated();

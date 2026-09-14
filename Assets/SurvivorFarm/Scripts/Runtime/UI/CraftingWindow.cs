@@ -55,10 +55,11 @@ namespace SurvivorFarm.Runtime.UI
             root.anchorMin = root.anchorMax = root.pivot = new Vector2(.5f, .5f);
             root.anchoredPosition = Vector2.zero;
             FarmUiStyle.Frame(root.gameObject.AddComponent<Image>());
-            Label(root, "TALLER", 24, 16, 720, 36, 24);
+            Label(root, "TALLER", 24, 16, 470, 36, 24);
+            if(Core.PortfolioSession.Active)Button(root,"Construir varias [Z]",570,16,242,40,()=>{Close();inventory.GetComponent<ConstructionSystem>()?.Begin("Fence");});
             FarmUiStyle.CloseButton(Button(root, "Cerrar [Esc]", 832, 16, 44, 40, Close));
             var bar = AdventureWindow.Rect(root, "Materiales disponibles", 24, 64, 852, 40);
-            string[] resources = { "Wood", "Stone", "Iron", "Fruit", "Coin" };
+            string[] resources = { "Wood", "Stone", "Iron", "Fruit", Core.PortfolioSession.Active?"GoldOre":"Coin" };
             for (int i = 0; i < resources.Length; i++) stock.Add(MaterialCostBadge.Create(bar, resources[i], i * 170, 0, 160));
             string[] captions = { "Todo", "Cocina", "Equipo", "Hogar" };
             for (int i = 0; i < Categories.Length; i++)
@@ -138,7 +139,7 @@ namespace SurvivorFarm.Runtime.UI
             stock[1].Set(inventory.Stone, 0, true);
             stock[2].Set(inventory.GetComponent<AdventureProgress>()?.Data.iron ?? 0, 0, true);
             stock[3].Set(inventory.Fruit, 0, true);
-            stock[4].Set(inventory.Coins, 0, true);
+            stock[4].Set(Core.PortfolioSession.Active?inventory.GetAvailableItemCount("GoldOre"):inventory.Coins, 0, true);
             float y = 0;
             foreach (var row in rows)
             {

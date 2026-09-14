@@ -15,8 +15,17 @@ Proteger el pozo es tan importante como mantener vivo al personaje.
 
 WASD mueve; Shift corre; E interactúa y elige herramienta contextual; clic ataca;
 1/2 seleccionan espada/arco; Espacio esquiva; Q consume ración; F abre recetas;
-I abre mochila. Z/X/C colocan barricada/trampa/ballesta; R gira barricadas;
-clic confirma; Esc o clic derecho cancelan. Esc fuera de menús abre la pausa.
+I abre mochila. Z abre la paleta continua; X/C seleccionan trampa/ballesta;
+R gira muros, clic coloca otra pieza; Esc o clic derecho terminan la construcción.
+La mochila y el taller también tienen acceso a la paleta. Esc fuera de menús abre la pausa.
+
+Ampliación de fortaleza: módulos de 2 unidades, empalizada → piedra → reforzado
+(hierro y oro). Seleccionar material superior sobre un muro permite mejorarlo
+con el coste completo, conservando el porcentaje de daño. El valle ahora abarca
+64 × 36 unidades sobre el mismo terreno: bosque al oeste, cantera al este y
+salientes minerales al noreste/sureste. El puente permanece abierto en la demo,
+también al cargar partidas anteriores. El pico contextual extrae 3 de hierro por
+veta; los salientes dan además 2 de oro. Cada veta se recupera al día siguiente.
 
 ## Recorrido y decisiones
 

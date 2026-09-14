@@ -22,8 +22,13 @@ namespace SurvivorFarm.Runtime.Gameplay
         public bool IsAlive => isActiveAndEnabled && health > 0;
         public int SpawnGeneration => 0;
         public string Kind => IsCore ? "Core" : data?.kind;
+        public Vector2 ContactPoint(Vector2 from)
+        {
+            var collider=GetComponent<BoxCollider2D>();
+            return collider!=null?collider.ClosestPoint(from):(Vector2)transform.position;
+        }
         public override bool IsAvailable => IsAlive && health < maximum;
-        public static bool IsDefense(string kind) => kind == "Fence" || kind == "Trap" || kind == "Turret";
+        public static bool IsDefense(string kind) => FortressPieces.IsWall(kind) || kind == "Trap" || kind == "Turret";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetRegistry() => all.Clear();
@@ -33,7 +38,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         public void Configure(BuildingData state, ConstructionSystem owner, PlayerInventory inventory)
         {
             data=state; construction=owner; player=inventory;
-            maximum=state.kind=="Fence"?14:state.kind=="Turret"?10:8;
+            maximum=FortressPieces.IsWall(state.kind)?(state.wallVersion==0?14:FortressPieces.Health(state.kind)):state.kind=="Turret"?10:8;
             health=state.health<0?maximum:Mathf.Clamp(state.health,0,maximum);
             data.health=health;
             visual=GetComponentInChildren<SpriteRenderer>();
@@ -69,7 +74,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             health=Mathf.Max(0,health-amount);Refresh();VisibleHitFeedback.Play(gameObject);
             player?.GetComponent<GameFeelFeedback>()?.Pulse("−"+amount,transform.position,true,false,false);
             player?.GetComponent<AudioFeedback>()?.Play(health<=0?CombatSound.Break:CombatSound.Chop,transform.position,.7f);
-            CombatHitParticles.Spawn(transform.position,transform.parent,ImpactSurface.Wood,false,health<=0);
+            CombatHitParticles.Spawn(transform.position,transform.parent,Kind=="StoneWall"||Kind=="ReinforcedWall"?ImpactSurface.Stone:ImpactSurface.Wood,false,health<=0);
             if(health>0)return;
             if(IsCore)PortfolioSession.Instance?.Lose("El pozo ha caído. La granja necesita sus defensas.");
             else construction?.RemoveDestroyed(data);
@@ -77,7 +82,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         private void Refresh()
         {
             if(data!=null)data.health=health;
-            if(visual!=null&&!IsCore)visual.color=Color.Lerp(new Color(.5f,.32f,.25f),Color.white,health/(float)Mathf.Max(1,maximum));
+            if(visual!=null&&!IsCore)visual.color=Color.Lerp(new Color(.5f,.32f,.25f),Kind=="ReinforcedWall"?new Color(1,.86f,.58f):Color.white,health/(float)Mathf.Max(1,maximum));
         }
         public override void SetHighlighted(bool highlighted)
         {
