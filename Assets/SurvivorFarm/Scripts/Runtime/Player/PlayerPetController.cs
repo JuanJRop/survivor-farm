@@ -10,9 +10,10 @@ namespace SurvivorFarm.Runtime.Player
         [SerializeField] private PetCompanion companion;
         [SerializeField] private bool equipped = true;
         [SerializeField] private Text equipmentLabel;
-        public bool Equipped => equipped;
+        private bool Available=>!Core.PortfolioSession.Active||GetComponent<PetAdoption>()?.Owned==true;
+        public bool Equipped => equipped&&Available;
         public PetCompanion Companion => companion;
-        public int DamageBonus => isActiveAndEnabled && equipped && companion != null && companion.Definition != null
+        public int DamageBonus => isActiveAndEnabled && Equipped && companion != null && companion.Definition != null
             ? companion.Definition.PlayerDamageBonus : 0;
 
         public void Configure(PetCompanion template, PetCompanion instance, Text label)
@@ -44,8 +45,8 @@ namespace SurvivorFarm.Runtime.Player
             if (companion != null)
             {
                 companion.ConfigureOwner(this);
-                companion.gameObject.SetActive(equipped && isActiveAndEnabled);
-                if (equipped) companion.Recall();
+                companion.gameObject.SetActive(Equipped && isActiveAndEnabled);
+                if (Equipped) companion.Recall();
             }
             if (equipmentLabel != null)
                 equipmentLabel.text = equipped ? "Gato equipado (+1 dano) - Retirar" : "Equipar gato (+1 dano)";

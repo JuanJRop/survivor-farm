@@ -1,0 +1,1369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="158" result="Failed(Child)" total="158" passed="153" failed="5" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:49:34Z" duration="185.8391339">
+  <test-suite type="TestSuite" id="1475" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="401" result="Failed" site="Child" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:49:34Z" duration="185.839134" total="158" passed="153" failed="5" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1469" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/QA/p/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="401" result="Failed" site="Child" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:49:34Z" duration="185.831326" total="158" passed="153" failed="5" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="13644" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1470" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="401" result="Failed" site="Child" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:49:34Z" duration="185.830012" total="158" passed="153" failed="5" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1471" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="401" result="Failed" site="Child" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:49:34Z" duration="185.828671" total="158" passed="153" failed="5" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="1001" name="CombatFeelTests" fullname="SurvivorFarm.Tests.CombatFeelTests" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" testcasecount="24" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:30Z" duration="1.509129" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="ParameterizedMethod" id="1006" name="ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon" fullname="SurvivorFarm.Tests.CombatFeelTests.ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:29Z" duration="0.068660" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1002" name="ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon(&quot;IronSword&quot;,6,4)" fullname="SurvivorFarm.Tests.CombatFeelTests.ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon(&quot;IronSword&quot;,6,4)" methodname="ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="1958915191" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:29Z" duration="0.039840" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1003" name="ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon(&quot;RubySword&quot;,8,4)" fullname="SurvivorFarm.Tests.CombatFeelTests.ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon(&quot;RubySword&quot;,8,4)" methodname="ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="868983475" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:29Z" duration="0.000948" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon(&quot;HunterBow&quot;,4,6)" fullname="SurvivorFarm.Tests.CombatFeelTests.ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon(&quot;HunterBow&quot;,4,6)" methodname="ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="562323923" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:29Z" duration="0.015202" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1005" name="ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon(&quot;DiamondBow&quot;,4,8)" fullname="SurvivorFarm.Tests.CombatFeelTests.ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon(&quot;DiamondBow&quot;,4,8)" methodname="ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="1601570258" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:29Z" duration="0.000520" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1014" name="ArrowImpactIsReservedBeforeReentrantDamageCallbacks" fullname="SurvivorFarm.Tests.CombatFeelTests.ArrowImpactIsReservedBeforeReentrantDamageCallbacks" methodname="ArrowImpactIsReservedBeforeReentrantDamageCallbacks" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="892276840" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:29Z" duration="0.005553" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1010" name="ArrowSpritesAreTheSameExistingAssetAcrossShots" fullname="SurvivorFarm.Tests.CombatFeelTests.ArrowSpritesAreTheSameExistingAssetAcrossShots" methodname="ArrowSpritesAreTheSameExistingAssetAcrossShots" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="100511405" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:29Z" duration="0.029472" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1025" name="BossRetainsAirborneImmunityAndFullDoubleDamageWindow" fullname="SurvivorFarm.Tests.CombatFeelTests.BossRetainsAirborneImmunityAndFullDoubleDamageWindow" methodname="BossRetainsAirborneImmunityAndFullDoubleDamageWindow" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="1230707398" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:29Z" duration="0.106037" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1017" name="BowReleaseWaitsForAnimationAndCanBeCancelled" fullname="SurvivorFarm.Tests.CombatFeelTests.BowReleaseWaitsForAnimationAndCanBeCancelled" methodname="BowReleaseWaitsForAnimationAndCanBeCancelled" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="2010192172" result="Passed" start-time="2026-09-20 09:46:29Z" end-time="2026-09-20 09:46:30Z" duration="1.217032" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1013" name="BowWithoutCameraAcquiresAnimalButStillRespectsCover" fullname="SurvivorFarm.Tests.CombatFeelTests.BowWithoutCameraAcquiresAnimalButStillRespectsCover" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.016768" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1011" name="BowWithoutCameraAcquiresAnimalButStillRespectsCover(False)" fullname="SurvivorFarm.Tests.CombatFeelTests.BowWithoutCameraAcquiresAnimalButStillRespectsCover(False)" methodname="BowWithoutCameraAcquiresAnimalButStillRespectsCover" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="1183189900" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.013011" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="BowWithoutCameraAcquiresAnimalButStillRespectsCover(True)" fullname="SurvivorFarm.Tests.CombatFeelTests.BowWithoutCameraAcquiresAnimalButStillRespectsCover(True)" methodname="BowWithoutCameraAcquiresAnimalButStillRespectsCover" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="2056268015" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.002668" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[No hay un objetivo al alcance.
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-case id="1026" name="BudHealingStillOccursOnlyOncePerAttackCycle" fullname="SurvivorFarm.Tests.CombatFeelTests.BudHealingStillOccursOnlyOncePerAttackCycle" methodname="BudHealingStillOccursOnlyOncePerAttackCycle" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="253206174" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.004332" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1022" name="CancellingGatheringDoesNotReplaceDamageAnimation" fullname="SurvivorFarm.Tests.CombatFeelTests.CancellingGatheringDoesNotReplaceDamageAnimation" methodname="CancellingGatheringDoesNotReplaceDamageAnimation" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="292681009" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.004094" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1015" name="CoverAddedAfterReleaseBlocksArrowImpact" fullname="SurvivorFarm.Tests.CombatFeelTests.CoverAddedAfterReleaseBlocksArrowImpact" methodname="CoverAddedAfterReleaseBlocksArrowImpact" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="2016162652" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.000687" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1021" name="DeathCancelsBeforeSameFrameReviveCanResumeHarvest" fullname="SurvivorFarm.Tests.CombatFeelTests.DeathCancelsBeforeSameFrameReviveCanResumeHarvest" methodname="DeathCancelsBeforeSameFrameReviveCanResumeHarvest" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="758012463" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.001660" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1008" name="EmptyAndUnknownEquipmentRemainSafe" fullname="SurvivorFarm.Tests.CombatFeelTests.EmptyAndUnknownEquipmentRemainSafe" methodname="EmptyAndUnknownEquipmentRemainSafe" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="656783735" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.000648" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1023" name="HarvestHitsDoNotPayUntilCompletionAndCompletionPaysOnce" fullname="SurvivorFarm.Tests.CombatFeelTests.HarvestHitsDoNotPayUntilCompletionAndCompletionPaysOnce" methodname="HarvestHitsDoNotPayUntilCompletionAndCompletionPaysOnce" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="187837190" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.003321" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[+2 madera, +4 oro
+]]></output>
+            </test-case>
+            <test-case id="1007" name="LegacySwordProgressionStaysExclusiveToSword" fullname="SurvivorFarm.Tests.CombatFeelTests.LegacySwordProgressionStaysExclusiveToSword" methodname="LegacySwordProgressionStaysExclusiveToSword" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="1687228056" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.002787" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1016" name="ReusedAndDestroyedArrowTargetsCannotTakeDamage" fullname="SurvivorFarm.Tests.CombatFeelTests.ReusedAndDestroyedArrowTargetsCannotTakeDamage" methodname="ReusedAndDestroyedArrowTargetsCannotTakeDamage" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="2014114433" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.001314" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1009" name="SwordSweepHitsFacingArcOnlyAndDeduplicatesColliders" fullname="SurvivorFarm.Tests.CombatFeelTests.SwordSweepHitsFacingArcOnlyAndDeduplicatesColliders" methodname="SwordSweepHitsFacingArcOnlyAndDeduplicatesColliders" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="1835820661" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.002672" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1020" name="TimedGatheringCancelsOutsideReachAndOnDisable" fullname="SurvivorFarm.Tests.CombatFeelTests.TimedGatheringCancelsOutsideReachAndOnDisable" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.003600" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1018" name="TimedGatheringCancelsOutsideReachAndOnDisable(True)" fullname="SurvivorFarm.Tests.CombatFeelTests.TimedGatheringCancelsOutsideReachAndOnDisable(True)" methodname="TimedGatheringCancelsOutsideReachAndOnDisable" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="3596869" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.001134" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1019" name="TimedGatheringCancelsOutsideReachAndOnDisable(False)" fullname="SurvivorFarm.Tests.CombatFeelTests.TimedGatheringCancelsOutsideReachAndOnDisable(False)" methodname="TimedGatheringCancelsOutsideReachAndOnDisable" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="222384524" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.000521" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1024" name="ToolUpgradeShortensGatheringWhileImpactsFollowClipCycles" fullname="SurvivorFarm.Tests.CombatFeelTests.ToolUpgradeShortensGatheringWhileImpactsFollowClipCycles" methodname="ToolUpgradeShortensGatheringWhileImpactsFollowClipCycles" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="89286217" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.003241" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1029" name="WarningMatchesImpactRadiusAndResetClearsLeapPose" fullname="SurvivorFarm.Tests.CombatFeelTests.WarningMatchesImpactRadiusAndResetClearsLeapPose" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.006313" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1027" name="WarningMatchesImpactRadiusAndResetClearsLeapPose(True,1.7f)" fullname="SurvivorFarm.Tests.CombatFeelTests.WarningMatchesImpactRadiusAndResetClearsLeapPose(True,1.7f)" methodname="WarningMatchesImpactRadiusAndResetClearsLeapPose" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="2027839801" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.003504" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1028" name="WarningMatchesImpactRadiusAndResetClearsLeapPose(False,1.1f)" fullname="SurvivorFarm.Tests.CombatFeelTests.WarningMatchesImpactRadiusAndResetClearsLeapPose(False,1.1f)" methodname="WarningMatchesImpactRadiusAndResetClearsLeapPose" classname="SurvivorFarm.Tests.CombatFeelTests" runstate="Runnable" seed="716649970" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:30Z" duration="0.001276" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+          <test-suite type="TestFixture" id="1032" name="CombatFxTests" fullname="SurvivorFarm.Tests.CombatFxTests" classname="SurvivorFarm.Tests.CombatFxTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:31Z" duration="0.396022" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1034" name="AuthoredSweepAdvancesAndFinishesDuringPause" fullname="SurvivorFarm.Tests.CombatFxTests.AuthoredSweepAdvancesAndFinishesDuringPause" methodname="AuthoredSweepAdvancesAndFinishesDuringPause" classname="SurvivorFarm.Tests.CombatFxTests" runstate="Runnable" seed="821058189" result="Passed" start-time="2026-09-20 09:46:30Z" end-time="2026-09-20 09:46:31Z" duration="0.385026" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1035" name="CancellingChargeClearsItsAuthoredVisual" fullname="SurvivorFarm.Tests.CombatFxTests.CancellingChargeClearsItsAuthoredVisual" methodname="CancellingChargeClearsItsAuthoredVisual" classname="SurvivorFarm.Tests.CombatFxTests" runstate="Runnable" seed="1248232735" result="Passed" start-time="2026-09-20 09:46:31Z" end-time="2026-09-20 09:46:31Z" duration="0.001070" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1033" name="NormalHeavyAndChargedSweepsUseDistinctAuthoredArt" fullname="SurvivorFarm.Tests.CombatFxTests.NormalHeavyAndChargedSweepsUseDistinctAuthoredArt" methodname="NormalHeavyAndChargedSweepsUseDistinctAuthoredArt" classname="SurvivorFarm.Tests.CombatFxTests" runstate="Runnable" seed="482048807" result="Passed" start-time="2026-09-20 09:46:31Z" end-time="2026-09-20 09:46:31Z" duration="0.001890" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1037" name="OneWallHitCreatesOneMaterialSpecificImpact" fullname="SurvivorFarm.Tests.CombatFxTests.OneWallHitCreatesOneMaterialSpecificImpact" methodname="OneWallHitCreatesOneMaterialSpecificImpact" classname="SurvivorFarm.Tests.CombatFxTests" runstate="Runnable" seed="1135626585" result="Passed" start-time="2026-09-20 09:46:31Z" end-time="2026-09-20 09:46:31Z" duration="0.001668" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1036" name="SurfaceImpactsUseSpritesAndRespectTheEffectsOption" fullname="SurvivorFarm.Tests.CombatFxTests.SurfaceImpactsUseSpritesAndRespectTheEffectsOption" methodname="SurfaceImpactsUseSpritesAndRespectTheEffectsOption" classname="SurvivorFarm.Tests.CombatFxTests" runstate="Runnable" seed="1204711931" result="Passed" start-time="2026-09-20 09:46:31Z" end-time="2026-09-20 09:46:31Z" duration="0.003509" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1038" name="CombatJuiceTests" fullname="SurvivorFarm.Tests.CombatJuiceTests" classname="SurvivorFarm.Tests.CombatJuiceTests" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-09-20 09:46:31Z" end-time="2026-09-20 09:46:34Z" duration="3.708465" total="7" passed="6" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1041" name="AShortClickIsOneNormalComboAttack" fullname="SurvivorFarm.Tests.CombatJuiceTests.AShortClickIsOneNormalComboAttack" methodname="AShortClickIsOneNormalComboAttack" classname="SurvivorFarm.Tests.CombatJuiceTests" runstate="Runnable" seed="475246065" result="Passed" start-time="2026-09-20 09:46:31Z" end-time="2026-09-20 09:46:31Z" duration="0.740992" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Receiver recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1043" name="ChargedKnockbackCannotCrossSolidCover" fullname="SurvivorFarm.Tests.CombatJuiceTests.ChargedKnockbackCannotCrossSolidCover" methodname="ChargedKnockbackCannotCrossSolidCover" classname="SurvivorFarm.Tests.CombatJuiceTests" runstate="Runnable" seed="1742922286" result="Passed" start-time="2026-09-20 09:46:31Z" end-time="2026-09-20 09:46:32Z" duration="0.742567" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Receiver recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1040" name="ChargedReleaseHitsOnceAtItsAnimationFrameAndPushesFurther" fullname="SurvivorFarm.Tests.CombatJuiceTests.ChargedReleaseHitsOnceAtItsAnimationFrameAndPushesFurther" methodname="ChargedReleaseHitsOnceAtItsAnimationFrameAndPushesFurther" classname="SurvivorFarm.Tests.CombatJuiceTests" runstate="Runnable" seed="1419522668" result="Failed" start-time="2026-09-20 09:46:32Z" end-time="2026-09-20 09:46:34Z" duration="1.907082" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[  Expected: 25
+  But was:  30
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.CombatJuiceTests+<ChargedReleaseHitsOnceAtItsAnimationFrameAndPushesFurther>d__7.MoveNext () [0x0013c] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\CombatJuiceTests.cs:58
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1042" name="DamageAnimationAndPauseCancelAChargeWithoutReleasingIt" fullname="SurvivorFarm.Tests.CombatJuiceTests.DamageAnimationAndPauseCancelAChargeWithoutReleasingIt" methodname="DamageAnimationAndPauseCancelAChargeWithoutReleasingIt" classname="SurvivorFarm.Tests.CombatJuiceTests" runstate="Runnable" seed="1700750350" result="Passed" start-time="2026-09-20 09:46:34Z" end-time="2026-09-20 09:46:34Z" duration="0.304238" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1045" name="FallbackAssignmentsAreStableAndEvenlySplit" fullname="SurvivorFarm.Tests.CombatJuiceTests.FallbackAssignmentsAreStableAndEvenlySplit" methodname="FallbackAssignmentsAreStableAndEvenlySplit" classname="SurvivorFarm.Tests.CombatJuiceTests" runstate="Runnable" seed="1507141770" result="Passed" start-time="2026-09-20 09:46:34Z" end-time="2026-09-20 09:46:34Z" duration="0.001349" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1039" name="HoldStateSeparatesTapPartialAndFullRelease" fullname="SurvivorFarm.Tests.CombatJuiceTests.HoldStateSeparatesTapPartialAndFullRelease" methodname="HoldStateSeparatesTapPartialAndFullRelease" classname="SurvivorFarm.Tests.CombatJuiceTests" runstate="Runnable" seed="141018537" result="Passed" start-time="2026-09-20 09:46:34Z" end-time="2026-09-20 09:46:34Z" duration="0.000962" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1044" name="OpenGapPreventsBreachingButAClosedEnclosureAllowsIt" fullname="SurvivorFarm.Tests.CombatJuiceTests.OpenGapPreventsBreachingButAClosedEnclosureAllowsIt" methodname="OpenGapPreventsBreachingButAClosedEnclosureAllowsIt" classname="SurvivorFarm.Tests.CombatJuiceTests" runstate="Runnable" seed="244500149" result="Passed" start-time="2026-09-20 09:46:34Z" end-time="2026-09-20 09:46:34Z" duration="0.008582" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1052" name="CombatLootTests" fullname="SurvivorFarm.Tests.CombatLootTests" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-09-20 09:46:34Z" end-time="2026-09-20 09:46:37Z" duration="2.259342" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1060" name="BrokenCrateDropsExperienceThatAdvancesCombatMastery" fullname="SurvivorFarm.Tests.CombatLootTests.BrokenCrateDropsExperienceThatAdvancesCombatMastery" methodname="BrokenCrateDropsExperienceThatAdvancesCombatMastery" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="291626434" result="Passed" start-time="2026-09-20 09:46:34Z" end-time="2026-09-20 09:46:35Z" duration="0.711230" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Test te golpeo: -1 vida.
+]]></output>
+            </test-case>
+            <test-case id="1059" name="ChestScattersDifferentIconsWithoutGrantingUntilCollected" fullname="SurvivorFarm.Tests.CombatLootTests.ChestScattersDifferentIconsWithoutGrantingUntilCollected" methodname="ChestScattersDifferentIconsWithoutGrantingUntilCollected" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="2146524851" result="Passed" start-time="2026-09-20 09:46:35Z" end-time="2026-09-20 09:46:36Z" duration="0.704066" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1053" name="DefeatDropsOneVisibleRewardAndPickupPaysOnlyAfterLandingOnce" fullname="SurvivorFarm.Tests.CombatLootTests.DefeatDropsOneVisibleRewardAndPickupPaysOnlyAfterLandingOnce" methodname="DefeatDropsOneVisibleRewardAndPickupPaysOnlyAfterLandingOnce" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="91935183" result="Passed" start-time="2026-09-20 09:46:36Z" end-time="2026-09-20 09:46:36Z" duration="0.703539" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Test recibio 10 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1057" name="HiddenDungeonLootKeepsItsRegionForSaving" fullname="SurvivorFarm.Tests.CombatLootTests.HiddenDungeonLootKeepsItsRegionForSaving" methodname="HiddenDungeonLootKeepsItsRegionForSaving" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="1567173078" result="Passed" start-time="2026-09-20 09:46:36Z" end-time="2026-09-20 09:46:36Z" duration="0.001498" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1054" name="HitFlashesAndKnockbackCannotCrossWall" fullname="SurvivorFarm.Tests.CombatLootTests.HitFlashesAndKnockbackCannotCrossWall" methodname="HitFlashesAndKnockbackCannotCrossWall" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="1632700053" result="Passed" start-time="2026-09-20 09:46:36Z" end-time="2026-09-20 09:46:37Z" duration="0.123527" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Test recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1058" name="LootRollsVaryByArchetypeAndIncludeGemsExperienceAndGold" fullname="SurvivorFarm.Tests.CombatLootTests.LootRollsVaryByArchetypeAndIncludeGemsExperienceAndGold" methodname="LootRollsVaryByArchetypeAndIncludeGemsExperienceAndGold" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="1257108927" result="Passed" start-time="2026-09-20 09:46:37Z" end-time="2026-09-20 09:46:37Z" duration="0.000815" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1055" name="ReturningToPoolWithoutDefeatDropsNothing" fullname="SurvivorFarm.Tests.CombatLootTests.ReturningToPoolWithoutDefeatDropsNothing" methodname="ReturningToPoolWithoutDefeatDropsNothing" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="626724022" result="Passed" start-time="2026-09-20 09:46:37Z" end-time="2026-09-20 09:46:37Z" duration="0.000617" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1056" name="UncollectedLootSurvivesSaveRoundTrip" fullname="SurvivorFarm.Tests.CombatLootTests.UncollectedLootSurvivesSaveRoundTrip" methodname="UncollectedLootSurvivesSaveRoundTrip" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="1967132946" result="Passed" start-time="2026-09-20 09:46:37Z" end-time="2026-09-20 09:46:37Z" duration="0.012037" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1061" name="CombatPolishTests" fullname="SurvivorFarm.Tests.CombatPolishTests" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-09-20 09:46:37Z" end-time="2026-09-20 09:46:41Z" duration="4.851750" total="13" passed="12" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1064" name="AnimatedSwordHitsOnContactFrameAndCannotHitTwice" fullname="SurvivorFarm.Tests.CombatPolishTests.AnimatedSwordHitsOnContactFrameAndCannotHitTwice" methodname="AnimatedSwordHitsOnContactFrameAndCannotHitTwice" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="278570225" result="Passed" start-time="2026-09-20 09:46:37Z" end-time="2026-09-20 09:46:37Z" duration="0.569603" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Elite recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1071" name="AudioBankIsBoundedDistinctAndUsesPitchVariation" fullname="SurvivorFarm.Tests.CombatPolishTests.AudioBankIsBoundedDistinctAndUsesPitchVariation" methodname="AudioBankIsBoundedDistinctAndUsesPitchVariation" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1647310261" result="Passed" start-time="2026-09-20 09:46:37Z" end-time="2026-09-20 09:46:37Z" duration="0.044008" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1066" name="BufferedInputContinuesOnceAndPauseClearsIt" fullname="SurvivorFarm.Tests.CombatPolishTests.BufferedInputContinuesOnceAndPauseClearsIt" methodname="BufferedInputContinuesOnceAndPauseClearsIt" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="758304297" result="Passed" start-time="2026-09-20 09:46:37Z" end-time="2026-09-20 09:46:38Z" duration="0.465531" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1070" name="CameraFeedbackReturnsExactlyToBaseWithoutDrift" fullname="SurvivorFarm.Tests.CombatPolishTests.CameraFeedbackReturnsExactlyToBaseWithoutDrift" methodname="CameraFeedbackReturnsExactlyToBaseWithoutDrift" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1316132218" result="Passed" start-time="2026-09-20 09:46:38Z" end-time="2026-09-20 09:46:38Z" duration="0.503598" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1062" name="ComboDataIsConfiguredAndThirdHitIsStronger" fullname="SurvivorFarm.Tests.CombatPolishTests.ComboDataIsConfiguredAndThirdHitIsStronger" methodname="ComboDataIsConfiguredAndThirdHitIsStronger" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1892096344" result="Passed" start-time="2026-09-20 09:46:38Z" end-time="2026-09-20 09:46:38Z" duration="0.000880" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1074" name="CratesRejectDuplicateRewardsAndUseBreakingSound" fullname="SurvivorFarm.Tests.CombatPolishTests.CratesRejectDuplicateRewardsAndUseBreakingSound" methodname="CratesRejectDuplicateRewardsAndUseBreakingSound" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="938364818" result="Failed" start-time="2026-09-20 09:46:38Z" end-time="2026-09-20 09:46:38Z" duration="0.001435" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[  Expected: 2
+  But was:  0
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.CombatPolishTests.CratesRejectDuplicateRewardsAndUseBreakingSound () [0x00061] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\CombatPolishTests.cs:222
+]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="1072" name="DebrisIsBoundedAndCleansUpDuringPause" fullname="SurvivorFarm.Tests.CombatPolishTests.DebrisIsBoundedAndCleansUpDuringPause" methodname="DebrisIsBoundedAndCleansUpDuringPause" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="369911008" result="Passed" start-time="2026-09-20 09:46:38Z" end-time="2026-09-20 09:46:39Z" duration="0.604169" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1069" name="DisablingTimeEffectRestoresPreexistingSpeedAndReducedMotionSkipsIt" fullname="SurvivorFarm.Tests.CombatPolishTests.DisablingTimeEffectRestoresPreexistingSpeedAndReducedMotionSkipsIt" methodname="DisablingTimeEffectRestoresPreexistingSpeedAndReducedMotionSkipsIt" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="323599057" result="Passed" start-time="2026-09-20 09:46:39Z" end-time="2026-09-20 09:46:39Z" duration="0.000823" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1063" name="ExpiredWindowAndWeaponSwitchRestartAtFirstAttack" fullname="SurvivorFarm.Tests.CombatPolishTests.ExpiredWindowAndWeaponSwitchRestartAtFirstAttack" methodname="ExpiredWindowAndWeaponSwitchRestartAtFirstAttack" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="380389911" result="Passed" start-time="2026-09-20 09:46:39Z" end-time="2026-09-20 09:46:39Z" duration="0.000581" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1065" name="InterruptedWindupDealsNoDamageAndResetsChain" fullname="SurvivorFarm.Tests.CombatPolishTests.InterruptedWindupDealsNoDamageAndResetsChain" methodname="InterruptedWindupDealsNoDamageAndResetsChain" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1152925789" result="Passed" start-time="2026-09-20 09:46:39Z" end-time="2026-09-20 09:46:39Z" duration="0.253962" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1073" name="PassiveDamageDoesNotFreezeThePlayerButDirectWeaponContactDoes" fullname="SurvivorFarm.Tests.CombatPolishTests.PassiveDamageDoesNotFreezeThePlayerButDirectWeaponContactDoes" methodname="PassiveDamageDoesNotFreezeThePlayerButDirectWeaponContactDoes" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1218959582" result="Passed" start-time="2026-09-20 09:46:39Z" end-time="2026-09-20 09:46:39Z" duration="0.002346" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Elite recibio 1 de dano.
+Elite recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1068" name="TemporaryTimeEffectRestoresAndCannotUnpauseGame" fullname="SurvivorFarm.Tests.CombatPolishTests.TemporaryTimeEffectRestoresAndCannotUnpauseGame" methodname="TemporaryTimeEffectRestoresAndCannotUnpauseGame" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="991200081" result="Passed" start-time="2026-09-20 09:46:39Z" end-time="2026-09-20 09:46:40Z" duration="0.804447" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1067" name="ThreeActualStrikesDeliverOneOneThreeAndEliteFinisher" fullname="SurvivorFarm.Tests.CombatPolishTests.ThreeActualStrikesDeliverOneOneThreeAndEliteFinisher" methodname="ThreeActualStrikesDeliverOneOneThreeAndEliteFinisher" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="476120826" result="Passed" start-time="2026-09-20 09:46:40Z" end-time="2026-09-20 09:46:41Z" duration="1.596734" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Elite recibio 1 de dano.
+Elite recibio 1 de dano.
+Elite recibio 3 de dano.
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1089" name="DungeonExpeditionTests" fullname="SurvivorFarm.Tests.DungeonExpeditionTests" classname="SurvivorFarm.Tests.DungeonExpeditionTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-20 09:46:41Z" end-time="2026-09-20 09:46:45Z" duration="3.543332" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1095" name="BossAnnouncesFixedImpactAndCanBeDodged" fullname="SurvivorFarm.Tests.DungeonExpeditionTests.BossAnnouncesFixedImpactAndCanBeDodged" methodname="BossAnnouncesFixedImpactAndCanBeDodged" classname="SurvivorFarm.Tests.DungeonExpeditionTests" runstate="Runnable" seed="610843257" result="Passed" start-time="2026-09-20 09:46:41Z" end-time="2026-09-20 09:46:44Z" duration="2.851480" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+El Custodio despierta.
+Saliste de la mazmorra.
+Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+El Custodio despierta.
+]]></output>
+            </test-case>
+            <test-case id="1096" name="BossCameraFramesActorsAndReturnsToExploration" fullname="SurvivorFarm.Tests.DungeonExpeditionTests.BossCameraFramesActorsAndReturnsToExploration" methodname="BossCameraFramesActorsAndReturnsToExploration" classname="SurvivorFarm.Tests.DungeonExpeditionTests" runstate="Runnable" seed="1968209872" result="Passed" start-time="2026-09-20 09:46:44Z" end-time="2026-09-20 09:46:45Z" duration="0.617732" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+El Custodio despierta.
+El Custodio recibio 100 de dano.
+Gema recuperada. Regresa a la casa para completar la expedición.
+Custodio derrotado. El relicario y la salida estan abiertos.
+]]></output>
+            </test-case>
+            <test-case id="1094" name="BossGateAndReliquaryRequireVictoryAndOldPositionsRecover" fullname="SurvivorFarm.Tests.DungeonExpeditionTests.BossGateAndReliquaryRequireVictoryAndOldPositionsRecover" methodname="BossGateAndReliquaryRequireVictoryAndOldPositionsRecover" classname="SurvivorFarm.Tests.DungeonExpeditionTests" runstate="Runnable" seed="985396101" result="Passed" start-time="2026-09-20 09:46:45Z" end-time="2026-09-20 09:46:45Z" duration="0.019525" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+Goblin lancero recibio 100 de dano.
+Goblin arquero recibio 100 de dano.
+Golem recibio 100 de dano.
+Gema recuperada. Regresa a la casa para completar la expedición.
+El Custodio despierta.
+El Custodio recibio 3 de dano.
+El Custodio recibio 100 de dano.
+Gema recuperada. Regresa a la casa para completar la expedición.
+Custodio derrotado. El relicario y la salida estan abiertos.
+Saliste de la mazmorra.
+Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+]]></output>
+            </test-case>
+            <test-case id="1092" name="DestructibleNeedsMultipleHitsAndGrantsLootOnlyOnce" fullname="SurvivorFarm.Tests.DungeonExpeditionTests.DestructibleNeedsMultipleHitsAndGrantsLootOnlyOnce" methodname="DestructibleNeedsMultipleHitsAndGrantsLootOnlyOnce" classname="SurvivorFarm.Tests.DungeonExpeditionTests" runstate="Runnable" seed="588119852" result="Passed" start-time="2026-09-20 09:46:45Z" end-time="2026-09-20 09:46:45Z" duration="0.011596" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+]]></output>
+            </test-case>
+            <test-case id="1093" name="GuardDeathsPersistAndOtherRoomsDoNotAggroTogether" fullname="SurvivorFarm.Tests.DungeonExpeditionTests.GuardDeathsPersistAndOtherRoomsDoNotAggroTogether" methodname="GuardDeathsPersistAndOtherRoomsDoNotAggroTogether" classname="SurvivorFarm.Tests.DungeonExpeditionTests" runstate="Runnable" seed="1914347496" result="Passed" start-time="2026-09-20 09:46:45Z" end-time="2026-09-20 09:46:45Z" duration="0.012199" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+Goblin lancero recibio 100 de dano.
+Saliste de la mazmorra.
+Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+]]></output>
+            </test-case>
+            <test-case id="1091" name="InteriorContainsOnlyDungeonObjectsAndBoundedEnemyPool" fullname="SurvivorFarm.Tests.DungeonExpeditionTests.InteriorContainsOnlyDungeonObjectsAndBoundedEnemyPool" methodname="InteriorContainsOnlyDungeonObjectsAndBoundedEnemyPool" classname="SurvivorFarm.Tests.DungeonExpeditionTests" runstate="Runnable" seed="87512264" result="Passed" start-time="2026-09-20 09:46:45Z" end-time="2026-09-20 09:46:45Z" duration="0.016553" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+Saliste de la mazmorra.
+Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+Saliste de la mazmorra.
+Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+Saliste de la mazmorra.
+Entraste a la mazmorra.
+Ruinas de Raizclara: explora las galerias y encuentra la camara del Custodio.
+]]></output>
+            </test-case>
+            <test-case id="1090" name="LayoutIsConnectedLargeAndHasExplorationLoop" fullname="SurvivorFarm.Tests.DungeonExpeditionTests.LayoutIsConnectedLargeAndHasExplorationLoop" methodname="LayoutIsConnectedLargeAndHasExplorationLoop" classname="SurvivorFarm.Tests.DungeonExpeditionTests" runstate="Runnable" seed="1802911888" result="Passed" start-time="2026-09-20 09:46:45Z" end-time="2026-09-20 09:46:45Z" duration="0.010353" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1097" name="DungeonPresentationTests" fullname="SurvivorFarm.Tests.DungeonPresentationTests" classname="SurvivorFarm.Tests.DungeonPresentationTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 09:46:45Z" end-time="2026-09-20 09:46:56Z" duration="11.226773" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1099" name="DungeonTimeReachesNightAndSuppliesPersist" fullname="SurvivorFarm.Tests.DungeonPresentationTests.DungeonTimeReachesNightAndSuppliesPersist" methodname="DungeonTimeReachesNightAndSuppliesPersist" classname="SurvivorFarm.Tests.DungeonPresentationTests" runstate="Runnable" seed="230718295" result="Passed" start-time="2026-09-20 09:46:45Z" end-time="2026-09-20 09:46:56Z" duration="10.805465" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1098" name="ShrineFootprintBlocksMovementAndCandlesAnimate" fullname="SurvivorFarm.Tests.DungeonPresentationTests.ShrineFootprintBlocksMovementAndCandlesAnimate" methodname="ShrineFootprintBlocksMovementAndCandlesAnimate" classname="SurvivorFarm.Tests.DungeonPresentationTests" runstate="Runnable" seed="2088988690" result="Passed" start-time="2026-09-20 09:46:56Z" end-time="2026-09-20 09:46:56Z" duration="0.418134" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1114" name="EnemyCampTests" fullname="SurvivorFarm.Tests.EnemyCampTests" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-09-20 09:46:56Z" end-time="2026-09-20 09:47:00Z" duration="4.272533" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1127" name="AttackingGuardKeepsAggroBeyondOldCampRadiusUntilVeryFarAway" fullname="SurvivorFarm.Tests.EnemyCampTests.AttackingGuardKeepsAggroBeyondOldCampRadiusUntilVeryFarAway" methodname="AttackingGuardKeepsAggroBeyondOldCampRadiusUntilVeryFarAway" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="1487526864" result="Passed" start-time="2026-09-20 09:46:56Z" end-time="2026-09-20 09:46:56Z" duration="0.008434" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Goblin lancero recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1129" name="EmptyLegacyCampDataAndCorruptMasksHaveSafeDefaults" fullname="SurvivorFarm.Tests.EnemyCampTests.EmptyLegacyCampDataAndCorruptMasksHaveSafeDefaults" methodname="EmptyLegacyCampDataAndCorruptMasksHaveSafeDefaults" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="176587767" result="Passed" start-time="2026-09-20 09:46:56Z" end-time="2026-09-20 09:46:56Z" duration="0.005449" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1115" name="FourDistinctMixedCampsLeaveVillageRoadsAndRiverClear" fullname="SurvivorFarm.Tests.EnemyCampTests.FourDistinctMixedCampsLeaveVillageRoadsAndRiverClear" methodname="FourDistinctMixedCampsLeaveVillageRoadsAndRiverClear" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="1218480912" result="Passed" start-time="2026-09-20 09:46:56Z" end-time="2026-09-20 09:46:56Z" duration="0.003432" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1117" name="GuardRosterAndProjectilesArePrewarmedOnlyOnce" fullname="SurvivorFarm.Tests.EnemyCampTests.GuardRosterAndProjectilesArePrewarmedOnlyOnce" methodname="GuardRosterAndProjectilesArePrewarmedOnlyOnce" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="292223796" result="Passed" start-time="2026-09-20 09:46:56Z" end-time="2026-09-20 09:46:56Z" duration="0.007047" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1119" name="GuardsChaseIntrudersButReturnInsteadOfEnteringTown" fullname="SurvivorFarm.Tests.EnemyCampTests.GuardsChaseIntrudersButReturnInsteadOfEnteringTown" methodname="GuardsChaseIntrudersButReturnInsteadOfEnteringTown" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="1506348913" result="Passed" start-time="2026-09-20 09:46:56Z" end-time="2026-09-20 09:46:57Z" duration="0.934990" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Saqueadores del oeste - 4 enemigos
+]]></output>
+            </test-case>
+            <test-case id="1118" name="GuardsPatrolWhenNearbyButNotAlerted" fullname="SurvivorFarm.Tests.EnemyCampTests.GuardsPatrolWhenNearbyButNotAlerted" methodname="GuardsPatrolWhenNearbyButNotAlerted" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="1614266330" result="Passed" start-time="2026-09-20 09:46:57Z" end-time="2026-09-20 09:46:57Z" duration="0.133088" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Saqueadores del oeste - 4 enemigos
+]]></output>
+            </test-case>
+            <test-case id="1122" name="LastGuardUnlocksChestAndPhysicalRewardsPayOnlyOnce" fullname="SurvivorFarm.Tests.EnemyCampTests.LastGuardUnlocksChestAndPhysicalRewardsPayOnlyOnce" methodname="LastGuardUnlocksChestAndPhysicalRewardsPayOnlyOnce" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="186860920" result="Passed" start-time="2026-09-20 09:46:57Z" end-time="2026-09-20 09:46:58Z" duration="0.750107" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Limo del campamento recibio 100 de dano.
+Escondite del sur: quedan 2 enemigos.
+Goblin lancero recibio 100 de dano.
+Escondite del sur: quedan 1 enemigos.
+Limo del campamento recibio 100 de dano.
+Escondite del sur despejado. Abre el cofre con E.
+Escondite del sur - despejado
+]]></output>
+            </test-case>
+            <test-case id="1120" name="LeavingCampCancelsArrowsAndOwnerDisableAlsoCancelsThem" fullname="SurvivorFarm.Tests.EnemyCampTests.LeavingCampCancelsArrowsAndOwnerDisableAlsoCancelsThem" methodname="LeavingCampCancelsArrowsAndOwnerDisableAlsoCancelsThem" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="1704092946" result="Passed" start-time="2026-09-20 09:46:58Z" end-time="2026-09-20 09:46:58Z" duration="0.051858" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1123" name="LegacyClearedChestWaitsForInteractionAndClaimedChestNeverPaysAgain" fullname="SurvivorFarm.Tests.EnemyCampTests.LegacyClearedChestWaitsForInteractionAndClaimedChestNeverPaysAgain" methodname="LegacyClearedChestWaitsForInteractionAndClaimedChestNeverPaysAgain" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="661072288" result="Passed" start-time="2026-09-20 09:46:58Z" end-time="2026-09-20 09:46:59Z" duration="0.781208" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Escondite del sur - despejado
+]]></output>
+            </test-case>
+            <test-case id="1125" name="LivingGuardsCannotBeCountedAsDefeatedByRepeatedCallbacks" fullname="SurvivorFarm.Tests.EnemyCampTests.LivingGuardsCannotBeCountedAsDefeatedByRepeatedCallbacks" methodname="LivingGuardsCannotBeCountedAsDefeatedByRepeatedCallbacks" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="696700725" result="Passed" start-time="2026-09-20 09:46:59Z" end-time="2026-09-20 09:46:59Z" duration="0.004619" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1121" name="PartialClearSurvivesSerializationAndDoesNotRespawnDefeatedGuards" fullname="SurvivorFarm.Tests.EnemyCampTests.PartialClearSurvivesSerializationAndDoesNotRespawnDefeatedGuards" methodname="PartialClearSurvivesSerializationAndDoesNotRespawnDefeatedGuards" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="838820279" result="Passed" start-time="2026-09-20 09:46:59Z" end-time="2026-09-20 09:46:59Z" duration="0.005948" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Goblin lancero recibio 100 de dano.
+Saqueadores del oeste: quedan 3 enemigos.
+]]></output>
+            </test-case>
+            <test-case id="1126" name="PendingVictorySuppliesWaitUntilPlayerRevives" fullname="SurvivorFarm.Tests.EnemyCampTests.PendingVictorySuppliesWaitUntilPlayerRevives" methodname="PendingVictorySuppliesWaitUntilPlayerRevives" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="206822009" result="Passed" start-time="2026-09-20 09:46:59Z" end-time="2026-09-20 09:47:00Z" duration="0.805565" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Escondite del sur - despejado
+]]></output>
+            </test-case>
+            <test-case id="1124" name="ReentrantPickupCallbacksCannotDuplicateCampSupplies" fullname="SurvivorFarm.Tests.EnemyCampTests.ReentrantPickupCallbacksCannotDuplicateCampSupplies" methodname="ReentrantPickupCallbacksCannotDuplicateCampSupplies" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="691488423" result="Passed" start-time="2026-09-20 09:47:00Z" end-time="2026-09-20 09:47:00Z" duration="0.749979" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Limo del campamento recibio 100 de dano.
+Escondite del sur: quedan 2 enemigos.
+Goblin lancero recibio 100 de dano.
+Escondite del sur: quedan 1 enemigos.
+Limo del campamento recibio 100 de dano.
+Escondite del sur despejado. Abre el cofre con E.
+Escondite del sur - despejado
+]]></output>
+            </test-case>
+            <test-case id="1116" name="SiteSelectionUsesLandAndAvoidsExistingObjectsWithoutMovingThem" fullname="SurvivorFarm.Tests.EnemyCampTests.SiteSelectionUsesLandAndAvoidsExistingObjectsWithoutMovingThem" methodname="SiteSelectionUsesLandAndAvoidsExistingObjectsWithoutMovingThem" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="1814534598" result="Passed" start-time="2026-09-20 09:47:00Z" end-time="2026-09-20 09:47:00Z" duration="0.007989" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1128" name="SlimeAndChestSpritesUseSingleUnclippedFrames" fullname="SurvivorFarm.Tests.EnemyCampTests.SlimeAndChestSpritesUseSingleUnclippedFrames" methodname="SlimeAndChestSpritesUseSingleUnclippedFrames" classname="SurvivorFarm.Tests.EnemyCampTests" runstate="Runnable" seed="324972700" result="Passed" start-time="2026-09-20 09:47:00Z" end-time="2026-09-20 09:47:00Z" duration="0.004922" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1179" name="InteractionPromptTests" fullname="SurvivorFarm.Tests.InteractionPromptTests" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-20 09:47:00Z" end-time="2026-09-20 09:47:01Z" duration="0.072972" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1181" name="OnlyHouseRepairAddsAWordToThePrompt" fullname="SurvivorFarm.Tests.InteractionPromptTests.OnlyHouseRepairAddsAWordToThePrompt" methodname="OnlyHouseRepairAddsAWordToThePrompt" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="842618992" result="Passed" start-time="2026-09-20 09:47:00Z" end-time="2026-09-20 09:47:00Z" duration="0.001477" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1182" name="PromptAnimatesWithoutChangingItsLayoutSize" fullname="SurvivorFarm.Tests.InteractionPromptTests.PromptAnimatesWithoutChangingItsLayoutSize" methodname="PromptAnimatesWithoutChangingItsLayoutSize" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="418248732" result="Passed" start-time="2026-09-20 09:47:00Z" end-time="2026-09-20 09:47:01Z" duration="0.065994" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1180" name="PromptShowsOnlyEAndHidesWithoutAnAvailableTarget" fullname="SurvivorFarm.Tests.InteractionPromptTests.PromptShowsOnlyEAndHidesWithoutAnAvailableTarget" methodname="PromptShowsOnlyEAndHidesWithoutAnAvailableTarget" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="749330844" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:01Z" duration="0.000902" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1183" name="ShopIsDiscoverableByTheSameInteractionSelector" fullname="SurvivorFarm.Tests.InteractionPromptTests.ShopIsDiscoverableByTheSameInteractionSelector" methodname="ShopIsDiscoverableByTheSameInteractionSelector" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="1230346655" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:01Z" duration="0.001124" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1246" name="OutdoorEnemyTests" fullname="SurvivorFarm.Tests.OutdoorEnemyTests" classname="SurvivorFarm.Tests.OutdoorEnemyTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:01Z" duration="0.267781" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1249" name="EnemyChasesOutsideButStopsWhenPlayerIsSafe" fullname="SurvivorFarm.Tests.OutdoorEnemyTests.EnemyChasesOutsideButStopsWhenPlayerIsSafe" methodname="EnemyChasesOutsideButStopsWhenPlayerIsSafe" classname="SurvivorFarm.Tests.OutdoorEnemyTests" runstate="Runnable" seed="548782478" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:01Z" duration="0.116865" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1247" name="GatheringGrowsProtectionAndSpendingDoesNotReduceIt" fullname="SurvivorFarm.Tests.OutdoorEnemyTests.GatheringGrowsProtectionAndSpendingDoesNotReduceIt" methodname="GatheringGrowsProtectionAndSpendingDoesNotReduceIt" classname="SurvivorFarm.Tests.OutdoorEnemyTests" runstate="Runnable" seed="243319641" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:01Z" duration="0.000975" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1250" name="HarvestCountsOnceAndSavedProgressRestoresRadius" fullname="SurvivorFarm.Tests.OutdoorEnemyTests.HarvestCountsOnceAndSavedProgressRestoresRadius" methodname="HarvestCountsOnceAndSavedProgressRestoresRadius" classname="SurvivorFarm.Tests.OutdoorEnemyTests" runstate="Runnable" seed="1592872040" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:01Z" duration="0.003114" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[+2 piedra
+]]></output>
+            </test-case>
+            <test-case id="1252" name="NightDetectionStartsPursuitAndDawnDoesNotImmediatelyForgetTarget" fullname="SurvivorFarm.Tests.OutdoorEnemyTests.NightDetectionStartsPursuitAndDawnDoesNotImmediatelyForgetTarget" methodname="NightDetectionStartsPursuitAndDawnDoesNotImmediatelyForgetTarget" classname="SurvivorFarm.Tests.OutdoorEnemyTests" runstate="Runnable" seed="301963871" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:01Z" duration="0.128840" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1251" name="NightIncreasesPopulationAndSleepingReturnsExcessToPool" fullname="SurvivorFarm.Tests.OutdoorEnemyTests.NightIncreasesPopulationAndSleepingReturnsExcessToPool" methodname="NightIncreasesPopulationAndSleepingReturnsExcessToPool" classname="SurvivorFarm.Tests.OutdoorEnemyTests" runstate="Runnable" seed="1397614733" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:01Z" duration="0.001569" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1248" name="PoolReusesInstancesAndCannotSpawnInsideProtectionOrWalls" fullname="SurvivorFarm.Tests.OutdoorEnemyTests.PoolReusesInstancesAndCannotSpawnInsideProtectionOrWalls" methodname="PoolReusesInstancesAndCannotSpawnInsideProtectionOrWalls" classname="SurvivorFarm.Tests.OutdoorEnemyTests" runstate="Runnable" seed="1286566112" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:01Z" duration="0.002058" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Limo recibio 100 de dano.
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1253" name="OutdoorPolishTests" fullname="SurvivorFarm.Tests.OutdoorPolishTests" classname="SurvivorFarm.Tests.OutdoorPolishTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:08Z" duration="7.127004" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1255" name="BridgeBlocksBothRailsAndLeavesTheDeckOpen" fullname="SurvivorFarm.Tests.OutdoorPolishTests.BridgeBlocksBothRailsAndLeavesTheDeckOpen" methodname="BridgeBlocksBothRailsAndLeavesTheDeckOpen" classname="SurvivorFarm.Tests.OutdoorPolishTests" runstate="Runnable" seed="939871058" result="Passed" start-time="2026-09-20 09:47:01Z" end-time="2026-09-20 09:47:08Z" duration="7.105312" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1254" name="EveryPathCapHasGrassCornersAndAnUnbrokenDirtCentre" fullname="SurvivorFarm.Tests.OutdoorPolishTests.EveryPathCapHasGrassCornersAndAnUnbrokenDirtCentre" methodname="EveryPathCapHasGrassCornersAndAnUnbrokenDirtCentre" classname="SurvivorFarm.Tests.OutdoorPolishTests" runstate="Runnable" seed="537410576" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.008877" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1256" name="PersistenceSaveTests" fullname="SurvivorFarm.Tests.PersistenceSaveTests" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" testcasecount="42" result="Failed" site="Child" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.263329" total="42" passed="41" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1298" name="DeathAndNullOptionalLegacyCollectionsRemainLoadable" fullname="SurvivorFarm.Tests.PersistenceSaveTests.DeathAndNullOptionalLegacyCollectionsRemainLoadable" methodname="DeathAndNullOptionalLegacyCollectionsRemainLoadable" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1482063258" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.003951" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1296" name="EmptyOrIncompleteRecordsAreNotNewGames" fullname="SurvivorFarm.Tests.PersistenceSaveTests.EmptyOrIncompleteRecordsAreNotNewGames" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.016539" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1292" name="EmptyOrIncompleteRecordsAreNotNewGames(&quot;{}&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.EmptyOrIncompleteRecordsAreNotNewGames(&quot;{}&quot;)" methodname="EmptyOrIncompleteRecordsAreNotNewGames" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1870107479" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001652" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1293" name="EmptyOrIncompleteRecordsAreNotNewGames(&quot;{\&quot;version\&quot;:20}&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.EmptyOrIncompleteRecordsAreNotNewGames(&quot;{\&quot;version\&quot;:20}&quot;)" methodname="EmptyOrIncompleteRecordsAreNotNewGames" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1942905234" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.000977" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1294" name="EmptyOrIncompleteRecordsAreNotNewGames(&quot;null&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.EmptyOrIncompleteRecordsAreNotNewGames(&quot;null&quot;)" methodname="EmptyOrIncompleteRecordsAreNotNewGames" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="281158195" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.000810" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1295" name="EmptyOrIncompleteRecordsAreNotNewGames(&quot;[]&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.EmptyOrIncompleteRecordsAreNotNewGames(&quot;[]&quot;)" methodname="EmptyOrIncompleteRecordsAreNotNewGames" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="490234421" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.000869" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1301" name="GameSnapshotWithAbsentOptionalComponentsPassesItsOwnValidator" fullname="SurvivorFarm.Tests.PersistenceSaveTests.GameSnapshotWithAbsentOptionalComponentsPassesItsOwnValidator" methodname="GameSnapshotWithAbsentOptionalComponentsPassesItsOwnValidator" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1668598400" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.002240" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1291" name="InvalidValuesAreRejectedBeforeRestore" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.021819" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1279" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;coins\&quot;:17&quot;,&quot;\&quot;coins\&quot;:-1&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;coins\&quot;:17&quot;,&quot;\&quot;coins\&quot;:-1&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1052175119" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001827" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1280" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;coins\&quot;:17&quot;,&quot;\&quot;coins\&quot;:2147483648&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;coins\&quot;:17&quot;,&quot;\&quot;coins\&quot;:2147483648&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1304310449" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001135" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1281" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;hungerPercent\&quot;:0.75&quot;,&quot;\&quot;hungerPercent\&quot;:2&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;hungerPercent\&quot;:0.75&quot;,&quot;\&quot;hungerPercent\&quot;:2&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="2092170453" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001065" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1282" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;x\&quot;:3&quot;,&quot;\&quot;x\&quot;:1e999&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;x\&quot;:3&quot;,&quot;\&quot;x\&quot;:1e999&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1302693201" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.000944" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1283" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;x\&quot;:3&quot;,&quot;\&quot;x\&quot;:null&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;x\&quot;:3&quot;,&quot;\&quot;x\&quot;:null&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="924786863" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.000918" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1284" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;health\&quot;:5&quot;,&quot;\&quot;health\&quot;:6&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;health\&quot;:5&quot;,&quot;\&quot;health\&quot;:6&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="65112881" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001023" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1285" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;version\&quot;:20&quot;,&quot;\&quot;version\&quot;:20,\&quot;selectedTool\&quot;:100&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;version\&quot;:20&quot;,&quot;\&quot;version\&quot;:20,\&quot;selectedTool\&quot;:100&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="958230046" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001020" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1286" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;plots\&quot;:[]&quot;,&quot;\&quot;plots\&quot;:[null]&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;plots\&quot;:[]&quot;,&quot;\&quot;plots\&quot;:[null]&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="95137611" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001006" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1287" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;buildings\&quot;:null&quot;,&quot;\&quot;buildings\&quot;:[null]&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;buildings\&quot;:null&quot;,&quot;\&quot;buildings\&quot;:[null]&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="2100098198" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.000937" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1288" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;groundLoot\&quot;:[]&quot;,&quot;\&quot;groundLoot\&quot;:[null]&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;groundLoot\&quot;:[]&quot;,&quot;\&quot;groundLoot\&quot;:[null]&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="328935136" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.000975" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1289" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;resourceSpawns\&quot;:[]&quot;,&quot;\&quot;resourceSpawns\&quot;:[{\&quot;id\&quot;:\&quot;x\&quot;},{\&quot;id\&quot;:\&quot;x\&quot;}]&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;resourceSpawns\&quot;:[]&quot;,&quot;\&quot;resourceSpawns\&quot;:[{\&quot;id\&quot;:\&quot;x\&quot;},{\&quot;id\&quot;:\&quot;x\&quot;}]&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1381497230" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001042" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1290" name="InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;plots\&quot;:[]&quot;,&quot;\&quot;plots\&quot;:[{\&quot;id\&quot;:\&quot;x\&quot;,\&quot;state\&quot;:100}]&quot;)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.InvalidValuesAreRejectedBeforeRestore(&quot;\&quot;plots\&quot;:[]&quot;,&quot;\&quot;plots\&quot;:[{\&quot;id\&quot;:\&quot;x\&quot;,\&quot;state\&quot;:100}]&quot;)" methodname="InvalidValuesAreRejectedBeforeRestore" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1744558936" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001087" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1297" name="MissingCurrentProgressSectionCannotClearProgress" fullname="SurvivorFarm.Tests.PersistenceSaveTests.MissingCurrentProgressSectionCannotClearProgress" methodname="MissingCurrentProgressSectionCannotClearProgress" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="281454308" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001379" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1299" name="RecoveryDoesNotReplaceHealthyBackupWithDamagedPrimary" fullname="SurvivorFarm.Tests.PersistenceSaveTests.RecoveryDoesNotReplaceHealthyBackupWithDamagedPrimary" methodname="RecoveryDoesNotReplaceHealthyBackupWithDamagedPrimary" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1069243486" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.058756" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1302" name="StableProviderKeepsAliasesAfterRenameReorderAndSerialization" fullname="SurvivorFarm.Tests.PersistenceSaveTests.StableProviderKeepsAliasesAfterRenameReorderAndSerialization" methodname="StableProviderKeepsAliasesAfterRenameReorderAndSerialization" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="867596350" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.002822" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1274" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.034633" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1257" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(5)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(5)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="2006065135" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.002171" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1258" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(6)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(6)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1161177973" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001559" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1259" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(7)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(7)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="2066137830" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001086" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1260" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(8)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(8)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1113726042" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001026" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1261" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(9)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(9)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="2070158661" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001062" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1262" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(10)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(10)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="232787667" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.000997" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1263" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(11)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(11)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1531595382" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001034" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1264" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(12)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(12)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1252543659" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001065" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1265" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(13)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(13)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="227394306" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.000972" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1266" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(14)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(14)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1971897258" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001048" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1267" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(15)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(15)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1378255174" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001038" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1268" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(16)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(16)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1510468439" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001086" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1269" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(17)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(17)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="771695186" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001139" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1270" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(18)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(18)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="2089708590" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001301" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1271" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(19)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(19)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1430223118" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001306" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1272" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(20)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(20)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="396714140" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001329" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1273" name="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(21)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(21)" methodname="SupportedVersionsPreserveLegacySeedsAndOptionalDefaults" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1554204864" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.001831" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1300" name="TotalFailureDoesNotOverwriteAnyCandidate" fullname="SurvivorFarm.Tests.PersistenceSaveTests.TotalFailureDoesNotOverwriteAnyCandidate" methodname="TotalFailureDoesNotOverwriteAnyCandidate" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="791151936" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.021658" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1278" name="UnsupportedVersionsBlockAnIsolatedSlot" fullname="SurvivorFarm.Tests.PersistenceSaveTests.UnsupportedVersionsBlockAnIsolatedSlot" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.059612" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1275" name="UnsupportedVersionsBlockAnIsolatedSlot(4)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.UnsupportedVersionsBlockAnIsolatedSlot(4)" methodname="UnsupportedVersionsBlockAnIsolatedSlot" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1249235106" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.017667" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1276" name="UnsupportedVersionsBlockAnIsolatedSlot(22)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.UnsupportedVersionsBlockAnIsolatedSlot(22)" methodname="UnsupportedVersionsBlockAnIsolatedSlot" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="1419797319" result="Failed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.021730" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: Failed
+  But was:  Primary
+]]></message>
+                  <stack-trace><![CDATA[at SurvivorFarm.Tests.PersistenceSaveTests.UnsupportedVersionsBlockAnIsolatedSlot (System.Int32 version) [0x0004a] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\PersistenceSaveTests.cs:58
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1277" name="UnsupportedVersionsBlockAnIsolatedSlot(0)" fullname="SurvivorFarm.Tests.PersistenceSaveTests.UnsupportedVersionsBlockAnIsolatedSlot(0)" methodname="UnsupportedVersionsBlockAnIsolatedSlot" classname="SurvivorFarm.Tests.PersistenceSaveTests" runstate="Runnable" seed="751453929" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:08Z" duration="0.017133" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+          <test-suite type="TestFixture" id="1354" name="RiverPresentationTests" fullname="SurvivorFarm.Tests.RiverPresentationTests" classname="SurvivorFarm.Tests.RiverPresentationTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:18Z" duration="9.308292" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1356" name="FarmPracticeUsesTheSameWaterAndKeepsTheBridgeCrossing" fullname="SurvivorFarm.Tests.RiverPresentationTests.FarmPracticeUsesTheSameWaterAndKeepsTheBridgeCrossing" methodname="FarmPracticeUsesTheSameWaterAndKeepsTheBridgeCrossing" classname="SurvivorFarm.Tests.RiverPresentationTests" runstate="Runnable" seed="2068386889" result="Passed" start-time="2026-09-20 09:47:08Z" end-time="2026-09-20 09:47:10Z" duration="1.797000" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1355" name="MainHasSynchronizedWaterAndGrassOnBothBanks" fullname="SurvivorFarm.Tests.RiverPresentationTests.MainHasSynchronizedWaterAndGrassOnBothBanks" methodname="MainHasSynchronizedWaterAndGrassOnBothBanks" classname="SurvivorFarm.Tests.RiverPresentationTests" runstate="Runnable" seed="1219215491" result="Passed" start-time="2026-09-20 09:47:10Z" end-time="2026-09-20 09:47:18Z" duration="7.508498" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1357" name="SwordAreaTests" fullname="SurvivorFarm.Tests.SwordAreaTests" classname="SurvivorFarm.Tests.SwordAreaTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-09-20 09:47:18Z" end-time="2026-09-20 09:47:18Z" duration="0.658063" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1360" name="HitPlaysAuthoredImpactAndPreservesMaterialThroughPooling" fullname="SurvivorFarm.Tests.SwordAreaTests.HitPlaysAuthoredImpactAndPreservesMaterialThroughPooling" methodname="HitPlaysAuthoredImpactAndPreservesMaterialThroughPooling" classname="SurvivorFarm.Tests.SwordAreaTests" runstate="Runnable" seed="794629305" result="Passed" start-time="2026-09-20 09:47:18Z" end-time="2026-09-20 09:47:18Z" duration="0.650503" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Test recibio 1 de dano.
+Test recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1358" name="SwordHitsAllNearbyEnemiesOnceButNotDistantEnemies" fullname="SurvivorFarm.Tests.SwordAreaTests.SwordHitsAllNearbyEnemiesOnceButNotDistantEnemies" methodname="SwordHitsAllNearbyEnemiesOnceButNotDistantEnemies" classname="SurvivorFarm.Tests.SwordAreaTests" runstate="Runnable" seed="905957731" result="Failed" start-time="2026-09-20 09:47:18Z" end-time="2026-09-20 09:47:18Z" duration="0.002187" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[  Expected: 9
+  But was:  10
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.SwordAreaTests.SwordHitsAllNearbyEnemiesOnceButNotDistantEnemies () [0x000a2] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\SwordAreaTests.cs:60
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Test recibio 1 de dano.
+Test recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1359" name="WallsStopAreaDamageButOtherEnemiesDoNot" fullname="SurvivorFarm.Tests.SwordAreaTests.WallsStopAreaDamageButOtherEnemiesDoNot" methodname="WallsStopAreaDamageButOtherEnemiesDoNot" classname="SurvivorFarm.Tests.SwordAreaTests" runstate="Runnable" seed="1886837575" result="Passed" start-time="2026-09-20 09:47:18Z" end-time="2026-09-20 09:47:18Z" duration="0.001899" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Test recibio 1 de dano.
+Test recibio 1 de dano.
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1380" name="VillageAdventureTests" fullname="SurvivorFarm.Tests.VillageAdventureTests" classname="SurvivorFarm.Tests.VillageAdventureTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 09:47:18Z" end-time="2026-09-20 09:47:34Z" duration="15.472811" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1381" name="CampsFightByDayAndChestsRequireInteractionAndPersistExactlyOnce" fullname="SurvivorFarm.Tests.VillageAdventureTests.CampsFightByDayAndChestsRequireInteractionAndPersistExactlyOnce" methodname="CampsFightByDayAndChestsRequireInteractionAndPersistExactlyOnce" classname="SurvivorFarm.Tests.VillageAdventureTests" runstate="Runnable" seed="261204426" result="Passed" start-time="2026-09-20 09:47:18Z" end-time="2026-09-20 09:47:26Z" duration="7.864166" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1382" name="DungeonKeepsVillageClockRunningFramesCameraAndReturnsWithPersistentProgress" fullname="SurvivorFarm.Tests.VillageAdventureTests.DungeonKeepsVillageClockRunningFramesCameraAndReturnsWithPersistentProgress" methodname="DungeonKeepsVillageClockRunningFramesCameraAndReturnsWithPersistentProgress" classname="SurvivorFarm.Tests.VillageAdventureTests" runstate="Runnable" seed="897463817" result="Passed" start-time="2026-09-20 09:47:26Z" end-time="2026-09-20 09:47:34Z" duration="7.596909" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1405" name="VillageSecurityTests" fullname="SurvivorFarm.Tests.VillageSecurityTests" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-20 09:47:34Z" end-time="2026-09-20 09:48:03Z" duration="29.205476" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1406" name="DamageAndAidAffectVillageSecurityWithoutChangingTheWell" fullname="SurvivorFarm.Tests.VillageSecurityTests.DamageAndAidAffectVillageSecurityWithoutChangingTheWell" methodname="DamageAndAidAffectVillageSecurityWithoutChangingTheWell" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" seed="419155314" result="Passed" start-time="2026-09-20 09:47:34Z" end-time="2026-09-20 09:47:41Z" duration="7.175741" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1407" name="DestroyedHomeCanBeRebuiltAtItsDoorAndCasualtiesStayDead" fullname="SurvivorFarm.Tests.VillageSecurityTests.DestroyedHomeCanBeRebuiltAtItsDoorAndCasualtiesStayDead" methodname="DestroyedHomeCanBeRebuiltAtItsDoorAndCasualtiesStayDead" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" seed="11620199" result="Passed" start-time="2026-09-20 09:47:41Z" end-time="2026-09-20 09:47:48Z" duration="7.291620" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1408" name="LegacySnapshotWithoutResidentsRestoresHealthyDefaultsAtHome" fullname="SurvivorFarm.Tests.VillageSecurityTests.LegacySnapshotWithoutResidentsRestoresHealthyDefaultsAtHome" methodname="LegacySnapshotWithoutResidentsRestoresHealthyDefaultsAtHome" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" seed="1379794098" result="Passed" start-time="2026-09-20 09:47:48Z" end-time="2026-09-20 09:47:55Z" duration="7.334817" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1409" name="OccupationPersistsItsGarrisonAndRequiresCombatAndRebuildingToLiberate" fullname="SurvivorFarm.Tests.VillageSecurityTests.OccupationPersistsItsGarrisonAndRequiresCombatAndRebuildingToLiberate" methodname="OccupationPersistsItsGarrisonAndRequiresCombatAndRebuildingToLiberate" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" seed="902086597" result="Passed" start-time="2026-09-20 09:47:55Z" end-time="2026-09-20 09:48:03Z" duration="7.397975" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1455" name="WorldInteractionPolishTests" fullname="SurvivorFarm.Tests.WorldInteractionPolishTests" classname="SurvivorFarm.Tests.WorldInteractionPolishTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-09-20 09:48:03Z" end-time="2026-09-20 09:48:03Z" duration="0.469871" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1458" name="CivilianReactsToALocalEnemyAndFindsAnEscapeLaneAroundAWall" fullname="SurvivorFarm.Tests.WorldInteractionPolishTests.CivilianReactsToALocalEnemyAndFindsAnEscapeLaneAroundAWall" methodname="CivilianReactsToALocalEnemyAndFindsAnEscapeLaneAroundAWall" classname="SurvivorFarm.Tests.WorldInteractionPolishTests" runstate="Runnable" seed="697590920" result="Failed" label="Error" start-time="2026-09-20 09:48:03Z" end-time="2026-09-20 09:48:03Z" duration="0.004296" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[UnityEngine.MissingComponentException : There is no 'CircleCollider2D' attached to the "Civilian" game object, but a script is trying to access it.
+You probably need to add a CircleCollider2D to the game object "Civilian". Or your script needs to check if the component is attached before using it.]]></message>
+                <stack-trace><![CDATA[  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x000cd] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.Collider2D.set_isTrigger (System.Boolean value) [0x00006] in <97aefd7896ad46ca8aa0eecadce704ac>:0 
+  at SurvivorFarm.Runtime.Gameplay.VillageResidentHealth.Configure (System.String id) [0x0003e] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\VillageResidentHealth.cs:31 
+  at SurvivorFarm.Tests.WorldInteractionPolishTests.CivilianReactsToALocalEnemyAndFindsAnEscapeLaneAroundAWall () [0x0002f] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldInteractionPolishTests.cs:81 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1eb9db207454431c84a47bcd81e79c37>:0 ]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="1456" name="PointerSelectsVisibleFrontObjectButIgnoresTransparentPixels" fullname="SurvivorFarm.Tests.WorldInteractionPolishTests.PointerSelectsVisibleFrontObjectButIgnoresTransparentPixels" methodname="PointerSelectsVisibleFrontObjectButIgnoresTransparentPixels" classname="SurvivorFarm.Tests.WorldInteractionPolishTests" runstate="Runnable" seed="1653516354" result="Passed" start-time="2026-09-20 09:48:03Z" end-time="2026-09-20 09:48:03Z" duration="0.002205" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1457" name="TreeBecomesTransparentBehindPlayerAndRecoversItsOpacity" fullname="SurvivorFarm.Tests.WorldInteractionPolishTests.TreeBecomesTransparentBehindPlayerAndRecoversItsOpacity" methodname="TreeBecomesTransparentBehindPlayerAndRecoversItsOpacity" classname="SurvivorFarm.Tests.WorldInteractionPolishTests" runstate="Runnable" seed="313942710" result="Passed" start-time="2026-09-20 09:48:03Z" end-time="2026-09-20 09:48:03Z" duration="0.459572" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1459" name="WorldRenewalTests" fullname="SurvivorFarm.Tests.WorldRenewalTests" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-09-20 09:48:03Z" end-time="2026-09-20 09:49:34Z" duration="91.161513" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1468" name="BruteReallyDamagesHouseAndRetargetsAfterDestruction" fullname="SurvivorFarm.Tests.WorldRenewalTests.BruteReallyDamagesHouseAndRetargetsAfterDestruction" methodname="BruteReallyDamagesHouseAndRetargetsAfterDestruction" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="380241092" result="Passed" start-time="2026-09-20 09:48:03Z" end-time="2026-09-20 09:48:13Z" duration="9.344338" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1467" name="DashCannotCrossSolidTreeTrunk" fullname="SurvivorFarm.Tests.WorldRenewalTests.DashCannotCrossSolidTreeTrunk" methodname="DashCannotCrossSolidTreeTrunk" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1411334254" result="Passed" start-time="2026-09-20 09:48:13Z" end-time="2026-09-20 09:48:20Z" duration="7.671988" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1466" name="DestroyedMovingPieceCannotBeResurrected" fullname="SurvivorFarm.Tests.WorldRenewalTests.DestroyedMovingPieceCannotBeResurrected" methodname="DestroyedMovingPieceCannotBeResurrected" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1022427262" result="Passed" start-time="2026-09-20 09:48:20Z" end-time="2026-09-20 09:48:28Z" duration="7.529693" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1463" name="FloraPaysOnceAndPersistsWithTheHouseDamage" fullname="SurvivorFarm.Tests.WorldRenewalTests.FloraPaysOnceAndPersistsWithTheHouseDamage" methodname="FloraPaysOnceAndPersistsWithTheHouseDamage" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="319004122" result="Passed" start-time="2026-09-20 09:48:28Z" end-time="2026-09-20 09:48:36Z" duration="7.648032" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1465" name="GrassBanksAndNativeCookingAnimationSurviveSaveLoad" fullname="SurvivorFarm.Tests.WorldRenewalTests.GrassBanksAndNativeCookingAnimationSurviveSaveLoad" methodname="GrassBanksAndNativeCookingAnimationSurviveSaveLoad" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="363471702" result="Passed" start-time="2026-09-20 09:48:36Z" end-time="2026-09-20 09:48:43Z" duration="7.762029" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1460" name="MenuHasSeparateHomeOptionsAndSaveBrowser" fullname="SurvivorFarm.Tests.WorldRenewalTests.MenuHasSeparateHomeOptionsAndSaveBrowser" methodname="MenuHasSeparateHomeOptionsAndSaveBrowser" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1618617631" result="Passed" start-time="2026-09-20 09:48:43Z" end-time="2026-09-20 09:49:09Z" duration="25.431356" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1464" name="MoveAttachesPreviewAndCancelRestoresThenDemolitionRefundsOnlyPaidCosts" fullname="SurvivorFarm.Tests.WorldRenewalTests.MoveAttachesPreviewAndCancelRestoresThenDemolitionRefundsOnlyPaidCosts" methodname="MoveAttachesPreviewAndCancelRestoresThenDemolitionRefundsOnlyPaidCosts" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1711169954" result="Passed" start-time="2026-09-20 09:49:09Z" end-time="2026-09-20 09:49:16Z" duration="7.747179" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1462" name="NoFreeCatAndPurchaseRequiresDayAndAllMaterials" fullname="SurvivorFarm.Tests.WorldRenewalTests.NoFreeCatAndPurchaseRequiresDayAndAllMaterials" methodname="NoFreeCatAndPurchaseRequiresDayAndAllMaterials" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1192648273" result="Passed" start-time="2026-09-20 09:49:16Z" end-time="2026-09-20 09:49:24Z" duration="7.368678" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1461" name="TreesHaveSingleGroundedVisualSolidTrunksAndTiersIncludingVillageProps" fullname="SurvivorFarm.Tests.WorldRenewalTests.TreesHaveSingleGroundedVisualSolidTrunksAndTiersIncludingVillageProps" methodname="TreesHaveSingleGroundedVisualSolidTrunksAndTiersIncludingVillageProps" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1755030018" result="Passed" start-time="2026-09-20 09:49:24Z" end-time="2026-09-20 09:49:34Z" duration="10.640657" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

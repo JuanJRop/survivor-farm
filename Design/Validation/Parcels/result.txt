@@ -1,0 +1,1 @@
+PASS: 8 surrounding parcels resized; additional cultivable ground present; all unlock interaction points outside blockers; Play preview captured. Test excluded from saves.

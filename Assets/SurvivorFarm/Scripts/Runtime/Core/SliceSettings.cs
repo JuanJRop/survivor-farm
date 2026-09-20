@@ -9,7 +9,7 @@ namespace SurvivorFarm.Runtime.Core
     [Serializable]
     public sealed class SliceDay
     {
-        public float preparationSeconds = 240;
+        public float preparationSeconds = 300;
         public float nightSeconds = 90;
         public RaidRole[] enemies = { RaidRole.Chaser, RaidRole.Chaser, RaidRole.Chaser };
     }
@@ -17,20 +17,20 @@ namespace SurvivorFarm.Runtime.Core
     [CreateAssetMenu(menuName = "Survivor Farm/Portfolio/Three night settings")]
     public sealed class SliceSettings : ScriptableObject
     {
-        public float duskSeconds = 25;
+        public float duskSeconds = 45;
         public int maximumConcurrentEnemies = 8;
         public int coreHealth = 36;
         public int bossHealth = 96;
         public Sprite[] cropStages;
         public SliceDay[] days = {
-            new SliceDay { preparationSeconds = 240, nightSeconds = 90, enemies = new[] {
+            new SliceDay { preparationSeconds = 300, nightSeconds = 90, enemies = new[] {
                 RaidRole.Chaser, RaidRole.Chaser, RaidRole.Chaser, RaidRole.Chaser,
                 RaidRole.Chaser, RaidRole.Chaser, RaidRole.Chaser, RaidRole.Chaser, RaidRole.Chaser } },
-            new SliceDay { preparationSeconds = 210, nightSeconds = 120, enemies = new[] {
+            new SliceDay { preparationSeconds = 300, nightSeconds = 120, enemies = new[] {
                 RaidRole.Chaser, RaidRole.Archer, RaidRole.Chaser, RaidRole.Brute,
                 RaidRole.Chaser, RaidRole.Archer, RaidRole.Chaser, RaidRole.Brute,
                 RaidRole.Archer, RaidRole.Chaser, RaidRole.Chaser, RaidRole.Archer, RaidRole.Brute, RaidRole.Chaser } },
-            new SliceDay { preparationSeconds = 180, nightSeconds = 120, enemies = new[] {
+            new SliceDay { preparationSeconds = 300, nightSeconds = 120, enemies = new[] {
                 RaidRole.Brute, RaidRole.Chaser, RaidRole.Archer, RaidRole.Chaser, RaidRole.Chaser,
                 RaidRole.Archer, RaidRole.Brute, RaidRole.Chaser, RaidRole.Archer, RaidRole.Chaser,
                 RaidRole.Brute, RaidRole.Archer, RaidRole.Chaser, RaidRole.Brute, RaidRole.Chaser,
@@ -41,10 +41,18 @@ namespace SurvivorFarm.Runtime.Core
     [Serializable]
     public sealed class SliceSnapshot
     {
+        public Gameplay.VillageProgressionState villageProgression;
         public int day = 1, coreHealth = 36, planted, harvested, trees, rocks, defenses;
         public float elapsed;
         // A save resumes at daylight before its current encounter, with current resources.
         // Projectiles and attack windups are never serialized.
         public bool completed, repaired;
+        public Player.MasteryRecord[] mastery;
+        public Gameplay.ResidentSnapshot[] residents;
+        public bool petPurchased;
+        public Gameplay.HouseDamageSnapshot[] houses;
+        public string[] foragedPlants;
+        public Gameplay.VillageSecuritySnapshot security;
+        public Gameplay.VillageAdventureSnapshot adventure;
     }
 }

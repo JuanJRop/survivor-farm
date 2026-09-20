@@ -33,6 +33,9 @@ namespace SurvivorFarm.Runtime.Player
 
         private static readonly Definition[] definitions =
         {
+            MaterialItem("Arrow", "Flechas", "Arrow", 1, "Munición del arco. Fabrica 8 flechas con 2 de madera y 1 de piedra."),
+            MaterialItem("Leather", "Cuero", "Leather", 3, "Piel curtida de vaca. Reúne 8 para fabricar una montura."),
+            MaterialItem("Saddle", "Montura", "Saddle", 30, "Permite montar caballos con E. Se fabrica con 8 cueros y 4 maderas; es reutilizable."),
             Food("Asparagus", "Esparrago", 4, 8),
             Food("Broccoli", "Brocoli", 5, 10),
             Food("Cabbage", "Repollo", 5, 10),

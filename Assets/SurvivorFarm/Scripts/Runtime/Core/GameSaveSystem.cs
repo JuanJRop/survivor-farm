@@ -11,7 +11,7 @@ namespace SurvivorFarm.Runtime.Core
 {
     public sealed class GameSaveSystem : MonoBehaviour
     {
-        private const int SaveVersion = 20;
+        private const int SaveVersion = 22;
 
         [SerializeField] private DayNightCycle dayNightCycle;
 
@@ -142,6 +142,7 @@ namespace SurvivorFarm.Runtime.Core
 
         public void SaveGame(bool notify)
         {
+            if (PracticeSession.Active) return;
             if (PortfolioSession.Active && !PortfolioSession.Instance.CanSave) return;
             if (player == null || inventory == null || persistenceBusy)
             {
@@ -168,6 +169,7 @@ namespace SurvivorFarm.Runtime.Core
 
         public bool TryLoadGame()
         {
+            if (PracticeSession.Active) return false;
             if (persistenceBusy) return false;
             persistenceBusy = true;
             try
@@ -222,7 +224,7 @@ namespace SurvivorFarm.Runtime.Core
                 JsonUtility.FromJsonOverwrite(json, data);
                 if (data == null || data.version < 5 || data.version > SaveVersion)
                 {
-                    error = "Unsupported save version (expected 5..20).";
+                    error = "Unsupported save version (expected 5..22).";
                     return false;
                 }
                 NormalizeSaveData(data);
@@ -291,6 +293,8 @@ namespace SurvivorFarm.Runtime.Core
             // These fields did not exist in the earliest supported layouts.
             if (data.version < 7) { data.day = 1; data.hour = 8f; }
             if (data.version < 17) data.inventory.preferredSeed = -1;
+            // All older ground drops were coins; missing item fields must not turn them into wood.
+            if (data.version < 22) foreach (var drop in data.groundLoot) if (drop != null) drop.item = (int)ItemKind.Coins;
             // Earlier mobile control enum values all restore to today's PC mode.
             data.movementMode = 0;
         }
@@ -335,7 +339,7 @@ namespace SurvivorFarm.Runtime.Core
                 if (drop == null || drop.amount < 0 || !Enum.IsDefined(typeof(ItemKind), drop.item)) return false;
             foreach (BuildingData building in data.buildings)
                 if (building == null || string.IsNullOrWhiteSpace(building.kind) || building.wood < 0 || building.stone < 0 ||
-                    building.food < 0 || building.iron < 0) return false;
+                    building.food < 0 || building.iron < 0 || building.paidWood<0 || building.paidStone<0 || building.paidIron<0 || building.paidGold<0) return false;
             foreach (PackedBuilding building in items.packedBuildings)
                 if (building == null || string.IsNullOrWhiteSpace(building.kind) || building.count < 0) return false;
             foreach (InventoryStack stack in items.itemStacks)
@@ -473,13 +477,14 @@ namespace SurvivorFarm.Runtime.Core
 
             foreach (var drop in FindObjectsByType<EnemyLootPickup>(FindObjectsInactive.Include, FindObjectsSortMode.None))
                 if (drop.IsUncollected && drop.Item != null)
-                    data.groundLoot.Add(new GroundLootSaveData { position = SaveVector.From(drop.transform.position),
-                        amount = drop.Amount, item = (int)drop.Item.Kind, dungeon = drop.IsDungeon });
+                    data.groundLoot.Add(new GroundLootSaveData { position = SaveVector.From(drop.LandingPosition),
+                        amount = drop.Amount, item = (int)drop.Item.Kind, dungeon = drop.IsDungeon, encounterId = drop.EncounterId });
             return data;
         }
 
         private void RestoreSaveData(GameSaveData data)
         {
+            player?.GetComponent<PlayerMountController>()?.ForceDismount();
             VillageDialogueWindow.CloseActive();
             var currentHouse=inventory?.GetComponent<HouseSystem>();if(currentHouse!=null&&currentHouse.IsInside)currentHouse.Exit(false);
             player?.GetComponent<PlayerPetController>()?.SetEquipped(data.version < 10 || data.petEquipped);
@@ -660,17 +665,19 @@ namespace SurvivorFarm.Runtime.Core
             EnemyLootPickup prefab = null;
             foreach (var enemy in FindObjectsByType<EnemyAIBase>(FindObjectsInactive.Include, FindObjectsSortMode.None))
                 if (enemy.LootPrefab != null) { prefab = enemy.LootPrefab; break; }
-            if (prefab == null) return;
             foreach (var old in FindObjectsByType<EnemyLootPickup>(FindObjectsInactive.Include, FindObjectsSortMode.None)) old.Discard();
             var outside = FindFirstObjectByType<OutdoorEnemyPool>(FindObjectsInactive.Include);
             var dungeon = FindFirstObjectByType<DungeonEnemyPool>(FindObjectsInactive.Include);
             foreach (var saved in savedDrops ?? new List<GroundLootSaveData>())
             {
-                if (saved.amount <= 0 || saved.item != (int)ItemKind.Coins) continue;
+                if (saved.amount <= 0 || !Enum.IsDefined(typeof(ItemKind), saved.item)) continue;
                 Transform parent = saved.dungeon ? dungeon != null ? dungeon.transform : null : outside != null ? outside.transform : null;
+                if (!string.IsNullOrEmpty(saved.encounterId))
+                    foreach (var camp in FindObjectsByType<EnemyCamp>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                        if (camp.Definition?.Id == saved.encounterId) { parent = camp.transform; break; }
                 Vector3 position = saved.position.ToVector3();
                 if (saved.dungeon && dungeon != null && dungeon.Expedition != null && !DungeonLayout.Walkable(position)) position = DungeonLayout.Entry;
-                if (parent != null) EnemyLootPickup.Spawn(prefab, position, parent, ResourceFlyweights.Item(ItemKind.Coins), saved.amount);
+                EnemyLootPickup.Spawn(prefab, position, parent, ResourceFlyweights.Item((ItemKind)saved.item), saved.amount);
             }
         }
 
@@ -746,8 +753,10 @@ namespace SurvivorFarm.Runtime.Core
         private sealed class GroundLootSaveData
         {
             public SaveVector position;
-            public int amount, item;
+            public int amount;
+            public int item = (int)ItemKind.Coins;
             public bool dungeon;
+            public string encounterId;
         }
 
         [Serializable]

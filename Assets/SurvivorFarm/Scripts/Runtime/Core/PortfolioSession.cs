@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using SurvivorFarm.Runtime.Gameplay;
 using SurvivorFarm.Runtime.Player;
 using SurvivorFarm.Runtime.UI;
@@ -20,17 +21,23 @@ namespace SurvivorFarm.Runtime.Core
         public PlayerInventory Player { get; private set; }
         public FarmDefense Core { get; private set; }
         public FarmRaidDirector Raids { get; private set; }
+        public VillageSecurity Security { get; private set; }
+        public VillageAdventure Adventure { get; private set; }
+        public VillageProgression Progression { get; private set; }
         public FarmRaidNavigation Navigation { get; } = new FarmRaidNavigation();
         public SlicePhase Phase { get; private set; } = SlicePhase.Introduction;
         public int Day { get; private set; } = 1;
         public float Remaining { get; private set; }
         public float Elapsed { get; private set; }
         public bool HasBegun { get; private set; }
-        public bool InCombat => Phase == SlicePhase.Night || Phase == SlicePhase.Boss;
-        public bool CanSave => HasBegun && (Phase == SlicePhase.Day || Phase == SlicePhase.Preparation || Phase == SlicePhase.Dawn || Phase == SlicePhase.Victory);
+        public bool InCombat => Security?.IsOccupied == true || Phase == SlicePhase.Night || Phase == SlicePhase.Boss;
+        public bool CanSave => !IsPractice && HasBegun && Adventure?.IsInsideDungeon != true && Security?.IsOccupied != true && (Phase == SlicePhase.Day || Phase == SlicePhase.Preparation || Phase == SlicePhase.Dawn || Phase == SlicePhase.Victory);
         public bool IsPaused { get; private set; }
         public bool IsReady { get; private set; }
+        public PracticeSession Practice => GetComponent<PracticeSession>();
+        public bool IsPractice => Practice != null;
         public string QaSlot { get; private set; }
+        public void SelectQaSave(string slot){if(GameSaveSystem.IsQa&&!HasBegun)QaSlot=slot;}
         public int Planted { get; private set; }
         public int Harvested { get; private set; }
         public int Trees { get; private set; }
@@ -45,20 +52,17 @@ namespace SurvivorFarm.Runtime.Core
         private float phaseDuration;
         private bool repaired;
 
-        public string Objective => !HasBegun ? "Tres noches para salvar la granja" :
-            Phase == SlicePhase.Victory ? "La granja vuelve a respirar" :
+        public string Objective => !HasBegun ? "Explora el valle y protege a sus habitantes" :
+            Phase == SlicePhase.Victory ? "El pueblo vuelve a respirar" :
             Phase == SlicePhase.Defeat ? EndingReason :
+            Security?.IsOccupied == true ? (Security.GarrisonRemaining > 0 ? $"PUEBLO OCUPADO · vence a {Security.GarrisonRemaining} invasores" : "Repara una casa y libera el pueblo en el pozo · E") :
+            Adventure?.IsInsideDungeon == true ? Adventure.Objective :
             Phase == SlicePhase.BossIntro || Phase == SlicePhase.Boss ? "Vence al Custodio · sal de las marcas, ataca al recuperarse" :
-            Phase == SlicePhase.Night ? $"Defiende el pozo · enemigos {Raids.Defeated}/{Raids.Total}" :
-            Phase == SlicePhase.Dawn ? "La noche ha terminado · nuevas defensas disponibles" :
-            Day == 1 && Trees == 0 ? "Reúne madera al oeste · acércate al árbol y pulsa E" :
-            Day == 1 && Rocks == 0 ? "Recoge piedra al este · E usa el pico automáticamente" :
-            Day == 1 && Planted < 3 ? $"Planta y riega 3 cultivos al sureste · {Planted}/3" :
-            Day == 1 && !repaired ? "Repara la barricada dañada al sur · E, 2 madera" :
-            Day == 1 && Player.GetComponent<PlayerCraftingController>().MealsCooked == 0 ? "Cosecha fruta y cocina una ración · F" :
-            Day == 2 ? "Combina trampas y barricadas · los demoledores buscan el pozo" :
-            Day == 3 ? "El Custodio viene por el Corazón bajo el pozo · prepara tu defensa final" :
-            "Construye barricadas y guarda raciones · Q cura, Espacio esquiva";
+            Phase == SlicePhase.Night ? $"Protege casas y vecinos · invasores {Raids.Defeated}/{Raids.Total}" :
+            Phase == SlicePhase.Preparation ? "¡Se acercan monstruos! Regresa al pueblo antes del anochecer" :
+            Phase == SlicePhase.Dawn ? "Pueblo a salvo · auxilia a los vecinos y repara las casas con E" :
+            Security != null && Security.Percent < 65 ? "El pueblo necesita ayuda · E repara casas y atiende a los vecinos" :
+            Adventure != null ? Adventure.Objective : "Explora, consigue raciones y vuelve para proteger el pueblo";
 
         private void Awake()
         {
@@ -77,19 +81,39 @@ namespace SurvivorFarm.Runtime.Core
             saves=FindFirstObjectByType<GameSaveSystem>();
             Core=PortfolioFarmSetup.Configure(this);
             Raids=gameObject.AddComponent<FarmRaidDirector>();Raids.Configure(this);
-            hud=gameObject.AddComponent<SliceHud>();hud.Configure(this);
+            if(!IsPractice)
+            {
+                Security=gameObject.AddComponent<VillageSecurity>();Security.Configure(this);
+                Security.OccupationStarted+=OnOccupation;Security.VillageLiberated+=OnLiberated;
+                Adventure=gameObject.AddComponent<VillageAdventure>();Adventure.Configure(this,Player.GetComponent<ValleyCampaign>().World);
+                Adventure.ProgressChanged+=SaveExplorationProgress;
+                Progression=gameObject.AddComponent<VillageProgression>();Progression.Configure(this);
+            }
+            if(!IsPractice){hud=gameObject.AddComponent<SliceHud>();hud.Configure(this);}
             gameObject.AddComponent<FarmSoundscape>().Configure(this);
             IsReady=true;
             SetPhase(SlicePhase.Introduction,0);
             Time.timeScale=0;
             FarmGameEvents.TreeHarvested+=OnTree;FarmGameEvents.RockHarvested+=OnRock;
             FarmGameEvents.SeedPlanted+=OnPlant;FarmGameEvents.CropHarvested+=OnHarvest;
+            if(IsPractice)
+            {
+                HasBegun=true;Day=3;Time.timeScale=1;
+                SetPracticePhase(false);
+                Practice.Configure(this);
+            }
         }
-        public bool CanBuild(string kind) => kind != "Trap" && kind != "Turret" || Day >= 2;
-        public static bool IsDemoRecipe(string id) => id=="Food"||id=="Sword"||FortressPieces.IsWall(id)||id=="Trap"||id=="Turret";
+        public void SetPracticePhase(bool combat,bool boss=false)
+        {
+            if(!IsPractice)return;
+            Phase=combat?(boss?SlicePhase.Boss:SlicePhase.Night):SlicePhase.Day;
+            Remaining=0;clock?.Restore(3,combat?20:10);PhaseChanged?.Invoke(Phase);
+        }
+        public bool CanBuild(string kind) => !FortressPieces.IsWall(kind) && kind != "Trap" && kind != "Turret";
+        public static bool IsDemoRecipe(string id) => id=="Food"||id=="Sword"||id=="Arrow"||id=="Saddle";
         public void BeginNewGame()
         {
-            if(!IsReady||HasBegun)return;
+            if(!IsReady||HasBegun||IsPractice)return;
             if(!GameSaveSystem.IsQa)
             {
                 PlayerPrefs.SetString("SurvivorFarmPortfolioSlot",DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff"));
@@ -97,7 +121,7 @@ namespace SurvivorFarm.Runtime.Core
             }
             Player.Restore(6,0,0,8,6,0,0,99,2);
             Player.RestorePacked(null);Player.RestoreItemStacks(null);
-            Player.RestoreEquipment(new[]{"Sword","Bow"},new[]{"","","","Sword","","","",""});
+            Player.RestoreEquipment(new[]{"Sword"},new[]{"","","","Sword","","","",""});
             stats.Restore(5,5,1);
             HasBegun=true;Day=1;Elapsed=0;Time.timeScale=1;
             SetPhase(SlicePhase.Day,settings.days[0].preparationSeconds);
@@ -116,11 +140,12 @@ namespace SurvivorFarm.Runtime.Core
             if(pause)Player.GetComponent<PlayerCombatController>()?.CancelMelee();
             IsPaused=pause;Time.timeScale=pause?0:1;
             if(pause)Player.GetComponent<PlayerMovementController>()?.StopMovement();
-            hud.RefreshOverlay();
+            hud?.RefreshOverlay();
+            Practice?.RefreshPause();
         }
         public void PrepareNow()
         {
-            if(Phase!=SlicePhase.Day||!HasBegun)return;
+            if(IsPractice||Phase!=SlicePhase.Day||!HasBegun||Adventure?.IsInsideDungeon==true||Security?.IsOccupied==true)return;
             SetPhase(SlicePhase.Preparation,settings.duskSeconds);
         }
         public void RegisterDefense(){Defenses++;Navigation.Invalidate();}
@@ -133,21 +158,19 @@ namespace SurvivorFarm.Runtime.Core
         private void Update()
         {
             if(!IsReady||!HasBegun)return;
-            if(Input.GetKeyDown(KeyCode.Escape)&&!InventoryPanelSystem.IsOpen)Pause(!IsPaused);
+            if(Input.GetKeyDown(KeyCode.Escape)&&!InventoryPanelSystem.IsOpen&&!FarmIntroduction.IsOpen)Pause(!IsPaused);
             if(IsPaused||Phase==SlicePhase.Victory||Phase==SlicePhase.Defeat)return;
-            if(stats.CurrentHealth<=0){Lose("Has caído defendiendo la granja.");return;}
-            if(!InventoryPanelSystem.IsOpen)
+            if(stats.CurrentHealth<=0){Lose("Has caído. El pueblo necesita a su defensor.");return;}
+            if(!InventoryPanelSystem.IsOpen&&!FarmIntroduction.IsOpen)
             {
                 if(Input.GetKeyDown(KeyCode.Q))BackpackActions.Use(Player,"Food");
-                if(Input.GetKeyDown(KeyCode.Z))Player.GetComponent<ConstructionSystem>().Begin("Fence");
-                if(Input.GetKeyDown(KeyCode.X))Player.GetComponent<ConstructionSystem>().Begin("Trap");
-                if(Input.GetKeyDown(KeyCode.C))Player.GetComponent<ConstructionSystem>().Begin("Turret");
             }
-            Advance(Time.deltaTime);
+            if(IsPractice)Practice.Tick(Time.deltaTime);else Advance(Time.deltaTime);
         }
         public void Advance(float seconds)
         {
-            if(!HasBegun||IsPaused||seconds<=0||float.IsNaN(seconds)||float.IsInfinity(seconds)||Phase==SlicePhase.Victory||Phase==SlicePhase.Defeat)return;
+            if(IsPractice||!HasBegun||IsPaused||FarmIntroduction.IsOpen||seconds<=0||float.IsNaN(seconds)||float.IsInfinity(seconds)||Phase==SlicePhase.Victory||Phase==SlicePhase.Defeat)return;
+            if(Security?.IsOccupied==true)return;
             Elapsed+=seconds;Remaining=Mathf.Max(0,Remaining-seconds);
             float progress=phaseDuration>0?1-Remaining/phaseDuration:1;
             if(Phase==SlicePhase.Day)clock?.Restore(Day,Mathf.Lerp(8,17,progress));
@@ -185,12 +208,14 @@ namespace SurvivorFarm.Runtime.Core
             if(phase==SlicePhase.BossIntro){Raids.Stop();Raids.IntroduceBoss();}
             if(phase==SlicePhase.Boss)Raids.ActivateBoss();
             if(phase==SlicePhase.Day)clock?.Restore(Day,8);
+            if(phase==SlicePhase.Preparation)FarmNotificationCenter.Show("¡Regresa al pueblo! Los monstruos atacarán las casas y a los vecinos.");
             PhaseChanged?.Invoke(phase);
             hud?.RefreshOverlay();
         }
         public void Win()
         {
-            if(Phase!=SlicePhase.Boss)return;
+            if(IsPractice){Practice.BossDefeated();return;}
+            if(Phase!=SlicePhase.Boss||Security?.IsOccupied==true)return;
             SetPhase(SlicePhase.Victory,0);Raids.Stop();clock?.Restore(4,8);
             Player.GetComponent<PlayerMovementController>()?.StopMovement();
             Camera.main?.GetComponent<CameraFollowTarget>()?.SetCombatFocus(null);
@@ -198,24 +223,61 @@ namespace SurvivorFarm.Runtime.Core
         }
         public void Lose(string reason)
         {
+            if(IsPractice){Practice.PlayerDefeated();return;}
             if(!HasBegun||Phase==SlicePhase.Defeat||Phase==SlicePhase.Victory)return;
             EndingReason=reason;SetPhase(SlicePhase.Defeat,0);Raids.Stop();
             Player.GetComponent<ConstructionSystem>()?.Cancel();
             Player.GetComponent<PlayerMovementController>()?.StopMovement();Time.timeScale=0;
         }
         public SliceSnapshot Capture() => new SliceSnapshot {day=Day,coreHealth=Core.Health,elapsed=Elapsed,
+            security=Security?.Capture(),adventure=Adventure?.Capture(),villageProgression=Progression?.Capture(),
+            mastery=Player.GetComponent<ToolMastery>()?.Capture(),
+            petPurchased=Player.GetComponent<PetAdoption>()?.Owned==true,
+            houses=FindObjectsByType<VillageHouseHealth>(FindObjectsInactive.Include,FindObjectsSortMode.None).Select(h=>h.Capture()).ToArray(),
+            foragedPlants=FindObjectsByType<ForagePlant>(FindObjectsInactive.Include,FindObjectsSortMode.None).Where(p=>p.Collected).Select(p=>p.Id).ToArray(),
+            residents=FindObjectsByType<VillageResidentHealth>(FindObjectsInactive.Include,FindObjectsSortMode.None).Where(r=>r.GetComponent<VillageGuard>()==null).Select(r=>r.Capture()).ToArray(),
             planted=Planted,harvested=Harvested,trees=Trees,rocks=Rocks,defenses=Defenses,repaired=repaired,completed=Phase==SlicePhase.Victory};
         public void Restore(SliceSnapshot snapshot)
         {
             if(snapshot==null||!IsReady)return;
             Day=Mathf.Clamp(snapshot.day,1,3);Elapsed=snapshot.elapsed;
             Planted=snapshot.planted;Harvested=snapshot.harvested;Trees=snapshot.trees;Rocks=snapshot.rocks;Defenses=snapshot.defenses;
-            repaired=snapshot.repaired||Day>1||Defenses>0;Core.RestoreHealth(snapshot.coreHealth);
+            repaired=snapshot.repaired||Day>1||Defenses>0;
+            Player.GetComponent<ToolMastery>()?.Restore(snapshot.mastery);
+            Player.GetComponent<PetAdoption>()?.Restore(snapshot.petPurchased);
+            Player.GetComponent<PlayerMountController>()?.ForceDismount();
+            Progression?.Restore(snapshot.villageProgression);
+            foreach(var house in FindObjectsByType<VillageHouseHealth>(FindObjectsInactive.Include,FindObjectsSortMode.None))house.Restore(snapshot.houses?.FirstOrDefault(h=>h.id==house.Id));
+            foreach(var plant in FindObjectsByType<ForagePlant>(FindObjectsInactive.Include,FindObjectsSortMode.None))plant.Restore(snapshot.foragedPlants?.Contains(plant.Id)==true);
+            Core.ConfigureCore(Player,settings.coreHealth);
+            foreach(var resident in FindObjectsByType<VillageResidentHealth>(FindObjectsInactive.Include,FindObjectsSortMode.None))
+            {
+                if(resident.GetComponent<VillageGuard>()!=null)continue;
+                var state=snapshot.residents?.FirstOrDefault(r=>r!=null&&r.id==resident.Id);
+                resident.Restore(state);
+            }
+            Core.RestoreHealth(snapshot.coreHealth);
             HasBegun=true;IsPaused=false;Time.timeScale=1;Raids.Stop();
             SetPhase(snapshot.completed?SlicePhase.Victory:SlicePhase.Day,settings.days[Day-1].preparationSeconds);
+            Adventure?.Restore(snapshot.adventure);
+            Security?.Restore(snapshot.security);
             if(snapshot.completed)Time.timeScale=0;
         }
         public void ReturnToTitle(){Time.timeScale=1;SceneManager.LoadScene("Main");}
+        private void SaveExplorationProgress(){if(CanSave)saves?.SaveGame(false);}
+        private void OnOccupation()
+        {
+            Adventure?.ExitDungeon();
+            Raids.Stop();
+            Camera.main?.GetComponent<CameraFollowTarget>()?.SetCombatFocus(null);
+            hud?.RefreshOverlay();
+        }
+        private void OnLiberated()
+        {
+            Raids.Stop();stats.Heal(2);
+            SetPhase(SlicePhase.Day,settings.days[Day-1].preparationSeconds);
+            saves?.SaveGame(false);
+        }
         public void Quit(){if(CanSave)saves?.SaveGame(false);Application.Quit();}
         private void OnDestroy()
         {

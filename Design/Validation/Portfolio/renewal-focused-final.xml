@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="8" result="Failed(Child)" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-15 09:31:57Z" end-time="2026-09-15 09:32:18Z" duration="20.7372351">
+  <test-suite type="TestSuite" id="1416" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="354" result="Failed" site="Child" start-time="2026-09-15 09:31:57Z" end-time="2026-09-15 09:32:18Z" duration="20.737235" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1410" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/QA/p/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="354" result="Failed" site="Child" start-time="2026-09-15 09:31:57Z" end-time="2026-09-15 09:32:18Z" duration="20.728270" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="10540" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1411" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="354" result="Failed" site="Child" start-time="2026-09-15 09:31:57Z" end-time="2026-09-15 09:32:18Z" duration="20.724931" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1412" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="354" result="Failed" site="Child" start-time="2026-09-15 09:31:57Z" end-time="2026-09-15 09:32:18Z" duration="20.721782" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="1401" name="WorldRenewalTests" fullname="SurvivorFarm.Tests.WorldRenewalTests" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" testcasecount="8" result="Failed" site="Child" start-time="2026-09-15 09:31:57Z" end-time="2026-09-15 09:32:18Z" duration="20.717150" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1409" name="BruteReallyDamagesHouseAndRetargetsAfterDestruction" fullname="SurvivorFarm.Tests.WorldRenewalTests.BruteReallyDamagesHouseAndRetargetsAfterDestruction" methodname="BruteReallyDamagesHouseAndRetargetsAfterDestruction" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1894726987" result="Failed" start-time="2026-09-15 09:31:57Z" end-time="2026-09-15 09:32:00Z" duration="2.987920" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+ArgumentException: Could not create sprite (112, 0, 16, 16) from a 112x16 texture.
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape, UnityEngine.SecondarySpriteTexture[] secondaryTextures) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.HouseSprites.Slice (System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HouseSprites.cs:9)
+SurvivorFarm.Runtime.World.PackEnvironment+<>c__DisplayClass1_0.<Animate>b__0 (System.Int32 i) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <6faa6124236442759eb396cfbfdad508>:0)
+SurvivorFarm.Runtime.World.PackEnvironment.Animate (UnityEngine.SpriteRenderer art, System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h, System.Int32 count, System.Int32 dx, System.Int32 dy, System.Single fps) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+SurvivorFarm.Runtime.World.PackEnvironment.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:59)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:69)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1408" name="DestroyedMovingPieceCannotBeResurrected" fullname="SurvivorFarm.Tests.WorldRenewalTests.DestroyedMovingPieceCannotBeResurrected" methodname="DestroyedMovingPieceCannotBeResurrected" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1182184841" result="Failed" start-time="2026-09-15 09:32:00Z" end-time="2026-09-15 09:32:03Z" duration="2.522017" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+ArgumentException: Could not create sprite (112, 0, 16, 16) from a 112x16 texture.
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape, UnityEngine.SecondarySpriteTexture[] secondaryTextures) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.HouseSprites.Slice (System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HouseSprites.cs:9)
+SurvivorFarm.Runtime.World.PackEnvironment+<>c__DisplayClass1_0.<Animate>b__0 (System.Int32 i) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <6faa6124236442759eb396cfbfdad508>:0)
+SurvivorFarm.Runtime.World.PackEnvironment.Animate (UnityEngine.SpriteRenderer art, System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h, System.Int32 count, System.Int32 dx, System.Int32 dy, System.Single fps) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+SurvivorFarm.Runtime.World.PackEnvironment.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:59)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:69)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1405" name="FloraPaysOnceAndPersistsWithTheHouseDamage" fullname="SurvivorFarm.Tests.WorldRenewalTests.FloraPaysOnceAndPersistsWithTheHouseDamage" methodname="FloraPaysOnceAndPersistsWithTheHouseDamage" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1328252007" result="Failed" start-time="2026-09-15 09:32:03Z" end-time="2026-09-15 09:32:06Z" duration="2.527785" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+ArgumentException: Could not create sprite (112, 0, 16, 16) from a 112x16 texture.
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape, UnityEngine.SecondarySpriteTexture[] secondaryTextures) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.HouseSprites.Slice (System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HouseSprites.cs:9)
+SurvivorFarm.Runtime.World.PackEnvironment+<>c__DisplayClass1_0.<Animate>b__0 (System.Int32 i) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <6faa6124236442759eb396cfbfdad508>:0)
+SurvivorFarm.Runtime.World.PackEnvironment.Animate (UnityEngine.SpriteRenderer art, System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h, System.Int32 count, System.Int32 dx, System.Int32 dy, System.Single fps) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+SurvivorFarm.Runtime.World.PackEnvironment.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:59)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:69)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1402" name="MenuHasSeparateHomeOptionsAndSaveBrowser" fullname="SurvivorFarm.Tests.WorldRenewalTests.MenuHasSeparateHomeOptionsAndSaveBrowser" methodname="MenuHasSeparateHomeOptionsAndSaveBrowser" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1109970508" result="Failed" start-time="2026-09-15 09:32:06Z" end-time="2026-09-15 09:32:08Z" duration="2.526122" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+ArgumentException: Could not create sprite (112, 0, 16, 16) from a 112x16 texture.
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape, UnityEngine.SecondarySpriteTexture[] secondaryTextures) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.HouseSprites.Slice (System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HouseSprites.cs:9)
+SurvivorFarm.Runtime.World.PackEnvironment+<>c__DisplayClass1_0.<Animate>b__0 (System.Int32 i) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <6faa6124236442759eb396cfbfdad508>:0)
+SurvivorFarm.Runtime.World.PackEnvironment.Animate (UnityEngine.SpriteRenderer art, System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h, System.Int32 count, System.Int32 dx, System.Int32 dy, System.Single fps) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+SurvivorFarm.Runtime.World.PackEnvironment.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:59)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:69)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1406" name="MoveAttachesPreviewAndCancelRestoresThenDemolitionRefundsOnlyPaidCosts" fullname="SurvivorFarm.Tests.WorldRenewalTests.MoveAttachesPreviewAndCancelRestoresThenDemolitionRefundsOnlyPaidCosts" methodname="MoveAttachesPreviewAndCancelRestoresThenDemolitionRefundsOnlyPaidCosts" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1924398353" result="Failed" start-time="2026-09-15 09:32:08Z" end-time="2026-09-15 09:32:11Z" duration="2.534021" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+ArgumentException: Could not create sprite (112, 0, 16, 16) from a 112x16 texture.
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape, UnityEngine.SecondarySpriteTexture[] secondaryTextures) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.HouseSprites.Slice (System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HouseSprites.cs:9)
+SurvivorFarm.Runtime.World.PackEnvironment+<>c__DisplayClass1_0.<Animate>b__0 (System.Int32 i) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <6faa6124236442759eb396cfbfdad508>:0)
+SurvivorFarm.Runtime.World.PackEnvironment.Animate (UnityEngine.SpriteRenderer art, System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h, System.Int32 count, System.Int32 dx, System.Int32 dy, System.Single fps) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+SurvivorFarm.Runtime.World.PackEnvironment.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:59)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:69)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1407" name="NativeEnvironmentFramesChangeAndMeleeRangeIsExpanded" fullname="SurvivorFarm.Tests.WorldRenewalTests.NativeEnvironmentFramesChangeAndMeleeRangeIsExpanded" methodname="NativeEnvironmentFramesChangeAndMeleeRangeIsExpanded" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="701424731" result="Failed" start-time="2026-09-15 09:32:11Z" end-time="2026-09-15 09:32:13Z" duration="2.531349" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+ArgumentException: Could not create sprite (112, 0, 16, 16) from a 112x16 texture.
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape, UnityEngine.SecondarySpriteTexture[] secondaryTextures) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.HouseSprites.Slice (System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HouseSprites.cs:9)
+SurvivorFarm.Runtime.World.PackEnvironment+<>c__DisplayClass1_0.<Animate>b__0 (System.Int32 i) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <6faa6124236442759eb396cfbfdad508>:0)
+SurvivorFarm.Runtime.World.PackEnvironment.Animate (UnityEngine.SpriteRenderer art, System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h, System.Int32 count, System.Int32 dx, System.Int32 dy, System.Single fps) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+SurvivorFarm.Runtime.World.PackEnvironment.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:59)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:69)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1404" name="NoFreeCatAndPurchaseRequiresDayAndAllMaterials" fullname="SurvivorFarm.Tests.WorldRenewalTests.NoFreeCatAndPurchaseRequiresDayAndAllMaterials" methodname="NoFreeCatAndPurchaseRequiresDayAndAllMaterials" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1762677282" result="Failed" start-time="2026-09-15 09:32:13Z" end-time="2026-09-15 09:32:16Z" duration="2.548286" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+ArgumentException: Could not create sprite (112, 0, 16, 16) from a 112x16 texture.
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape, UnityEngine.SecondarySpriteTexture[] secondaryTextures) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.HouseSprites.Slice (System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HouseSprites.cs:9)
+SurvivorFarm.Runtime.World.PackEnvironment+<>c__DisplayClass1_0.<Animate>b__0 (System.Int32 i) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <6faa6124236442759eb396cfbfdad508>:0)
+SurvivorFarm.Runtime.World.PackEnvironment.Animate (UnityEngine.SpriteRenderer art, System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h, System.Int32 count, System.Int32 dx, System.Int32 dy, System.Single fps) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+SurvivorFarm.Runtime.World.PackEnvironment.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:59)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:69)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1403" name="TreesHaveSingleGroundedVisualSolidTrunksAndTiersIncludingVillageProps" fullname="SurvivorFarm.Tests.WorldRenewalTests.TreesHaveSingleGroundedVisualSolidTrunksAndTiersIncludingVillageProps" methodname="TreesHaveSingleGroundedVisualSolidTrunksAndTiersIncludingVillageProps" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1282736334" result="Failed" start-time="2026-09-15 09:32:16Z" end-time="2026-09-15 09:32:18Z" duration="2.528580" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+ArgumentException: Could not create sprite (112, 0, 16, 16) from a 112x16 texture.
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape, UnityEngine.SecondarySpriteTexture[] secondaryTextures) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border, System.Boolean generateFallbackPhysicsShape) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType, UnityEngine.Vector4 border) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude, UnityEngine.SpriteMeshType meshType) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit, System.UInt32 extrude) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Sprite.Create (UnityEngine.Texture2D texture, UnityEngine.Rect rect, UnityEngine.Vector2 pivot, System.Single pixelsPerUnit) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.HouseSprites.Slice (System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HouseSprites.cs:9)
+SurvivorFarm.Runtime.World.PackEnvironment+<>c__DisplayClass1_0.<Animate>b__0 (System.Int32 i) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () (at <6faa6124236442759eb396cfbfdad508>:0)
+System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <6faa6124236442759eb396cfbfdad508>:0)
+SurvivorFarm.Runtime.World.PackEnvironment.Animate (UnityEngine.SpriteRenderer art, System.String atlas, System.Int32 x, System.Int32 y, System.Int32 w, System.Int32 h, System.Int32 count, System.Int32 dx, System.Int32 dy, System.Single fps) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:19)
+SurvivorFarm.Runtime.World.PackEnvironment.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world) (at Assets/SurvivorFarm/Scripts/Runtime/World/PackEnvironment.cs:59)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:69)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

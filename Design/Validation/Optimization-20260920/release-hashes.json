@@ -1,0 +1,12 @@
+[
+  {
+    "File": "SurvivalFarm.exe",
+    "SHA256": "A30757FDACED5B2B01A43651642425666CF958F9671C42AEA4A5837369535D33",
+    "MatchesQA": true
+  },
+  {
+    "File": "SurvivalFarm_Data/Managed/SurvivorFarm.Runtime.dll",
+    "SHA256": "02B32E0EB3E8765FFFDC080DA280EA00D46FFD3B6B7EA61A3FCED133B4B88D63",
+    "MatchesQA": true
+  }
+]

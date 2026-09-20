@@ -11,13 +11,13 @@ namespace SurvivorFarm.Runtime.Gameplay
         public bool IsActive => ownsTime;
         public static bool ReducedMotion { get; set; }
 
-        public void Impact(bool heavy, bool finisher)
+        public void Impact(bool heavy, bool finisher,bool charged=false)
         {
             if (!GameFeelFeedback.Enabled || ReducedMotion || Time.timeScale <= 0) return;
             if (ownsTime && !Mathf.Approximately(Time.timeScale, appliedScale)) Cancel(false);
             if (!ownsTime) { originalScale = Time.timeScale; ownsTime = true; }
             float now = Time.unscaledTime;
-            stopUntil = Mathf.Max(stopUntil, now + (heavy ? .065f : .032f));
+            stopUntil = Mathf.Max(stopUntil, now + (charged?.09f:heavy ? .075f : .035f));
             if (finisher) slowUntil = now + .27f;
             Apply();
         }

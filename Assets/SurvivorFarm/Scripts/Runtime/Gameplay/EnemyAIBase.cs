@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SurvivorFarm.Runtime.Player;
 using SurvivorFarm.Runtime.UI;
 using SurvivorFarm.Runtime.World;
@@ -8,6 +9,22 @@ namespace SurvivorFarm.Runtime.Gameplay
     [RequireComponent(typeof(Collider2D))]
     public abstract class EnemyAIBase : MonoBehaviour, IDamageable
     {
+        private static readonly List<EnemyAIBase> activeEnemies = new List<EnemyAIBase>(96);
+        private int registryIndex = -1;
+        /// <summary>Enabled enemies, including the brief death animation. Check IsAlive before targeting.
+        /// Iterate backwards if returning enemies to their pools while visiting this list.</summary>
+        public static IReadOnlyList<EnemyAIBase> ActiveEnemies => activeEnemies;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetRegistry() => activeEnemies.Clear();
+
+        private void OnEnable()
+        {
+            if (registryIndex >= 0 && registryIndex < activeEnemies.Count && activeEnemies[registryIndex] == this) return;
+            registryIndex = activeEnemies.Count;
+            activeEnemies.Add(this);
+        }
+
         [SerializeField] private float moveSpeed = 2.1f;
         [SerializeField] private float attackRange = 0.75f;
         [SerializeField] private float attackInterval = 1.25f;
@@ -54,6 +71,9 @@ namespace SurvivorFarm.Runtime.Gameplay
         public float AttackWindup => CombatStyle == EnemyCombatStyle.ArcherGoblin ? .7f : enemyName == "Golem" ? .85f : .55f;
         public int CurrentHealth => Mathf.Max(0, currentHealth);
         public int MaximumHealth => maxHealth;
+        public virtual bool CanBeExecuted => IsAlive && !IsElite && CurrentHealth <= Mathf.Max(1, Mathf.CeilToInt(maxHealth * .25f));
+        public bool IsProvoked { get; private set; }
+        public void CalmDown() => IsProvoked = false;
         public void EnsureMinimumHealth(int health) => maxHealth = Mathf.Max(maxHealth, health);
 
         protected Transform Target => target;
@@ -92,13 +112,15 @@ namespace SurvivorFarm.Runtime.Gameplay
             if (CombatStyle == style && spriteAnimation != null) return;
             CombatStyle = style;
             bool ranged = style == EnemyCombatStyle.ArcherGoblin;
-            ConfigureStats(ranged ? "Goblin arquero" : "Goblin lancero", ranged ? 10 : 12, 1,
-                ranged ? 1.5f : 1.8f, ranged ? 4.8f : .95f, ranged ? 2.1f : 1.5f, ranged ? 4 : 3);
+            bool heavy = style == EnemyCombatStyle.Orc || style == EnemyCombatStyle.BloodMonster;
+            ConfigureStats(EnemyRoster.DisplayName(style), heavy ? 16 : ranged ? 10 : 12, heavy ? 2 : 1,
+                heavy ? 1.45f : ranged ? 1.7f : 2.1f, ranged ? 4.8f : style == EnemyCombatStyle.SpearGoblin ? 1.3f : 1.15f,
+                heavy ? 1.7f : ranged ? 1.85f : 1.25f, heavy ? 6 : ranged ? 4 : 3);
             foreach (var animation in GetComponentsInChildren<MovementSpriteAnimation>(true)) animation.enabled = false;
             if (bodyRenderer == null) bodyRenderer = GetComponentInChildren<SpriteRenderer>(true);
             if (bodyRenderer == null)
             {
-                var art = new GameObject("Goblin Visual");
+                var art = new GameObject("Enemy Visual");
                 art.transform.SetParent(transform, false);
                 bodyRenderer = art.AddComponent<SpriteRenderer>();
             }
@@ -118,6 +140,9 @@ namespace SurvivorFarm.Runtime.Gameplay
         public void ConfigureAnimation(PlayerAnimationLibrary library)
         {
             if (library == null || bodyRenderer == null) return;
+            // A pooled corpse may change archetype before ActivateFromPool restores it.
+            // Preserve the authored collider state, not the temporary death disable.
+            RestoreColliders();
             foreach (var animation in GetComponentsInChildren<MovementSpriteAnimation>(true)) animation.enabled = false;
             spriteAnimation = GetComponent<EnemySpriteAnimator>() ?? gameObject.AddComponent<EnemySpriteAnimator>();
             spriteAnimation.Configure(library, bodyRenderer);
@@ -151,6 +176,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             RestoreColliders();
             transform.position = position;
             currentHealth = maxHealth;
+            IsProvoked = false;
             SpawnGeneration++;
             nextAttackTime = 0f; strikeAt=-1;
             hurtFlashEndsAt = 0f;
@@ -173,6 +199,15 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         private void OnDisable()
         {
+            if (registryIndex >= 0 && registryIndex < activeEnemies.Count && activeEnemies[registryIndex] == this)
+            {
+                int last = activeEnemies.Count - 1;
+                var moved = activeEnemies[last];
+                activeEnemies[registryIndex] = moved;
+                moved.registryIndex = registryIndex;
+                activeEnemies.RemoveAt(last);
+            }
+            registryIndex = -1;
             projectiles?.Cancel(this);
             RestoreHitVisual();
             CancelAttack();
@@ -203,13 +238,15 @@ namespace SurvivorFarm.Runtime.Gameplay
             }
 
             int finalDamage = Mathf.Max(1, amount);
+            if (source != null) IsProvoked = true;
             bool heavy = HitFeedback.IsHeavy(gameObject, source);
+            bool charged=HitFeedback.IsCharged(gameObject,source);
             strikeAt = -1;
-            activeKnockbackDuration = heavy ? Mathf.Max(.32f, knockbackDuration * 1.4f) : knockbackDuration;
+            activeKnockbackDuration = charged?.5f:heavy ? Mathf.Max(.36f, knockbackDuration * 1.6f) : Mathf.Max(.22f,knockbackDuration);
             nextAttackTime = Time.time + activeKnockbackDuration;
             Vector2 away = (Vector2)transform.position - (source != null ? (Vector2)source.transform.position : target != null ? (Vector2)target.position : (Vector2)transform.position - Vector2.down);
             knockbackVelocity = (away.sqrMagnitude > 0.0001f ? away.normalized : Vector2.up) *
-                knockbackDistance * (heavy ? 1.25f : .65f) * KnockbackResistance / Mathf.Max(.01f, activeKnockbackDuration);
+                knockbackDistance * (charged?2.5f:heavy ? 1.6f : .8f) * KnockbackResistance / Mathf.Max(.01f, activeKnockbackDuration);
             knockbackRemaining = activeKnockbackDuration;
             currentHealth -= finalDamage;
             hurtFlashEndsAt = Time.time + hurtFlashDuration;
@@ -219,7 +256,6 @@ namespace SurvivorFarm.Runtime.Gameplay
             if (currentHealth <= 0)
             {
                 projectiles?.Cancel(this);
-                knockbackRemaining = 0;
                 if (spriteAnimation == null) ReturnToPool();
                 else
                 {
@@ -231,7 +267,7 @@ namespace SurvivorFarm.Runtime.Gameplay
                 return;
             }
 
-            spriteAnimation?.PlayHurt(heavy ? .32f : .18f);
+            spriteAnimation?.PlayHurt(charged?.48f:heavy ? .36f : .22f);
             ApplyVisuals();
         }
 
@@ -240,10 +276,12 @@ namespace SurvivorFarm.Runtime.Gameplay
             ApplyVisuals();
             if (IsDying)
             {
+                if(knockbackRemaining>0)TickKnockback();
                 if (Time.time >= recycleAt) ReturnToPool();
                 return;
             }
             if (!IsAlive) return;
+            RefreshTarget();
             if (target == null || !target.gameObject.activeInHierarchy || (targetStats != null && targetStats.CurrentHealth <= 0))
             {
                 CancelAttack();
@@ -273,6 +311,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         }
 
         protected virtual bool CanApplyKnockback(Vector2 position) => true;
+        protected virtual void RefreshTarget() { }
 
         protected virtual void TickEnemy()
         {
@@ -285,7 +324,7 @@ namespace SurvivorFarm.Runtime.Gameplay
                 {
                     strikeAt = -1;
                     nextAttackTime = Time.time + attackInterval * AttackIntervalMultiplier;
-                    bool facing = CombatStyle != EnemyCombatStyle.SpearGoblin || Vector2.Dot(attackDirection, toTarget.normalized) >= .25f;
+                    bool facing = toTarget.sqrMagnitude < .01f || Vector2.Dot(attackDirection, toTarget.normalized) >= -.15f;
                     // A committed arrow still launches if the player dodges out of range or behind cover.
                     // The projectile's swept collision, not a second aim check, resolves that shot.
                     if (CombatStyle == EnemyCombatStyle.ArcherGoblin)
@@ -376,10 +415,11 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected virtual void OnDefeated(PlayerInventory inventory)
         {
             pool?.NotifyDefeated(this);
-            EnemyLootPickup.Spawn(lootPrefab, transform.position, transform.parent, ResourceFlyweights.Item(ItemKind.Coins), coinReward);
+            DropLoot();
             FarmGameEvents.RaiseEnemyDefeated();
-            FarmNotificationCenter.Show($"Derrotaste a {enemyName}.");
         }
+
+        protected void DropLoot() => EnemyLootTable.Drop(transform.position, transform.parent, CombatStyle, IsElite, coinReward, lootPrefab);
 
         private void ApplyVisuals()
         {

@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using SurvivorFarm.Runtime.Gameplay;
@@ -18,8 +18,13 @@ namespace SurvivorFarm.Runtime.Player
         private IWorldInteractable highlightedInteractable;
         private Camera mainCamera;
         private SpriteRenderer[] indicatorRenderers = new SpriteRenderer[0];
-        private WorldInteractable[] nearbyCandidates;
-        private float refreshCandidatesAt;
+        private SpriteRenderer playerVisual;
+        private Predicate<WorldInteractable> pointerFilter;
+        private FarmTool pointerTool;
+
+        // Interface references bypass Unity's destroyed-object null comparison during scene unload.
+        private static bool Exists(IWorldInteractable value) => value != null &&
+            (!(value is UnityEngine.Object native) || native != null);
 
         private void Awake()
         {
@@ -28,15 +33,29 @@ namespace SurvivorFarm.Runtime.Player
             movement = GetComponent<PlayerMovementController>();
             characterAnimator = GetComponent<PlayerCharacterAnimator>();
             mainCamera = Camera.main;
+            playerVisual = GetComponent<SpriteRenderer>();
+            pointerFilter = AcceptPointer;
+            if (GetComponent<FarmHandCursor>() == null) gameObject.AddComponent<FarmHandCursor>();
         }
 
         private void Update()
         {
-            if (InventoryPanelSystem.IsOpen || AdventureWindow.IsOpen || Time.timeScale == 0f)
+            if(!Exists(highlightedInteractable))highlightedInteractable=null;
+            if (InventoryPanelSystem.IsOpen || VillageUpgradeWindow.IsOpen || !FarmIntroduction.AllowsInteraction || AdventureWindow.IsOpen || Time.timeScale == 0f)
             {
                 FarmNotificationCenter.SetInteractionButton(false, "Interactuar");
                 return;
             }
+            var mount = GetComponent<PlayerMountController>();
+            if (mount != null && mount.IsMounted)
+            {
+                FarmNotificationCenter.SetInteractionButton(false, "E");
+                if (Input.GetKeyDown(KeyCode.E)) mount.TryDismount();
+                return;
+            }
+            var combat = GetComponent<PlayerCombatController>();
+            if (combat != null && (combat.IsExecuting || Input.GetKeyDown(KeyCode.E) && combat.TryExecuteNearest()))
+            { FarmNotificationCenter.SetInteractionButton(false, "E"); return; }
             IWorldInteractable nearest = FindNearestInteractable(transform.position, interactionRadius);
             if (!ReferenceEquals(nearest, highlightedInteractable))
             {
@@ -46,7 +65,7 @@ namespace SurvivorFarm.Runtime.Player
                 }
 
                 highlightedInteractable = nearest;
-                indicatorRenderers = nearest != null ? nearest.Transform.GetComponentsInChildren<SpriteRenderer>() : new SpriteRenderer[0];
+                indicatorRenderers = nearest != null ? nearest.Transform.GetComponentsInChildren<SpriteRenderer>() : Array.Empty<SpriteRenderer>();
 
                 if (highlightedInteractable != null)
                 {
@@ -54,16 +73,10 @@ namespace SurvivorFarm.Runtime.Player
                 }
             }
 
-            FarmTool selectedTool = toolbelt != null ? toolbelt.SelectedTool : FarmTool.Sword;
-            FarmTool interactionTool = highlightedInteractable != null
-                ? ResolveInteractionTool(highlightedInteractable, selectedTool)
-                : selectedTool;
-            FarmNotificationCenter.SetPrompt(highlightedInteractable != null
-                ? highlightedInteractable.GetInteractionLabel(interactionTool)
-                : "Explora y reconstruye Raízclara.");
+            FarmNotificationCenter.SetPrompt(string.Empty);
             if (mainCamera == null) mainCamera = Camera.main;
             FarmNotificationCenter.SetInteractionButtonAtWorldPosition(highlightedInteractable != null,
-                highlightedInteractable != null ? highlightedInteractable.GetInteractionLabel(interactionTool).Replace("Interactuar: ", "") : "Interactuar",
+                highlightedInteractable is VillageHouseHealth house ? house.Health < house.Maximum ? "Reparar" : "Mejorar" : "E",
                 highlightedInteractable != null ? GetIndicatorPosition(highlightedInteractable) : Vector3.zero, mainCamera);
             if (highlightedInteractable != null && (Input.GetKeyDown(KeyCode.E) || (Input.GetMouseButtonDown(1) && !IsPointerOverUi(-1))))
                 PerformInteraction();
@@ -71,26 +84,50 @@ namespace SurvivorFarm.Runtime.Player
 
         private Vector3 GetIndicatorPosition(IWorldInteractable target)
         {
-            Vector3 position = target.Transform.position + interactionButtonWorldOffset;
-            foreach (var visual in indicatorRenderers)
-                if (visual != null && visual.enabled && visual.gameObject.activeInHierarchy && visual.sprite != null) position.y = Mathf.Max(position.y, visual.bounds.max.y + 0.25f);
+            bool repair = target is VillageHouseHealth;
+            Vector3 position = target.Transform.position + (repair ? Vector3.up * .65f : interactionButtonWorldOffset);
+            if (!repair)
+                foreach (var visual in indicatorRenderers)
+                    if (visual != null && visual.enabled && visual.gameObject.activeInHierarchy && visual.sprite != null) position.y = Mathf.Max(position.y, visual.bounds.max.y + 0.25f);
+            if (mainCamera == null) return position;
+
+            if (playerVisual == null) playerVisual = GetComponentInChildren<SpriteRenderer>();
+            Bounds playerBounds = playerVisual != null && playerVisual.sprite != null ? playerVisual.bounds :
+                new Bounds(transform.position + Vector3.up * .25f, new Vector3(.7f, 1.3f, 0f));
+            Vector3 min = mainCamera.WorldToScreenPoint(playerBounds.min);
+            Vector3 max = mainCamera.WorldToScreenPoint(playerBounds.max);
+            Vector3 screen = mainCamera.WorldToScreenPoint(position);
+            Vector2 halfBadge = FarmNotificationCenter.InteractionBadgeScreenSize(repair) * .5f;
+            const float gap = 8f;
+            if (screen.y + halfBadge.y >= min.y - gap && screen.y - halfBadge.y <= max.y + gap &&
+                screen.x + halfBadge.x >= min.x - gap && screen.x - halfBadge.x <= max.x + gap)
+            {
+                // Keep the badge at the object's height, beside the player rather than over their face.
+                float left = min.x - halfBadge.x - gap, right = max.x + halfBadge.x + gap;
+                bool preferLeft = screen.x < (min.x + max.x) * .5f;
+                if (right + halfBadge.x > mainCamera.pixelRect.xMax) preferLeft = true;
+                else if (left - halfBadge.x < mainCamera.pixelRect.xMin) preferLeft = false;
+                screen.x = preferLeft ? left : right;
+                position = mainCamera.ScreenToWorldPoint(screen);
+            }
             return position;
         }
 
         private void OnDisable()
         {
-            if (highlightedInteractable != null)
+            if (Exists(highlightedInteractable))
             {
                 highlightedInteractable.SetHighlighted(false);
-                highlightedInteractable = null;
             }
+            highlightedInteractable = null;
 
             FarmNotificationCenter.SetInteractionButton(false, "Interactuar");
         }
 
         public void PerformInteraction()
         {
-            if (InventoryPanelSystem.IsOpen || Time.timeScale == 0f || highlightedInteractable == null ||
+            if (VillageUpgradeWindow.IsOpen || GetComponent<PlayerMountController>()?.IsMounted == true || GetComponent<PlayerCombatController>()?.IsExecuting == true) return;
+            if (InventoryPanelSystem.IsOpen || !FarmIntroduction.AllowsInteraction || Time.timeScale == 0f || !Exists(highlightedInteractable) ||
                 highlightedInteractable.Transform == null || !highlightedInteractable.IsAvailable ||
                 Vector2.Distance(transform.position, highlightedInteractable.Transform.position) > interactionRadius)
             {
@@ -109,7 +146,7 @@ namespace SurvivorFarm.Runtime.Player
 
         public static bool Supports(IWorldInteractable target, FarmTool tool)
         {
-            if(target==null || !target.IsAvailable)return false;
+            if(!Exists(target) || !target.IsAvailable)return false;
             if(target is Behaviour component && !component.isActiveAndEnabled)return false;
             if(target is FarmingPlot plot)return plot.SupportsTool(tool);
             if(target is AnimalResource)return tool==FarmTool.Sword || tool==FarmTool.Bow;
@@ -142,25 +179,30 @@ namespace SurvivorFarm.Runtime.Player
             FarmTool selectedTool=toolbelt!=null?toolbelt.SelectedTool:FarmTool.Sword;
             SelectedPlot=null;
             if(IsPointerOverUi(-1))return null;
-            if(nearbyCandidates==null||Time.time>=refreshCandidatesAt)
-            {
-                nearbyCandidates=FindObjectsByType<WorldInteractable>(FindObjectsSortMode.None);
-                refreshCandidatesAt=Time.time+.15f;
-            }
-            WorldInteractable[] interactables=nearbyCandidates;
+            var interactables=WorldInteractable.Active;
+            if(mainCamera==null)mainCamera=Camera.main;
             if(mainCamera!=null)
             {
                 Vector3 pointer=mainCamera.ScreenToWorldPoint(Input.mousePosition);pointer.z=0;
-                IWorldInteractable pointed = interactables
-                    .Where(t=>t!=null&&Supports(t,ResolveInteractionTool(t,selectedTool))&&Vector2.Distance(position,t.Transform.position)<=radius&&Vector2.Distance(pointer,t.Transform.position)<.65f)
-                    .OrderBy(t=>(t.Transform.position-pointer).sqrMagnitude).FirstOrDefault();
-                if(pointed!=null)return pointed;
+                pointerTool = selectedTool;
+                var pointed = WorldPointerTargeting.FindAt(interactables, pointer, pointerFilter);
+                // A deliberate aim must never harvest a different nearby object.
+                if(pointed!=null)return Vector2.Distance(position,pointed.Transform.position)<=radius?pointed:null;
             }
-            IWorldInteractable nearestObject = interactables
-                .Where(t=>t!=null&&Supports(t,ResolveInteractionTool(t,selectedTool))&&Vector2.Distance(position,t.Transform.position)<=radius)
-                .OrderBy(t=>(t.Transform.position-position).sqrMagnitude).FirstOrDefault();
+            IWorldInteractable nearestObject = null;
+            float bestDistance = radius * radius;
+            for (int i = 0; i < interactables.Count; i++)
+            {
+                var candidate = interactables[i];
+                if (candidate == null || !Supports(candidate, ResolveInteractionTool(candidate, selectedTool))) continue;
+                float distance = ((Vector2)(candidate.Transform.position - position)).sqrMagnitude;
+                if (distance > bestDistance) continue;
+                bestDistance = distance; nearestObject = candidate;
+            }
             return nearestObject;
         }
+
+        private bool AcceptPointer(WorldInteractable target) => Supports(target, ResolveInteractionTool(target, pointerTool));
 
         private static bool IsPointerOverUi(int pointerId)
         {

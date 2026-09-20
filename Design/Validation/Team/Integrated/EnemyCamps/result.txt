@@ -1,0 +1,5 @@
+south: (-8.00, -16.00, 0.00), 3 guards, reachable supplies, no town/river/road obstruction.
+west: (-26.00, -8.00, 0.00), 4 guards, reachable supplies, no town/river/road obstruction.
+east: (23.00, -8.00, 0.00), 4 guards, reachable supplies, no town/river/road obstruction.
+north: (18.00, 15.00, 0.00), 5 guards, reachable supplies, no town/river/road obstruction.
+PASS: partial/full clear persistence, automatic unique victory reward in real inventory, pooled guard identity, four original-art camps.

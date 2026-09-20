@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-14 23:58:24Z" end-time="2026-09-14 23:58:27Z" duration="3.2417474">
+  <test-suite type="TestSuite" id="1393" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="334" result="Passed" start-time="2026-09-14 23:58:24Z" end-time="2026-09-14 23:58:27Z" duration="3.241747" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1387" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/Temp/p/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="334" result="Passed" start-time="2026-09-14 23:58:24Z" end-time="2026-09-14 23:58:27Z" duration="3.232982" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="14692" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1388" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="334" result="Passed" start-time="2026-09-14 23:58:24Z" end-time="2026-09-14 23:58:27Z" duration="3.230578" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1389" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="334" result="Passed" start-time="2026-09-14 23:58:24Z" end-time="2026-09-14 23:58:27Z" duration="3.228518" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1142" name="LivingValleyTests" fullname="SurvivorFarm.Tests.LivingValleyTests" classname="SurvivorFarm.Tests.LivingValleyTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-14 23:58:24Z" end-time="2026-09-14 23:58:27Z" duration="3.222869" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1147" name="RaidersCanCommitAnAttackAgainstACivilian" fullname="SurvivorFarm.Tests.LivingValleyTests.RaidersCanCommitAnAttackAgainstACivilian" methodname="RaidersCanCommitAnAttackAgainstACivilian" classname="SurvivorFarm.Tests.LivingValleyTests" runstate="Runnable" seed="1255657669" result="Passed" start-time="2026-09-14 23:58:24Z" end-time="2026-09-14 23:58:27Z" duration="3.211155" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

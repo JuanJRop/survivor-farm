@@ -113,7 +113,9 @@ namespace SurvivorFarm.Runtime.Gameplay
             if (instance == null || (!(instance is TreeResource) && !(instance is RockResource))) return;
             bool valid = saved != null && Finite(saved.position.x) && Finite(saved.position.y) && Finite(saved.position.z) &&
                 Finite(saved.remaining) && saved.remaining >= 0 && Vector2.Distance(saved.position, transform.position) <= 6.1f;
+            if(valid&&PortfolioSession.Active&&World.FarmExploration.IsRiver(saved.position,.5f))valid=false;
             instance.transform.position = valid ? new Vector3(saved.position.x, saved.position.y, transform.position.z) : transform.position;
+            if(PortfolioSession.Active){ResourceTier.Configure(instance);World.FarmWorldPolish.StyleResource(instance);}
             remaining = valid ? Mathf.Clamp(saved.remaining, 0, 300) : -1;
         }
         private static bool Finite(float n) => !float.IsNaN(n) && !float.IsInfinity(n);

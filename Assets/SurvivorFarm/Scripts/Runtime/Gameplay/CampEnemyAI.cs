@@ -10,10 +10,13 @@ namespace SurvivorFarm.Runtime.Gameplay
         private int slot, patrolStep;
         private float nextPatrol;
         private bool wasEngaged;
+        public bool DungeonElite { get; set; }
+        public override bool IsElite => DungeonElite;
+        public bool HasEngaged => wasEngaged;
         public Vector3 GuardPosition => camp.transform.position + guardOffset;
         public bool IsReturning { get; private set; }
-        public bool CanBeAttackedByPet => camp != null && camp.CanEngage && !IsReturning;
-        public override bool CanLaunchProjectile => base.CanLaunchProjectile && camp != null && camp.CanEngage && !IsReturning;
+        public bool CanBeAttackedByPet => camp != null && camp.CanPursue(this) && !IsReturning;
+        public override bool CanLaunchProjectile => base.CanLaunchProjectile && camp != null && camp.CanPursue(this) && !IsReturning;
         protected override HomeSafeZone ProjectileProtection => camp != null ? camp.Protection : null;
 
         public void ConfigureCamp(EnemyCamp owner, Transform target, int index, Vector3 offset)
@@ -36,23 +39,19 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         protected override void TickEnemy()
         {
-            if (camp == null || !camp.isActiveAndEnabled) { CancelAttack(); return; }
-            if (!camp.CanEngage)
+            if (camp == null || !camp.isActiveAndEnabled || !camp.CanSimulate) { CancelAttack(); return; }
+            if (!camp.CanPursue(this))
             {
                 CancelAttack();
                 if (wasEngaged) IsReturning = true;
                 wasEngaged = false;
+                CalmDown();
                 if (IsReturning || Vector2.Distance(transform.position, GuardPosition) > .85f) ReturnHome();
                 else Patrol();
                 return;
             }
             wasEngaged = true;
-            if (IsReturning || Vector2.Distance(transform.position, camp.transform.position) >= EnemyCamp.LeashRadius - .1f)
-            {
-                CancelAttack();
-                ReturnHome();
-                return;
-            }
+            IsReturning = false;
             base.TickEnemy();
         }
 
@@ -73,7 +72,7 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         protected override void AttackTarget(PlayerSurvivalStats stats)
         {
-            if (camp != null && camp.CanEngage && !IsReturning) base.AttackTarget(stats);
+            if (camp != null && camp.CanPursue(this) && !IsReturning) base.AttackTarget(stats);
         }
 
         protected override void OnDefeated(PlayerInventory inventory)

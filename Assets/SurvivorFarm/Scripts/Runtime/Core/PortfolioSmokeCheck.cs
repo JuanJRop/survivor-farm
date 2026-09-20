@@ -30,7 +30,7 @@ namespace SurvivorFarm.Runtime.Core
             if(type!=LogType.Error&&type!=LogType.Exception)return;
             failed=true;File.AppendAllText(Path.Combine(output,"errors.txt"),message+"\n"+stack+"\n");
         }
-        private void Update(){if(Time.realtimeSinceStartup-started>120)Finish(false,"Verification timed out.");}
+        private void Update(){if(Time.realtimeSinceStartup-started>180)Finish(false,"Verification timed out.");}
         private IEnumerator Start()
         {
             var run=Run();
@@ -40,7 +40,7 @@ namespace SurvivorFarm.Runtime.Core
                 try{next=run.MoveNext();}catch(Exception error){Finish(false,error.ToString());yield break;}
                 if(!next)break;yield return run.Current;
             }
-            Finish(!failed,"Windows executable: title, real animated 1-2-3 combo, elite finisher, continuous walls, corners, material upgrades, visual backpack, all four outer ore nodes, crops, recipes, save/load, bounded raids, boss patterns, phase II, ending; staged screenshots captured. This is automated verification, not a human balance playtest.");
+            Finish(!failed,"Windows executable: guided movement/combo/charge tutorial, authored charged sword effect and impact, real animated 1-2-3 combo, elite finisher, retired defensive construction blocked without spending, visual backpack, all four outer ore nodes, world work clock, crops, recipes, save/load, bounded raids, boss patterns, phase II, ending; staged screenshots captured. This is automated verification, not a human balance playtest.");
         }
         private IEnumerator Run()
         {
@@ -48,10 +48,23 @@ namespace SurvivorFarm.Runtime.Core
             for(int i=0;i<200;i++){session=PortfolioSession.Instance;if(session!=null&&session.IsReady)break;yield return null;}
             Require(session!=null&&session.IsReady,"Main did not initialize.");
             yield return new WaitForSecondsRealtime(.5f);Capture("01-title");yield return new WaitForSecondsRealtime(.3f);
+            var menu=session.GetComponent<UI.DemoFrontEnd>();
+            menu.Options();yield return new WaitForSecondsRealtime(.3f);Capture("33-options");
+            menu.LoadScreen();yield return new WaitForSecondsRealtime(.3f);Capture("34-load-slots");menu.Home();
             session.BeginNewGame();
+            yield return ExerciseTutorial(session);
             yield return new WaitForSecondsRealtime(.7f);Capture("02-day");yield return new WaitForSecondsRealtime(.3f);
+            yield return ExerciseWorldRenewal(session);
+            var mastery=session.Player.GetComponent<ToolMastery>();session.Player.AddCoins(200);session.Player.AddWood(50);session.Player.AddStone(50);
+            for(int tier=1;tier<=2;tier++)
+            {
+                for(int i=0;i<ToolMastery.Required(FarmTool.Pickaxe,tier);i++)mastery.Earn(FarmTool.Pickaxe,tier);
+                Require(mastery.Purchase(FarmTool.Pickaxe),"Usage unlock + purchase failed.");
+            }
+            session.Player.GetComponent<UI.MasteryWindow>().Open();
+            yield return new WaitForSecondsRealtime(.4f);Capture("14-mastery-tree");session.Player.GetComponent<UI.MasteryWindow>().Close();
             yield return ExerciseCombo(session);
-            yield return ExerciseFortress(session);
+            yield return ExerciseSuppliesAndExploration(session);
             var player=session.Player;var campaign=player.GetComponent<ValleyCampaign>();
             var plots=FindObjectsByType<FarmingPlot>(FindObjectsSortMode.None);
             foreach(var plot in plots)
@@ -70,7 +83,7 @@ namespace SurvivorFarm.Runtime.Core
             int wood=player.Wood;player.AddWood(30);Require(save.TryLoadGame()&&player.Wood==wood,"Checkpoint failed.");
             for(int day=1;day<=3;day++)
             {
-                session.PrepareNow();session.Advance(26);
+                session.Advance(session.Remaining+.1f);session.Advance(session.Settings.duskSeconds+1);
                 // Allow real AI movement and committed attacks before accelerating the wave schedule.
                 for(int i=0;i<6;i++){session.Advance(5);yield return new WaitForSecondsRealtime(.15f);}
                 if(day==1){yield return new WaitForSecondsRealtime(.6f);Capture("04-night");yield return new WaitForSecondsRealtime(.3f);}
@@ -100,6 +113,24 @@ namespace SurvivorFarm.Runtime.Core
             yield return new WaitForSecondsRealtime(1.1f);Capture("06-phase-two");yield return new WaitForSecondsRealtime(.3f);
             boss.TakeDamage(1000,player);Require(session.Phase==SlicePhase.Victory,"Victory missing.");
             yield return new WaitForSecondsRealtime(1.2f);Capture("07-ending");yield return new WaitForSecondsRealtime(.5f);
+        }
+        private IEnumerator ExerciseWorldRenewal(PortfolioSession session)
+        {
+            var player=session.Player;var campaign=player.GetComponent<ValleyCampaign>();
+            Require(!player.GetComponent<PlayerPetController>().Equipped,"The cat must be a purchase, not a free starting companion.");
+            campaign.Teleport(new Vector3(0,5));yield return new WaitForSecondsRealtime(.7f);Capture("35-native-bridge-water");
+            var tree=FindObjectsByType<TreeResource>(FindObjectsSortMode.None).First(t=>Mathf.Abs(t.transform.position.x+8)<.1f);
+            Require(tree.GetComponent<CircleCollider2D>().enabled&&!tree.GetComponent<CircleCollider2D>().isTrigger,"Village trunk is not solid.");
+            campaign.Teleport(tree.transform.position+Vector3.up*.9f);yield return new WaitForSecondsRealtime(.5f);Capture("36-behind-village-tree");
+            campaign.Teleport(tree.transform.position+Vector3.down);yield return new WaitForSecondsRealtime(.5f);Capture("37-front-of-tree");
+            var flower=FindObjectsByType<ForagePlant>(FindObjectsSortMode.None).First(p=>!p.Fruit);
+            campaign.Teleport(flower.transform.position+Vector3.down*.7f);int seeds=player.CommonSeeds;
+            flower.Interact(FarmTool.Axe,player);Require(player.CommonSeeds==seeds+1,"Foraging did not pay seeds.");
+            var house=VillageHouseHealth.All.First();campaign.Teleport(house.ContactPoint(house.transform.position+Vector3.down*3)+Vector2.down);
+            house.TakeDamage(8,null);yield return new WaitForSecondsRealtime(.5f);Capture("38-house-health");
+            house.TakeDamage(100,null);yield return new WaitForSecondsRealtime(.5f);Capture("39-house-ruins");
+            Require(!house.IsAlive,"House destruction failed.");house.Restore(null);
+            campaign.Teleport(new Vector3(1,-2));
         }
         private IEnumerator ExerciseCombo(PortfolioSession session)
         {
@@ -148,19 +179,22 @@ namespace SurvivorFarm.Runtime.Core
             combat.CancelMelee();
         }
 
-        private IEnumerator ExerciseFortress(PortfolioSession session)
+        private IEnumerator ExerciseSuppliesAndExploration(PortfolioSession session)
         {
             var player=session.Player;var campaign=player.GetComponent<ValleyCampaign>();var build=player.GetComponent<ConstructionSystem>();
-            // Arranged materials only in --qa; exercise the real placement, upgrade, mining and inventory APIs.
+            // Arranged materials only in --qa; retired defenses stay unavailable
+            // even with enough resources or a direct request through their old APIs.
             player.AddWood(100);player.AddStone(100);player.GetComponent<AdventureProgress>().AddIron(15);player.AddItem("GoldOre",4);
-            player.AddPacked("Fence",2);campaign.Teleport(new Vector3(0,-10));Physics2D.SyncTransforms();
-            Require(build.BeginPacked("Fence"),"Packed wall selection failed.");
-            Require(build.PlaceSelected(new Vector2(1,-12))&&build.PlaceSelected(new Vector2(3,-12)),"Repeated placement failed.");
-            build.Rotate();Require(build.PlaceSelected(new Vector2(4,-11)),"Wall corner failed.");
-            build.Begin("StoneWall");Require(build.PlaceSelected(new Vector2(1,-12)),"Stone upgrade failed.");
-            build.Begin("ReinforcedWall");Require(build.PlaceSelected(new Vector2(3,-12)),"Reinforced upgrade failed.");
-            yield return new WaitForSecondsRealtime(.6f);Capture("09-fortress-palette");yield return new WaitForSecondsRealtime(.25f);
-            build.Cancel();
+            int wood=player.Wood,stone=player.Stone;
+            foreach(string kind in FortressPieces.Palette)
+            {
+                Require(!session.CanBuild(kind)&&!PortfolioSession.IsDemoRecipe(kind),"A retired defense remains available: "+kind);
+                build.Begin(kind);Require(!ConstructionSystem.IsPlacing,"A retired defense opened placement: "+kind);
+                Require(!build.Pack(kind)&&!build.Place(kind,new Vector2(1,-12)),"A retired defense was created: "+kind);
+            }
+            Require(player.Wood==wood&&player.Stone==stone,"Rejected defenses consumed resources.");
+            Require(!build.Buildings.Any(b=>BackpackActions.IsRetiredDefense(b.kind)),"Authored defenses remain in the village.");
+            campaign.Teleport(new Vector3(1,-2));yield return new WaitForSecondsRealtime(.4f);Capture("09-village-security");
             FindFirstObjectByType<UI.InventoryPanelSystem>().Toggle();
             yield return new WaitForSecondsRealtime(.4f);Capture("10-backpack");yield return new WaitForSecondsRealtime(.25f);
             FindFirstObjectByType<UI.InventoryPanelSystem>().Close();
@@ -172,13 +206,47 @@ namespace SurvivorFarm.Runtime.Core
                 Require(oreArt.sprite!=null&&oreArt.enabled,"Ore marking has no visible sprite.");
                 Require(oreArt.sortingOrder>vein.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder,"Ore marking is hidden behind its rock.");
                 Capture("12-ore-ready-"+vein.Index);yield return new WaitForSecondsRealtime(.2f);vein.Interact(FarmTool.Pickaxe,player);
-                yield return new WaitForSecondsRealtime(3.15f);
+                yield return new WaitForSecondsRealtime(.8f);Capture("21-work-clock-"+vein.Index);
+                yield return new WaitForSecondsRealtime(2.35f);
                 Require(!vein.IsMining,"Mining did not complete.");
                 Capture("11-exploration-"+vein.Index);yield return new WaitForSecondsRealtime(.25f);
             }
             player.GetComponent<PlayerToolbelt>().Select(FarmTool.Sword);
             Require(player.GetAvailableItemCount("GoldOre")>=6,"Outer ore reward missing.");
             campaign.Teleport(new Vector3(1,-2));
+            campaign.Teleport(new Vector3(-5,9.2f));yield return new WaitForSecondsRealtime(.6f);Capture("16-river-bank");
+            var chicken=FindObjectsByType<AnimalResource>(FindObjectsSortMode.None).First(a=>a.name.StartsWith("Chicken "));
+            int food=player.Food;chicken.TakeDamage(100,player);Require(player.Food==food+2&&!chicken.IsAlive,"Chicken did not pay meat once.");
+            campaign.Teleport(new Vector3(1,-2));
+        }
+
+        private IEnumerator ExerciseTutorial(PortfolioSession session)
+        {
+            var player=session.Player;var combat=player.GetComponent<PlayerCombatController>();
+            var intro=session.gameObject.AddComponent<UI.FarmIntroduction>();intro.Open();float clock=session.Remaining;
+            yield return new WaitForSecondsRealtime(3);Capture("13-introduction");
+            Require(intro.TryBeginMovement(Vector2.right),"Movement lesson did not accept its control.");
+            player.GetComponent<ValleyCampaign>().Teleport(player.transform.position+Vector3.right*1.1f);
+            yield return new WaitForSecondsRealtime(2);Capture("17-practice-enemy");intro.Next();intro.Next();
+            Require(intro.CurrentLesson==UI.FarmIntroduction.Lesson.Combo,"Combo practice did not begin.");
+            for(int step=0;step<3;step++)
+            {
+                intro.PracticeEnemy.transform.position=player.transform.position+Vector3.right*.8f;Physics2D.SyncTransforms();
+                combat.AttackTarget(intro.PracticeEnemy);yield return new WaitForSeconds(step==2?.4f:.46f);
+            }
+            yield return new WaitForSecondsRealtime(1.6f);
+            Require(intro.CurrentLesson==UI.FarmIntroduction.Lesson.ChargeHint,"Third contact did not advance the lesson.");
+            intro.Next();intro.Next();Require(combat.BeginCharge(),"Sword charge was unavailable.");
+            yield return new WaitForSecondsRealtime(1.12f);Capture("18-sword-charged");
+            var enemy=intro.PracticeEnemy;int health=enemy.CurrentHealth;
+            enemy.transform.position=player.transform.position+Vector3.right;Physics2D.SyncTransforms();combat.ReleaseCharge(enemy);
+            float deadline=Time.realtimeSinceStartup+2;
+            while(enemy.CurrentHealth==health&&Time.realtimeSinceStartup<deadline)yield return null;
+            Require(enemy.CurrentHealth<health&&combat.LastAttackWasCharged,"Charged sword failed to resolve contact.");
+            Capture("19-charged-impact");yield return new WaitForSecondsRealtime(1.4f);
+            Require(intro.CurrentLesson==UI.FarmIntroduction.Lesson.Mission,"Charge did not finish the practice.");
+            Require(Mathf.Approximately(session.Remaining,clock),"Night countdown ran during the tutorial.");
+            intro.Finish();yield return new WaitForSecondsRealtime(.3f);
         }
 
         private void Capture(string name)

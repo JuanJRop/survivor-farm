@@ -139,7 +139,8 @@ namespace SurvivorFarm.Tests
             tools.Select(FarmTool.Bow);
             animal.transform.position = Vector3.right * 3f;
             Physics2D.SyncTransforms();
-            combat.Attack();
+            inventory.AddEquipment("Bow"); inventory.AddItem("Arrow", 1); tools.Select(FarmTool.Bow);
+            combat.TryShootBowAt(animal.transform.position);
             Assert.That(Object.FindFirstObjectByType<ArrowProjectile>(), Is.Not.Null);
             yield return new WaitForSeconds(0.65f);
             Assert.That(animal.IsHarvested, Is.True);
@@ -192,8 +193,8 @@ namespace SurvivorFarm.Tests
             Assert.That(stats.HungerPercent, Is.EqualTo(1f));
         }
 
-        [Test]
-        public void BowCannotHuntThroughLockedZoneCollider()
+        [UnityTest]
+        public IEnumerator BowProjectileStopsAtLockedZoneCollider()
         {
             PlayerToolbelt tools = inventory.gameObject.AddComponent<PlayerToolbelt>();
             PlayerCombatController combat = inventory.gameObject.AddComponent<PlayerCombatController>();
@@ -203,9 +204,11 @@ namespace SurvivorFarm.Tests
             wall.transform.position = Vector3.right * 1.5f;
             wall.AddComponent<BoxCollider2D>();
             Physics2D.SyncTransforms();
-            tools.Select(FarmTool.Bow);
-            combat.AttackTarget(animal);
-            Assert.That(Object.FindFirstObjectByType<ArrowProjectile>(), Is.Null);
+            inventory.AddEquipment("Bow"); inventory.AddItem("Arrow", 1); tools.Select(FarmTool.Bow);
+            combat.TryShootBowAt(animal.transform.position);
+            Assert.That(Object.FindFirstObjectByType<ArrowProjectile>(), Is.Not.Null);
+            yield return new WaitForSeconds(.5f);
+            Assert.AreEqual(0, inventory.GetItemCount("Arrow"));
             Assert.That(animal.IsHarvested, Is.False);
         }
 
@@ -309,6 +312,9 @@ namespace SurvivorFarm.Tests
             Assert.That(interact.gameObject.activeSelf, Is.True);
             inventory.AddWood(2);
             Assert.That(counts[3].text, Is.EqualTo("2"));
+            tools.SelectNext();
+            Assert.That(toolName.text, Is.EqualTo("Espada"), "A new inventory cannot cycle to the locked dungeon bow.");
+            inventory.AddEquipment("Bow");
             tools.SelectNext();
             Assert.That(toolName.text, Is.EqualTo("Arco"));
             hud.SetActive(false);

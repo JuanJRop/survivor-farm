@@ -30,6 +30,7 @@ namespace SurvivorFarm.Runtime.Player
         {
             var feet = GetComponent<CircleCollider2D>();
             if (feet != null) { feet.radius = .27f; feet.offset = new Vector2(0, -.12f); }
+            if(feet!=null&&SurvivorFarm.Runtime.Core.PortfolioSession.Active){feet.radius=.24f;feet.offset=new Vector2(0,-.4f);}
             body = GetComponent<Rigidbody2D>();
             inventory = GetComponent<PlayerInventory>();
             stats = GetComponent<PlayerSurvivalStats>();
@@ -40,7 +41,7 @@ namespace SurvivorFarm.Runtime.Player
 
         private void Update()
         {
-            if (SurvivorFarm.Runtime.UI.InventoryPanelSystem.IsOpen) { StopMovement(); return; }
+            if (SurvivorFarm.Runtime.UI.InventoryPanelSystem.IsOpen||UI.VillageUpgradeWindow.IsOpen||GetComponent<PlayerCombatController>()?.IsExecuting==true||!UI.FarmIntroduction.AllowsMovement) { StopMovement(); return; }
             moveInput = new Vector2((Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0),
                 (Input.GetKey(KeyCode.W) ? 1 : 0) - (Input.GetKey(KeyCode.S) ? 1 : 0));
             moveInput = Vector2.ClampMagnitude(moveInput, 1f);
@@ -50,7 +51,7 @@ namespace SurvivorFarm.Runtime.Player
         public bool TryDash(Vector2 direction)
         {
             if (direction.sqrMagnitude < .01f || Time.timeScale == 0 || Time.time < nextDash ||
-                UI.InventoryPanelSystem.IsOpen || stats != null && stats.CurrentHealth <= 0) return false;
+                UI.InventoryPanelSystem.IsOpen || UI.VillageUpgradeWindow.IsOpen || UI.FarmIntroduction.IsOpen || GetComponent<PlayerMountController>()?.IsMounted == true || stats != null && stats.CurrentHealth <= 0) return false;
             characterAnimator?.CancelAction();
             dashDirection = direction.normalized;
             dashUntil = Time.time + .18f;
@@ -61,11 +62,12 @@ namespace SurvivorFarm.Runtime.Player
 
         private void FixedUpdate()
         {
+            if (GetComponent<PlayerCombatController>()?.IsExecuting == true) { body.linearVelocity = Vector2.zero; return; }
             if (IsDashing) { body.linearVelocity = dashDirection * 11f; return; }
             if (characterAnimator == null) characterAnimator = GetComponent<PlayerCharacterAnimator>();
             if (characterAnimator != null && characterAnimator.MovementLocked)
             { body.linearVelocity = Vector2.zero; return; }
-            body.linearVelocity = moveInput * (Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed) * (inventory?.MovementBonus ?? 1f);
+            body.linearVelocity = moveInput * (Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed) * (inventory?.MovementBonus ?? 1f) * (GetComponent<PlayerMountController>()?.SpeedMultiplier ?? 1f);
         }
 
         // Old save data can no longer enable destination or touch movement.

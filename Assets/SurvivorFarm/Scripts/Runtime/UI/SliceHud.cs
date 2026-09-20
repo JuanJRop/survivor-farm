@@ -15,12 +15,13 @@ namespace SurvivorFarm.Runtime.UI
         private GameObject canvasRoot,hud,overlay;
         private RectTransform card;
         private Text phase,objective,core,controls,bossText,title,description;
-        private Text comboText;
+        private readonly Image[] comboPips=new Image[3];
+        private readonly Image[] dayPips=new Image[3];
+        private CanvasGroup comboGroup;
         private RectTransform stockPanel;
         private readonly MaterialCostBadge[] stockBadges=new MaterialCostBadge[6];
         private Image coreFill,bossFill;
         private GameObject bossPanel;
-        private Button ready;
         private readonly System.Collections.Generic.List<GameObject> buttons=new System.Collections.Generic.List<GameObject>();
         private float refreshAt;
         private CanvasGroup fade;
@@ -38,19 +39,32 @@ namespace SurvivorFarm.Runtime.UI
             scaler.referenceResolution=new Vector2(1280,720);scaler.matchWidthOrHeight=.5f;
             hud=Rect(canvasRoot.transform,"Session readouts",Vector2.zero,Vector2.zero,Vector2.zero).gameObject;
             Stretch(hud.GetComponent<RectTransform>());
-            phase=Label(Panel(hud.transform,"Fase",new Vector2(.5f,1),new Vector2(0,-12),new Vector2(402,58)),"",20,Gold);
-            var goals=Panel(hud.transform,"Objetivo",Vector2.one,new Vector2(-12,-12),new Vector2(350,92));
-            objective=Label(goals,"",17,Paper);objective.alignment=TextAnchor.MiddleLeft;Inset(objective.rectTransform,16,10);
-            var well=Panel(hud.transform,"Estado del pozo",new Vector2(0,1),new Vector2(12,-72),new Vector2(204,58));
-            core=Label(well,"",15,Paper);core.rectTransform.offsetMin=new Vector2(12,20);core.rectTransform.offsetMax=new Vector2(-12,-4);
-            coreFill=Bar(well,new Vector2(12,10),new Vector2(180,5),new Color(.5f,.8f,.65f));
+            var clockFace=Rect(hud.transform,"Reloj del valle",new Vector2(.5f,1),new Vector2(0,-10),new Vector2(150,36));
+            phase=Label(clockFace,"",25,Paper);phase.gameObject.AddComponent<Shadow>().effectDistance=new Vector2(1,-2);
+            for(int i=0;i<3;i++)
+            {
+                var tick=Rect(clockFace,"Amanecer "+(i+1),new Vector2(.5f,0),new Vector2((i-1)*14,-6),new Vector2(8,3));
+                dayPips[i]=tick.gameObject.AddComponent<Image>();dayPips[i].raycastTarget=false;
+            }
+            var goals=Panel(hud.transform,"Objetivo",Vector2.one,new Vector2(-12,-12),new Vector2(304,66));
+            goals.GetComponent<Image>().color=new Color(.08f,.13f,.1f,.58f);
+            objective=Label(goals,"",14,Paper);objective.alignment=TextAnchor.MiddleLeft;Inset(objective.rectTransform,12,6);
+            var well=Panel(hud.transform,"Seguridad del pueblo",new Vector2(0,1),new Vector2(12,-66),new Vector2(250,82));
+            core=Label(well,"",14,Paper);core.rectTransform.offsetMin=new Vector2(12,20);core.rectTransform.offsetMax=new Vector2(-12,-4);
+            Bar(well,new Vector2(12,10),new Vector2(226,6),new Color(.25f,.18f,.18f));
+            coreFill=Bar(well,new Vector2(12,10),new Vector2(226,6),new Color(.5f,.8f,.65f));
             stockPanel=Panel(hud.transform,"Recursos con iconos",new Vector2(1,0),new Vector2(-12,12),new Vector2(280,82));
             string[] stockIds={"Wood","Stone","Iron","GoldOre","Food","CommonSeeds"};
             for(int i=0;i<stockBadges.Length;i++)stockBadges[i]=MaterialCostBadge.Create(stockPanel,stockIds[i],10+i%3*90,7+i/3*36,82);
-            var hints=Rect(hud.transform,"Controles",new Vector2(.5f,0),new Vector2(0,90),new Vector2(690,28));
-            controls=Label(hints,"",14,Paper);controls.gameObject.AddComponent<Shadow>().effectDistance=new Vector2(1,-1);
-            comboText=Label(Panel(hud.transform,"Combo de espada",new Vector2(.5f,0),new Vector2(0,121),new Vector2(234,29)),"",15,Gold);
-            ready=Button(hud.transform,"Listo para la noche",new Vector2(1,1),new Vector2(-12,-112),new Vector2(198,34),session.PrepareNow);
+            var hints=Rect(hud.transform,"Atajos discretos",new Vector2(.5f,0),new Vector2(0,105),new Vector2(510,22));
+            controls=Label(hints,"",12,Paper);controls.gameObject.AddComponent<Shadow>().effectDistance=new Vector2(1,-1);
+            var rhythm=Rect(hud.transform,"Ritmo de tres cortes",new Vector2(.5f,0),new Vector2(0,86),new Vector2(80,10));
+            comboGroup=rhythm.gameObject.AddComponent<CanvasGroup>();comboGroup.blocksRaycasts=false;
+            for(int i=0;i<3;i++)
+            {
+                var pip=Rect(rhythm,"Corte "+(i+1),new Vector2(.5f,.5f),new Vector2((i-1)*20,0),Vector2.one*(i==2?10:7));
+                pip.localRotation=Quaternion.Euler(0,0,45);comboPips[i]=pip.gameObject.AddComponent<Image>();comboPips[i].raycastTarget=false;
+            }
             var bossRect=Panel(hud.transform,"Jefe",new Vector2(.5f,1),new Vector2(0,-82),new Vector2(490,69));
             bossPanel=bossRect.gameObject;bossText=Label(bossRect,"",17,Paper);bossText.rectTransform.offsetMin=new Vector2(10,18);bossText.rectTransform.offsetMax=new Vector2(-10,-4);
             bossFill=Bar(bossRect,new Vector2(18,9),new Vector2(454,6),new Color(.9f,.36f,.35f));
@@ -58,11 +72,12 @@ namespace SurvivorFarm.Runtime.UI
             overlay.AddComponent<Image>().color=new Color(.025f,.045f,.055f,.72f);
             fade=overlay.AddComponent<CanvasGroup>();
             card=Panel(overlay.transform,"Portada",new Vector2(.5f,.5f),Vector2.zero,new Vector2(724,528));
-            var eyebrow=Label(Rect(card,"Edición",new Vector2(.5f,1),new Vector2(0,-28),new Vector2(660,24)),"UNA GRANJA · TRES NOCHES",14,Gold);
+            var eyebrow=Label(Rect(card,"Edición",new Vector2(.5f,1),new Vector2(0,-28),new Vector2(660,24)),"UN PUEBLO · TRES NOCHES",14,Gold);
             title=Label(Rect(card,"Título",new Vector2(.5f,1),new Vector2(0,-72),new Vector2(660,106)),"SURVIVAL FARM",48,Paper);
             description=Label(Rect(card,"Descripción",new Vector2(.5f,1),new Vector2(0,-190),new Vector2(614,108)),"",18,Muted);
             var footer=Label(Rect(card,"Pie",new Vector2(.5f,0),new Vector2(0,18),new Vector2(660,24)),"WASD mover  ·  E interactuar  ·  Clic atacar  ·  Espacio esquivar",14,Muted);
             HideOldSessionReadouts();
+            gameObject.AddComponent<DemoFrontEnd>().Configure(owner);
             RefreshOverlay();
         }
         private void HideOldSessionReadouts()
@@ -80,26 +95,28 @@ namespace SurvivorFarm.Runtime.UI
             refreshAt=Time.unscaledTime+.1f;
             bool blocked=InventoryPanelSystem.IsOpen&&!ConstructionSystem.IsPlacing;
             hud.SetActive(session.HasBegun&&!overlay.activeSelf&&!blocked);
-            string label=session.Phase==SlicePhase.Day?"PREPARA LA GRANJA":session.Phase==SlicePhase.Preparation?"CAE LA NOCHE":
-                session.Phase==SlicePhase.Night?"DEFIENDE LA GRANJA":session.Phase==SlicePhase.Dawn?"AMANECER":session.Phase==SlicePhase.Boss?"ÚLTIMA DEFENSA":"EL CUSTODIO";
-            phase.text=$"DÍA {session.Day} / 3   ·   {label}"+(session.Remaining>0?$"\n{Mathf.CeilToInt(session.Remaining)/60:00}:{Mathf.CeilToInt(session.Remaining)%60:00}":"");
+            phase.text=session.Security?.IsOccupied==true?"OCUPADO":session.Remaining>0?$"{Mathf.CeilToInt(session.Remaining)/60:00}:{Mathf.CeilToInt(session.Remaining)%60:00}":session.InCombat?"NOCHE":"ALBA";
+            phase.color=session.InCombat?new Color(.7f,.85f,1):session.Phase==SlicePhase.Preparation?Gold:Paper;
+            for(int i=0;i<3;i++)dayPips[i].color=i<session.Day?Gold:new Color(1,1,1,.3f);
             objective.text=session.Objective;
-            if(!session.InCombat&&Vector2.Distance(session.Player.transform.position,session.Core.transform.position)>16)
-                objective.text="EXPLORA Y FORTIFICA\n"+Mathf.CeilToInt(Vector2.Distance(session.Player.transform.position,session.Core.transform.position))+" m hasta el pozo · regresa antes de la noche";
-            core.text=$"POZO   {session.Core.Health} / {session.Core.Maximum}";
-            coreFill.fillAmount=session.Core.Health/(float)session.Core.Maximum;
+            var security=session.Security;
+            if(security!=null)
+            {
+                core.text=$"{(security.IsOccupied?"PUEBLO OCUPADO":"SEGURIDAD DEL PUEBLO")}  {security.Percent}%\nVecinos vivos {security.LivingResidents} · Casas dañadas {security.DamagedHouses+security.DestroyedHouses}";
+                coreFill.fillAmount=security.Normalized;
+                coreFill.color=Color.Lerp(new Color(.95f,.3f,.25f),new Color(.5f,.8f,.65f),security.Normalized);
+            }
             var player=session.Player;
             var combo=player.GetComponent<ComboController>();
             bool sword=player.GetComponent<PlayerToolbelt>()?.SelectedTool==FarmTool.Sword;
-            comboText.transform.parent.gameObject.SetActive(sword&&!ConstructionSystem.IsPlacing);
-            comboText.text=combo!=null&&combo.StepNumber>0?$"CORTE {combo.StepNumber} / 3"+(combo.StepNumber==3?" · REMATE":" · CLIC para seguir"):"CLIC · 1 → 2 → 3 REMATE";
+            int step=combo!=null?combo.StepNumber:0;
+            comboGroup.alpha=sword&&!ConstructionSystem.IsPlacing&&step>0?1:0;
+            for(int i=0;i<3;i++)comboPips[i].color=i<step?(i==2?Gold:Paper):new Color(.2f,.25f,.22f,.7f);
             stockPanel.gameObject.SetActive(!ConstructionSystem.IsPlacing);
             int[] counts={player.Wood,player.Stone,player.GetComponent<AdventureProgress>().Data.iron,player.GetAvailableItemCount("GoldOre"),player.Food,player.CommonSeeds};
             for(int i=0;i<stockBadges.Length;i++)stockBadges[i].Set(counts[i],0,true);
-            ready.gameObject.SetActive(session.Phase==SlicePhase.Day);
             controls.text=ConstructionSystem.IsPlacing?"":
-                session.Day==1?"E interactuar   ·   I mochila   ·   F recetas   ·   Z construir   ·   Q curar":
-                "Z construir   ·   X trampa   ·   C ballesta   ·   I mochila   ·   Q curar";
+                "E interactuar / ayudar   ·   Q curarte   ·   I mochila   ·   F recetas   ·   K maestrías";
             var boss=session.Raids.Boss;
             bossPanel.SetActive(boss!=null&&(session.Phase==SlicePhase.Boss||session.Phase==SlicePhase.BossIntro));
             if(boss!=null)
@@ -112,27 +129,28 @@ namespace SurvivorFarm.Runtime.UI
         public void RefreshOverlay()
         {
             if(overlay==null)return;
+            if(!session.HasBegun){overlay.SetActive(false);return;}
             foreach(var button in buttons)Destroy(button);buttons.Clear();
-            bool show=!session.HasBegun||session.IsPaused||session.Phase==SlicePhase.Victory||session.Phase==SlicePhase.Defeat;
+            bool show=!FarmIntroduction.IsOpen&&(!session.HasBegun||session.IsPaused||session.Phase==SlicePhase.Victory||session.Phase==SlicePhase.Defeat);
             overlay.SetActive(show);if(!show)return;
             fade.alpha=session.Phase==SlicePhase.Victory?0:1;
             bool victory=session.Phase==SlicePhase.Victory,defeat=session.Phase==SlicePhase.Defeat;
-            title.text=victory?"UN NUEVO AMANECER":defeat?"LA GRANJA TE NECESITA":session.IsPaused?"UN RESPIRO":"SURVIVAL FARM";
+            title.text=victory?"UN NUEVO AMANECER":defeat?"EL PUEBLO TE NECESITA":session.IsPaused?"UN RESPIRO":"SURVIVAL FARM";
             title.fontSize=victory||defeat?36:48;
-            description.text=victory?$"El Custodio descansa. El Corazón del Valle sigue a salvo.\n\nTres noches superadas · {TimeSpan.FromSeconds(session.Elapsed):mm\\:ss}\nGracias por jugar esta pequeña historia.":
+            description.text=victory?$"Has protegido al pueblo y vencido al Custodio.\nSeguridad {session.Security?.Percent ?? 100}% · Cofres abiertos {session.Adventure?.CompletedCount ?? 0}/5\nTres noches superadas · {TimeSpan.FromSeconds(session.Elapsed):mm\\:ss}\nGracias por defender a los tuyos.":
                 defeat?session.EndingReason+"\n\nContinúa desde la última preparación guardada.":
-                session.IsPaused?"Tu granja espera.\nLa partida se guarda durante la preparación de cada día.":
-                "De día, cultiva y prepara tus defensas.\nDe noche, protege el pozo de las criaturas del valle.\nAl tercer anochecer, despierta su guardián.";
+                session.IsPaused?"Explora campamentos y ruinas de día. Defiende casas y vecinos de noche.\nEl tiempo sigue corriendo dentro de las mazmorras.\nEl progreso se guarda durante el día, fuera de combate.":
+                "De día, descubre campamentos y mazmorras con recompensas.\nDe noche, protege las casas y a sus habitantes.\nSi el pueblo cae, derrota a los ocupantes y recupéralo.";
             if(!session.HasBegun)
             {
-                AddButton("Empezar · unos 20 minutos",-334,session.BeginNewGame);
+                AddButton("Empezar · unos 25–30 minutos",-334,()=>{session.BeginNewGame();(GetComponent<FarmIntroduction>()??gameObject.AddComponent<FarmIntroduction>()).Open();});
                 var save=FindFirstObjectByType<GameSaveSystem>();
                 if(save!=null&&File.Exists(save.SaveFile))AddButton("Continuar preparación guardada",-391,()=>session.ContinueGame());
                 AddButton("Salir",-448,session.Quit);
             }
             else if(session.IsPaused)
             {
-                AddButton("Volver a la granja",-292,()=>session.Pause(false));
+                AddButton("Volver al valle",-292,()=>session.Pause(false));
                 AddButton(AudioListener.volume>0?"Silenciar audio":"Activar audio",-342,()=>{AudioListener.volume=AudioListener.volume>0?0:1;RefreshOverlay();});
                 AddButton(CombatTimeFeedback.ReducedMotion?"Impacto de cámara: reducido":"Impacto de cámara: normal",-392,()=>{CombatTimeFeedback.ReducedMotion=!CombatTimeFeedback.ReducedMotion;RefreshOverlay();});
                 AddButton("Volver al inicio",-442,session.ReturnToTitle);

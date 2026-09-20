@@ -1,0 +1,101 @@
+{
+  "Grass": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Grass.png",
+    "rect": null
+  },
+  "Path": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Path.png",
+    "rect": null
+  },
+  "Tuft": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Tuft.png",
+    "rect": null
+  },
+  "Tree": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Tree.png",
+    "rect": null
+  },
+  "House": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/House.png",
+    "rect": null
+  },
+  "Well": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Well.png",
+    "rect": null
+  },
+  "Chest": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Chest.png",
+    "rect": null
+  },
+  "Soil": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Soil.png",
+    "rect": null
+  },
+  "Crop": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Crop4.png",
+    "rect": null
+  },
+  "Chicken": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Chicken0_0.png",
+    "rect": null
+  },
+  "Sign": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Sign.png",
+    "rect": null
+  },
+  "Rock": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Rock.png",
+    "rect": null
+  },
+  "Deer": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/DeerIdle0_0.png",
+    "rect": null
+  },
+  "Slime": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/SlimeIdle0.png",
+    "rect": null
+  },
+  "Floor": {
+    "source": "Assets/SurvivorFarm/Art/WorldSprites/Floor.png",
+    "rect": null
+  },
+  "Josh": {
+    "source": "Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/Character and Portrait/Character/Pre-made/Josh/Idle.png",
+    "rect": [
+      0,
+      0,
+      32,
+      32
+    ]
+  },
+  "Boss": {
+    "source": "Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/Enemy/Sprout Slime/Pink/Idle.png",
+    "rect": [
+      0,
+      0,
+      16,
+      32
+    ]
+  },
+  "Portal": {
+    "source": "Assets/SurvivorFarm/Art/Sprites/FarmRPGTinyAssetPack/Exterior/Deep Forest/Root portal.png",
+    "rect": [
+      96,
+      0,
+      48,
+      48
+    ]
+  },
+  "Workbench": {
+    "source": "Assets/SurvivorFarm/Resources/BackpackIcons/Workbench.png",
+    "rect": null
+  },
+  "Campfire": {
+    "source": "Assets/SurvivorFarm/Resources/BackpackIcons/Campfire.png",
+    "rect": null
+  },
+  "Gem": {
+    "source": "Assets/SurvivorFarm/Resources/BackpackIcons/Gem.png",
+    "rect": null
+  }
+}

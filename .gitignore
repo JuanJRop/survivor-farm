@@ -43,6 +43,14 @@ ExportedObj/
 
 # Local nested worktrees or copied projects should not be committed here.
 /SurvivorFarm/
+/QA/
+
+# Generated QA compiler outputs (reports and captures remain versioned).
+/Design/Validation/**/*.dll
+/Design/Validation/**/*.rsp
+
+# Unity automatic scene recovery copies stay local.
+/Assets/_Recovery/
 
 *.pidb.meta
 *.pdb.meta

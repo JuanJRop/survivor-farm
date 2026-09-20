@@ -55,13 +55,12 @@ namespace SurvivorFarm.Runtime.UI
             Label(root, "MOCHILA", 24, 18, 400, 32, 26);
             if(Core.PortfolioSession.Active)
             {
-                Button(root,"Construir  [Z]",566,16,196,40,BeginConstruction);
                 var inset=Rect(root,"Detalle de inventario",590,120,238,365).gameObject.AddComponent<Image>();
                 FarmUiStyle.Frame(inset,true);inset.raycastTarget=false;
             }
             if(!Core.PortfolioSession.Active)FarmUiStyle.IconButton(Button(root, "Personaje [C]", 726, 16, 44, 40, owner.OpenEquipment),"Helmet","Personaje [C]");
             FarmUiStyle.CloseButton(Button(root, "Cerrar  [Esc]", 782, 16, 44, 40, owner.Close));
-            string[] labels = Core.PortfolioSession.Active?new[]{"Todo","Comida","Materiales","Construcción"}:new[]{ "Todo", "Comida", "Materiales", "Gemas", "Elementos", "Varios" };
+            string[] labels = Core.PortfolioSession.Active?new[]{"Todo","Comida","Materiales","Hogar"}:new[]{ "Todo", "Comida", "Materiales", "Gemas", "Elementos", "Varios" };
             int[] categoryIds = Core.PortfolioSession.Active?new[]{0,3,4,9}:new[]{ 0, 3, 4, 6, 7, 1 };
             for (int i = 0; i < labels.Length; i++)
             {
@@ -101,9 +100,7 @@ namespace SurvivorFarm.Runtime.UI
             summary = Label(root, "", 24, 495, 795, 26, 16);
             if(Core.PortfolioSession.Active)
             {
-                Button(root,"Paleta de construcción",608,407,210,40,BeginConstruction);
-                Label(root,"Selecciona una pieza y coloca varias seguidas.",608,452,210,36,14).color=FarmUiStyle.Muted;
-                Label(root,"EXPLORA · REÚNE · FORTIFICA",24,545,795,24,15).color=FarmUiStyle.Accent;
+                Label(root,"EXPLORA · MEJORA · DEFIENDE",24,545,795,24,15).color=FarmUiStyle.Accent;
             }
             ghost = Rect(root, "Arrastre", 0, 0, 48, 48).gameObject.AddComponent<Image>();
             ghost.preserveAspect = true; ghost.raycastTarget = false; ghost.gameObject.SetActive(false);
@@ -202,10 +199,6 @@ namespace SurvivorFarm.Runtime.UI
             owner.Close();
             if(BackpackActions.IsBuilding(item.Id))BackpackActions.Use(inventory,item.Id);
             else FindFirstObjectByType<CraftingWindow>()?.Open();
-        }
-        private void BeginConstruction()
-        {
-            owner.Close();inventory.GetComponent<ConstructionSystem>()?.Begin("Fence");
         }
         void Act(bool selling)
         {

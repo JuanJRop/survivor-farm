@@ -22,8 +22,8 @@ namespace SurvivorFarm.Runtime.Gameplay
         public bool IsExposed=>running&&state==3;
         public int Pattern=>pattern;
         public string Status=>!running?"EL CUSTODIO DESPIERTA":state==3?"RECUPERANDO · DAÑO DOBLE":
-            state==1?(pattern==0?"SALTO · SAL DEL CÍRCULO":pattern==1?"ABANICO · BUSCA COBERTURA":pattern==2?"RAÍCES · SIGUE MOVIÉNDOTE":"LLAMADA · PREPARA TUS DEFENSAS"):
-            PhaseTwo?"FASE II · LAS RAÍCES RESPONDEN":"FASE I · EL GUARDIÁN DEL POZO";
+            state==1?(pattern==0?"SALTO · SAL DEL CÍRCULO":pattern==1?"ABANICO · BUSCA COBERTURA":pattern==2?"RAÍCES · SIGUE MOVIÉNDOTE":"LLAMADA · PROTEGE A LOS VECINOS"):
+            PhaseTwo?"FASE II · LAS RAÍCES RESPONDEN":"FASE I · EL CUSTODIO DEL VALLE";
         public void Configure(PortfolioSession owner,DungeonBoss enemy,EnemyProjectilePool arrows)
         {
             session=owner;boss=enemy;projectiles=arrows;
@@ -106,12 +106,10 @@ namespace SurvivorFarm.Runtime.Gameplay
         {
             CultivationSoilVisual.Emit(point,false);
             if(Vector2.Distance(session.Player.transform.position,point)<radius)session.Player.GetComponent<PlayerSurvivalStats>().TakeDamage(2);
-            // The same telegraphed footprint applies to structures, with bounded damage.
-            for(int i=FarmDefense.All.Count-1;i>=0;i--)
-            {
-                var defense=FarmDefense.All[i];
-                if(defense.IsAlive&&Vector2.Distance(defense.transform.position,point)<radius)defense.TakeDamage(3,null);
-            }
+            foreach(var house in new System.Collections.Generic.List<VillageHouseHealth>(VillageHouseHealth.All))
+                if(house.IsAlive&&Vector2.Distance(house.ContactPoint(point),point)<radius)house.TakeDamage(3,null);
+            foreach(var resident in new System.Collections.Generic.List<VillageResidentHealth>(VillageResidentHealth.All))
+                if(resident.IsAlive&&Vector2.Distance(resident.transform.position,point)<radius)resident.TakeDamage(2,null);
         }
         private static Vector3 Clamp(Vector3 point)=>new Vector3(Mathf.Clamp(point.x,-15,15),Mathf.Clamp(point.y,-9,6),0);
         private void OnDisable()=>Stop();

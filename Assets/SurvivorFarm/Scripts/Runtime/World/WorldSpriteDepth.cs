@@ -10,7 +10,9 @@ namespace SurvivorFarm.Runtime.World
         public float GroundOffset;
         private void LateUpdate()
         {
-            if (Visual != null) Visual.sortingOrder = 1000 - Mathf.RoundToInt((transform.position.y + GroundOffset) * 20f);
+            if (Visual == null) return;
+            int order = 1000 - Mathf.RoundToInt((transform.position.y + GroundOffset) * 20f);
+            if (Visual.sortingOrder != order) Visual.sortingOrder = order;
         }
     }
 }

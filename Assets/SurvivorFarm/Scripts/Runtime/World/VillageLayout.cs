@@ -20,7 +20,7 @@ namespace SurvivorFarm.Runtime.World
             }
         }
 
-        public const float HouseWidth = 2.2f;
+        public const float HouseWidth = 2.5f;
         public static readonly Rect Bounds = new Rect(-12, -7, 24, 14);
         public static readonly Vector3 Well = new Vector3(-1.1f, .25f);
         public static readonly Vector3 Note = new Vector3(1.7f, 1.65f);

@@ -46,9 +46,9 @@ namespace SurvivorFarm.Runtime.Gameplay
             }
         }
         public int ActiveLimit => IsNight ? capacity : FirstDayCampLocked ? 0 : Mathf.Clamp(daytimeLimit, 0, capacity);
-        public float DetectionRange => IsNight ? nightDetectionRange : dayDetectionRange;
+        public float DetectionRange => IsNight ? Mathf.Max(11f, nightDetectionRange) : Mathf.Max(5.5f, dayDetectionRange);
         public float SpeedMultiplier => IsNight ? nightSpeedMultiplier : daySpeedMultiplier;
-        public float AttackDelayMultiplier => IsNight ? nightAttackIntervalMultiplier : dayAttackIntervalMultiplier;
+        public float AttackDelayMultiplier => IsNight ? nightAttackIntervalMultiplier : Mathf.Min(1.1f, dayAttackIntervalMultiplier);
         public float SpawnInterval => IsNight ? nightSpawnInterval : daySpawnInterval;
         public int ActiveCount
         {

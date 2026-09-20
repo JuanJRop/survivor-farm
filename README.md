@@ -8,21 +8,49 @@ combate, recursos, inventario, construcción y arte originales.
 
 Abre `Builds/Portfolio/SurvivalFarm.exe`. Conserva toda la carpeta junto al
 ejecutable. En Unity, abre la escena Main y pulsa Play.
+Paquete actual: `Builds/SurvivalFarm-TinyRPG-CombatFX-Windows.zip`.
+
+## Escenas de práctica
+
+En el menú principal, abre **Escenas de práctica**. También puedes abrir en Unity
+`Assets/SurvivorFarm/Scenes/ArenaCombate.unity` o `TallerGranja.unity` y pulsar Play.
+
+- **Arena:** cinco oleadas repetibles y bestiario individual: limo, murciélago,
+  gólem, rastreador, arquero, demoledor, Custodio, soldado, orco, demonio y monstruo
+  de sangre. Los cuatro personajes de Tiny RPG usan sus animaciones originales.
+- **Taller:** día sin límite para cultivar, plantar, regar, construir, mover,
+  desmontar, talar, minar y cocinar. Incluye accesos rápidos a cada zona.
+
+**F6** abre los controles de práctica: curar/reponer suministros, elegir niveles
+de equipo, reiniciar, cambiar de área o volver al menú. No se leen ni escriben
+partidas de campaña. Reiniciar descarta solo lo realizado en esa práctica.
+Detalles y mantenimiento: `Design/Development/PRACTICE-SCENES.md`.
+
+## Campaña de la demo
+
+El menú distingue **Continuar, Nueva partida, Cargar partida y Opciones** y marca
+claramente la versión como demo. Nueva partida conserva los guardados anteriores.
 
 Prepara la granja durante tres días, defiende el pozo durante las noches y vence
-al Custodio. Duración de diseño: aproximadamente 18–23 minutos; «Listo para la
-noche» permite adelantar la preparación. El ritmo final requiere playtests humanos.
+al Custodio. Duración de diseño: aproximadamente 18–23 minutos. La noche llega
+automáticamente, sin botón para adelantarla. El ritmo final requiere playtests humanos.
+Una partida nueva enseña jugando: WASD libera el movimiento, un rival seguro
+permite practicar el combo y después la descarga. El reloj espera durante la lección.
 
 | Control | Acción |
 | --- | --- |
 | WASD / Shift | Caminar / correr |
 | E / clic derecho | Interacción contextual, recoger, plantar, regar, cosechar, reparar |
 | Clic izquierdo / 1 / 2 | Atacar / espada / arco |
+| Mantener clic ~1 s y soltar (espada) | Cargar y descargar un golpe potente |
 | Espacio | Esquiva, con recarga breve |
 | Q | Comer una ración |
 | F / I | Recetas y mejoras / mochila |
 | Z / X / C | Paleta de construcción / trampa / ballesta |
 | R / clic / Esc | Girar muro / colocar otra pieza / salir de construcción |
+| M (en construcción) | Seleccionar una pieza colocada y moverla sin coste |
+| B (en construcción) | Desmontar: devuelve el 69% de los materiales invertidos |
+| K | Maestrías: usar, desbloquear y comprar el siguiente nivel |
 | Esc | Pausa |
 
 Las trampas y la ballesta se desbloquean el día 2. Cosechar devuelve semillas y
@@ -30,9 +58,10 @@ fruta; dos frutas producen una ración en las recetas. Las reparaciones cuestan
 dos maderas y recuperan seis puntos de estructura. Las marcas del jefe muestran
 el área que dañará; su recuperación permite daño doble.
 
-La paleta permanece abierta al colocar piezas. Usa primero las que hay en la
+La construcción permanece activa al colocar piezas; su cajón se abre al acercar
+el cursor a la pestaña inferior y se retrae al volver al mapa. Usa primero las que hay en la
 mochila y después los materiales indicados por los iconos. Los muros nuevos son
-módulos de 2 unidades con extremos comunes: gira con R para cerrar esquinas y
+módulos de 2 unidades en horizontal y 4 en vertical: gira con R para cerrar esquinas y
 deja un acceso. Puedes elegir piedra o reforzado y hacer clic sobre un muro
 inferior para mejorarlo (coste de pieza completa; conserva la proporción de daño).
 La mochila incluye iconos grandes, cantidades y una pestaña de construcción.
@@ -41,15 +70,33 @@ El valle jugable se extiende a 64 × 36 unidades, manteniendo la granja y el rí
 Hay más madera al oeste y piedra al este. Las dos vetas de la cantera dan hierro;
 los dos salientes alejados también dan oro mineral, usado en muros reforzados.
 Cruza el puente abierto para llegar al saliente norte. E elige automáticamente el
-pico: no se exige una mejora oculta en esta demo. Las cuatro vetas se recuperan
-cada día. Regresa al pozo antes de que termine la preparación.
+pico: las vetas de hierro exigen nivel 2 y las de oro nivel 3, indicados al acercarte.
+Las cuatro vetas se recuperan cada día. Regresa al pozo antes de que termine la preparación.
+
+Las rocas y los árboles tienen tres niveles. Usa cada herramienta para desbloquear
+su siguiente maestría y después cómprala en K; desbloquear no entrega equipo gratis.
+Espada, arco, hacha, pico, azada y regadera disponen de tres niveles. Los objetivos
+son cortos para la demo; recolectar recursos de nivel inferior no entrena el siguiente.
+Los vecinos caminan con colisión, pueden morir a manos de enemigos y cada baja
+reduce tres puntos la resistencia máxima del pozo. Las gallinas se pueden cazar.
+La orilla superior del río está animada y sincronizada; el borde inferior muestra
+césped estático. Las orillas mantienen al jugador sobre tierra. Los cortes, la
+carga y los impactos de combate usan las animaciones originales de Combat FX.
+Muros y casas se atenúan cuando ocultan al jugador. Al señalar un árbol o roca
+aparece su nivel; un reloj pequeño junto al personaje muestra el trabajo en curso.
+Los asaltantes priorizan vecinos vivos cercanos (7 unidades); sin esa prioridad,
+se reparten de forma alterna entre pozo y jugador. Rodean muros abiertos y solo
+buscan una brecha cuando los muros cierran realmente el paso al objetivo.
 
 La espada encadena **corte → retorno → remate**. Haz clic de nuevo durante la
 recuperación o en los 0,6 s siguientes. El tercer golpe hace daño ×2 +1 y tiene
 impacto más fuerte; acabar con un demoledor así permite un remate visual breve.
+Mantén clic 1,05 s hasta la señal dorada y suelta: descarga de daño ×3 +2,
+mayor alcance y retroceso. Es una acción independiente que reinicia la cadena;
+daño recibido, esquiva, menús o pérdida de foco interrumpen la carga.
 En pausa puedes reducir shake, zoom y cámara lenta con «Impacto de cámara».
 Los sonidos y partículas distinguen combate, madera, piedra, cajas y loot.
-Detalle técnico y validación: `Design/Development/COMBAT-POLISH-2026-09-14.md`.
+Detalle técnico y validación: `Design/Development/COMBAT-JUICE-2026-09-15.md`.
 
 La demo guarda automáticamente durante la preparación, en ranuras `portfolio_*`
 separadas de la campaña histórica. Continuar recupera el comienzo de la preparación
@@ -58,6 +105,8 @@ punto. Las pruebas usan archivos QA independientes.
 
 ## Desarrollo de la vertical slice
 
+- Última iteración y validación: `Design/Development/WORLD-RENEWAL-2026-09-15.md`.
+- Distribución actual: `Builds/SurvivalFarm-ValleRenovado-Windows.zip`.
 - Auditoría previa: `Design/Development/VERTICAL-SLICE-AUDIT-2026-09-14.md`.
 - Configuración: `Data/ScriptableObjects/PortfolioSettings.asset` (duraciones,
   composiciones, límite de enemigos, vida del pozo y jefe, crecimiento visual).

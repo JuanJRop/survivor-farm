@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SurvivorFarm.Runtime.Core;
 using SurvivorFarm.Runtime.Gameplay;
 using SurvivorFarm.Runtime.Player;
@@ -30,7 +31,15 @@ namespace SurvivorFarm.Runtime.UI
         private Rect lastSafeArea;
         private Vector2Int lastScreenSize;
         private int displayedDay = -1;
+        private int displayedMinute = -1;
+        private int displayedSwordTier = -1, displayedArrows = -1;
+        private bool displayedBowUnlocked;
+        private Button displayedSwordButton, displayedBowButton;
+        private readonly List<Image> weaponIcons = new List<Image>(4);
+        private readonly List<Text> weaponLabels = new List<Text>(4);
         private float restyleUntil;
+        private float nextStyleRefresh;
+        private float nextWeaponRefresh;
         private static readonly Color SurvivalPanel = FarmUiStyle.Surface;
         private static readonly Color SurvivalSubPanel = FarmUiStyle.Control;
         private static readonly Color SurvivalInk = FarmUiStyle.Ink;
@@ -77,14 +86,26 @@ namespace SurvivorFarm.Runtime.UI
 
         private void Update()
         {
+            if (Time.unscaledTime >= nextWeaponRefresh) { nextWeaponRefresh = Time.unscaledTime + .2f; RefreshWeaponSlots(); }
             if (Clock != null && Day != null)
             {
-                displayedDay = Clock.Day;
-                Day.text = $"D{displayedDay} {Mathf.FloorToInt(Clock.Hour):00}:{Mathf.FloorToInt(Clock.Hour%1*60):00}";
+                int minute = Mathf.FloorToInt(Clock.Hour * 60);
+                if (displayedDay != Clock.Day || displayedMinute != minute)
+                {
+                    displayedDay = Clock.Day; displayedMinute = minute;
+                    Day.text = $"D{displayedDay} {minute / 60:00}:{minute % 60:00}";
+                }
             }
             if (restyleUntil > 0f)
             {
-                if (Time.unscaledTime <= restyleUntil) ApplySurvivalLayout();
+                if (Time.unscaledTime <= restyleUntil)
+                {
+                    if (Time.unscaledTime >= nextStyleRefresh)
+                    {
+                        nextStyleRefresh = Time.unscaledTime + .1f;
+                        ApplySurvivalLayout();
+                    }
+                }
                 else restyleUntil = 0f;
             }
             if (Screen.width <= 0 || Screen.height <= 0) return;
@@ -114,6 +135,7 @@ namespace SurvivorFarm.Runtime.UI
             RefreshSurvival();
             if (Toolbelt != null) RefreshTool(Toolbelt.SelectedTool);
             if (Day != null) Day.text = $"DÍA {(Clock != null ? Clock.Day : 1)}";
+            displayedDay = displayedMinute = -1;
         }
 
         public void RequestStyleRefresh()
@@ -152,10 +174,45 @@ namespace SurvivorFarm.Runtime.UI
                 ToolFrames[i].sprite = selected ? Panel : Slot;
                 ToolFrames[i].color = selected ? SurvivalAccent : SurvivalSlot;
             }
+            RefreshWeaponSlots();
+        }
+
+        private void RefreshWeaponSlots()
+        {
+            if (Inventory == null || ToolButtons == null) return;
+            int swordTier = Inventory.GetComponent<PlayerCombatController>()?.SwordTier ?? 1;
+            bool bowUnlocked = Inventory.OwnsEquipment("Bow");
+            int arrows = Inventory.GetItemCount("Arrow");
+            Button swordButton = ToolButtons.Length > (int)FarmTool.Sword ? ToolButtons[(int)FarmTool.Sword] : null;
+            Button bowButton = ToolButtons.Length > (int)FarmTool.Bow ? ToolButtons[(int)FarmTool.Bow] : null;
+            if (displayedSwordTier == swordTier && displayedArrows == arrows && displayedBowUnlocked == bowUnlocked &&
+                displayedSwordButton == swordButton && displayedBowButton == bowButton) return;
+            displayedSwordTier = swordTier; displayedArrows = arrows; displayedBowUnlocked = bowUnlocked;
+            displayedSwordButton = swordButton; displayedBowButton = bowButton;
+            for (int i = 0; i < ToolButtons.Length; i++)
+            {
+                if (i != (int)FarmTool.Sword && i != (int)FarmTool.Bow || ToolButtons[i] == null) continue;
+                bool bow = i == (int)FarmTool.Bow; var button = ToolButtons[i];
+                button.interactable = !bow || bowUnlocked;
+                button.GetComponentsInChildren(true, weaponIcons);
+                foreach (var icon in weaponIcons)
+                    if (icon.name.Contains("Icon"))
+                    {
+                        if (!bow) icon.sprite = PlayerWeaponPresentation.SwordSprite(swordTier);
+                        icon.color = bow && !bowUnlocked ? new Color(.4f, .45f, .45f) : Color.white;
+                    }
+                var hint = button.GetComponent<HudActionTooltip>();
+                if (hint != null) hint.Caption = bow ? bowUnlocked ? "Arco · apunta al cursor · " + arrows + " flechas" : "Arco bloqueado · encuéntralo en las ruinas" : "Espada · nivel " + swordTier;
+                button.GetComponentsInChildren(true, weaponLabels);
+                foreach (var label in weaponLabels)
+                    if (label.name == "Shortcut" || label.name.EndsWith(" Key", StringComparison.Ordinal))
+                        label.text = bow ? bowUnlocked ? "2 · " + arrows : "?" : "1";
+            }
         }
 
         private void ApplySurvivalLayout()
         {
+            displayedSwordTier = -1; // Styling also resets shortcut labels; repaint weapon state once afterward.
             TintPanel(Hearts != null && Hearts.Length > 0 && Hearts[0] != null ? Hearts[0].transform.parent as RectTransform : null);
             TintPanel(Day != null ? Day.transform.parent as RectTransform : null);
             TintPanel(FindRect("Mission"));

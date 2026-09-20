@@ -25,10 +25,13 @@ namespace SurvivorFarm.Runtime.Gameplay
             Health = Mathf.Max(0, Health - amount);
             HitFeedback.Report(gameObject, source, amount, Health == 0, false, rock ? ImpactSurface.Stone : ImpactSurface.Wood);
             if (Health > 0) return;
-            if (rock) { source.AddStone(2); source.GetComponent<AdventureProgress>()?.AddIron(1); }
-            else { source.AddWood(2); source.AddCoins(3); }
             GetComponent<Collider2D>().enabled = false; GetComponent<SpriteRenderer>().enabled = false;
-            FarmNotificationCenter.Show(rock ? "Escombros: +2 piedra, +1 hierro." : "Suministros: +2 madera, +3 monedas.");
+            if (rock)
+            {
+                EnemyLootPickup.Scatter(transform.position, transform.parent, ItemKind.Stone, 2);
+                EnemyLootPickup.Scatter(transform.position, transform.parent, ItemKind.Iron, 1);
+            }
+            else EnemyLootPickup.Scatter(transform.position, transform.parent, ItemKind.Experience, Random.Range(2, 5));
         }
     }
 }

@@ -69,14 +69,16 @@ namespace SurvivorFarm.Editor
                 if (!west.IsCleared) throw new Exception("Camp cannot be cleared");
                 campaign.Teleport(west.Chest.transform.position + Vector3.down * .7f);
                 camera.transform.position = west.transform.position + new Vector3(0, -.8f, -10);
-                if (!west.Claimed || west.TryClaim(player)) throw new Exception("Automatic camp reward is unavailable or duplicated");
+                if (west.Claimed || !west.TryClaim(player) || west.TryClaim(player)) throw new Exception("Chest reward is unavailable or duplicated");
+                yield return new WaitForSeconds(.7f);
+                foreach (var drop in west.GetComponentsInChildren<EnemyLootPickup>()) drop.TryCollect(player);
                 if (player.Coins < coins + west.Definition.Coins || player.Food != food + west.Definition.Food ||
                     player.GetComponent<AdventureProgress>().Data.iron != iron + west.Definition.Iron) throw new Exception("Camp reward did not reach the actual inventory");
                 campaign.Restore(JsonUtility.FromJson<ValleyData>(JsonUtility.ToJson(campaign.Data)));
                 if (!west.IsCleared || !west.Claimed || west.Members.Any(e => e.IsAlive)) throw new Exception("Camp clear did not survive a save roundtrip");
                 if (!instances.SequenceEqual(west.Members)) throw new Exception("Camp pool replaced its guard instances");
                 capture("camp-cleared-1280.png", 1280, 720);
-                report.Add("PASS: partial/full clear persistence, automatic unique victory reward in real inventory, pooled guard identity, four original-art camps.");
+                report.Add("PASS: partial/full clear persistence, unique scattered chest rewards collected into inventory, pooled guard identity, four original-art camps.");
                 Directory.CreateDirectory("Design/Validation/EnemyCamps");
                 File.WriteAllLines("Design/Validation/EnemyCamps/result.txt", report);
             }

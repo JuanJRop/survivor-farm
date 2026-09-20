@@ -1,0 +1,1 @@
+PASS: five villager conversations with original sprites, decline without side effects, explicit acceptance and delivery buttons, accepted quest save/load, stale dialogue closure, unique rewards, screenshots at 1280x720 and 1920x1080.

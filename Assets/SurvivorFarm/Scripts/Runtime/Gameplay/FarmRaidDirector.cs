@@ -11,7 +11,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         private readonly List<RaidEnemy> pool=new List<RaidEnemy>();
         private EnemyProjectilePool projectiles;
         private SliceDay wave;
-        private int cursor;
+        private int cursor, assignmentCursor;
         private float elapsed,spawnAt=-1;
         private Vector3 pendingPosition;
         private CombatTelegraph entrance;
@@ -38,7 +38,28 @@ namespace SurvivorFarm.Runtime.Gameplay
                 var enemy=root.AddComponent<RaidEnemy>();enemy.ConfigureRaid(owner,RaidRole.Chaser,projectiles);enemy.ReturnToPool();pool.Add(enemy);
             }
         }
-        public void Begin(int day){Stop();wave=session.Settings.days[day-1];cursor=0;elapsed=0;}
+        public void Begin(int day){Stop();wave=session.Settings.days[day-1];cursor=0;assignmentCursor=0;elapsed=0;}
+        public void BeginOccupationGarrison(int remaining)
+        {
+            Stop();wave=null;assignmentCursor=0;
+            if(Boss!=null){Boss.ReturnToPool();Destroy(Boss.gameObject);Boss=null;}
+            int count=Mathf.Clamp(remaining,0,Mathf.Min(4,pool.Count));
+            Vector3[] posts={new Vector3(-3,0),new Vector3(3,0),new Vector3(0,-4),new Vector3(0,3)};
+            for(int i=0;i<count;i++)
+            {
+                Vector3 position=posts[i];bool found=false;
+                for(int attempt=0;attempt<25;attempt++)
+                {
+                    var candidate=posts[i]+new Vector3((attempt%5-2)*.6f,(attempt/5-2)*.6f);
+                    bool blocked=false;
+                    foreach(var hit in Physics2D.OverlapCircleAll(candidate,.4f))
+                        if(!hit.isTrigger){blocked=true;break;}
+                    if(blocked)continue;position=candidate;found=true;break;
+                }
+                if(!found&&!FindEntry(i,out position))continue;
+                Spawn(i==0?RaidRole.Brute:i==2?RaidRole.Archer:RaidRole.Chaser,position);
+            }
+        }
         public void Tick(float seconds)
         {
             if(wave==null||!session.InCombat)return;
@@ -60,15 +81,18 @@ namespace SurvivorFarm.Runtime.Gameplay
             foreach(var enemy in pool)
             {
                 if(enemy.gameObject.activeSelf)continue;
-                enemy.ConfigureRaid(session,role,projectiles);enemy.ActivateFromPool(position);return true;
+                int assignment=assignmentCursor++;
+                enemy.ConfigureRaid(session,role,projectiles,assignment,EnemyRoster.RaidStyle(role,session.Day,assignment));
+                enemy.ActivateFromPool(position);return true;
             }
             return false;
         }
         private bool FindEntry(int seed,out Vector3 position)
         {
+            var entries=session.IsPractice?PracticeWaveDirector.Entries:Entries;
             for(int i=0;i<18;i++)
             {
-                position=Entries[(seed+i/6)%Entries.Length]+new Vector3(i%3*.6f-.6f,i%2*.6f);
+                position=entries[(seed+i/6)%entries.Length]+new Vector3(i%3*.6f-.6f,i%2*.6f);
                 bool blocked=false;
                 foreach(var hit in Physics2D.OverlapCircleAll(position,.4f))if(!hit.isTrigger){blocked=true;break;}
                 if(!blocked)return true;
@@ -92,6 +116,12 @@ namespace SurvivorFarm.Runtime.Gameplay
             Camera.main?.GetComponent<CameraFollowTarget>()?.SetCombatFocus(root.transform);
         }
         public void ActivateBoss()=>BossPattern?.Begin();
+        public void ResetPracticeBoss()
+        {
+            if(!session.IsPractice)return;
+            Stop();
+            if(Boss!=null){Boss.ReturnToPool();Destroy(Boss.gameObject);Boss=null;}
+        }
         public void Stop()
         {
             foreach(var enemy in pool)enemy.ReturnToPool();

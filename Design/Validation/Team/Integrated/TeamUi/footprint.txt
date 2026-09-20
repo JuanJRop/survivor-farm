@@ -1,0 +1,4 @@
+Controlled QA sample; not a player FPS benchmark.
+GameObjects: 19004
+SpriteRenderers: 13754
+Managed bytes: 771358720

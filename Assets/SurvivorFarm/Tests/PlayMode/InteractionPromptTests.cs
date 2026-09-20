@@ -41,13 +41,25 @@ namespace SurvivorFarm.Tests
         public void TearDown() => Object.DestroyImmediate(root);
 
         [Test]
-        public void PromptShowsInteractAndHidesWithoutAnAvailableTarget()
+        public void PromptShowsOnlyEAndHidesWithoutAnAvailableTarget()
         {
             FarmNotificationCenter.SetInteractionButtonAtWorldPosition(true, "Interactuar", Vector3.zero, camera);
             Assert.IsTrue(button.gameObject.activeSelf);
-            Assert.AreEqual("Interactuar", button.GetComponentInChildren<Text>().text);
+            Assert.AreEqual("E", button.GetComponentInChildren<Text>().text);
+            Assert.AreEqual(48f, ((RectTransform)button.transform).sizeDelta.x);
+            Assert.AreEqual(0, button.image.color.a, "Only the keycap has a background; the oversized dark banner is removed.");
             FarmNotificationCenter.SetInteractionButton(false, "Interactuar");
             Assert.IsFalse(button.gameObject.activeSelf);
+        }
+
+        [Test]
+        public void OnlyHouseRepairAddsAWordToThePrompt()
+        {
+            FarmNotificationCenter.SetInteractionButton(true, "Reparar");
+            Assert.AreEqual("E · Reparar", button.GetComponentInChildren<Text>().text);
+            FarmNotificationCenter.SetInteractionButton(true, "Retirar flores · una semilla");
+            Assert.AreEqual("E", button.GetComponentInChildren<Text>().text);
+            Assert.AreEqual(48f, ((RectTransform)button.transform).sizeDelta.x);
         }
 
         [UnityTest]
@@ -74,6 +86,30 @@ namespace SurvivorFarm.Tests
             player.transform.SetParent(root.transform);
             var find = typeof(FarmPlayerInteractor).GetMethod("FindNearestInteractable", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.AreSame(shop, find.Invoke(player, new object[] { Vector3.zero, 1.35f }));
+        }
+
+        [TestCase(5.8f)]
+        [TestCase(9f)]
+        public void NearbyBadgeMovesBesidePlayerAtDifferentCameraZooms(float zoom)
+        {
+            camera.orthographicSize = zoom;
+            var player = new GameObject("Player").AddComponent<FarmPlayerInteractor>();
+            player.transform.SetParent(root.transform);
+            typeof(FarmPlayerInteractor).GetField("mainCamera", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(player, camera);
+            var target = new GameObject("Exit").AddComponent<ShopEntrance>();
+            target.transform.SetParent(root.transform); target.transform.position = Vector3.down * .9f;
+            var getPosition = typeof(FarmPlayerInteractor).GetMethod("GetIndicatorPosition", BindingFlags.NonPublic | BindingFlags.Instance);
+            Vector3 point = (Vector3)getPosition.Invoke(player, new object[] { target });
+            Vector3 screen = camera.WorldToScreenPoint(point);
+            float halfBadge = FarmNotificationCenter.InteractionBadgeScreenSize(false).x * .5f;
+            float playerRight = camera.WorldToScreenPoint(Vector3.right * .35f).x;
+            float playerLeft = camera.WorldToScreenPoint(Vector3.left * .35f).x;
+            Assert.IsTrue(screen.x - halfBadge >= playerRight + 7.9f || screen.x + halfBadge <= playerLeft - 7.9f,
+                "The badge can choose either side, but must clear the player at this zoom.");
+            Assert.That(point.y, Is.EqualTo(0).Within(.001f), "Keep the badge close to the exit rather than lifting it over the player.");
+            target.transform.position = new Vector3(3, -.9f);
+            Vector3 unobstructed = (Vector3)getPosition.Invoke(player, new object[] { target });
+            Assert.That(unobstructed.x, Is.EqualTo(3).Within(.001f), "Only move prompts that overlap the player.");
         }
     }
 }

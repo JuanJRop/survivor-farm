@@ -1,0 +1,2 @@
+PASS
+Death overlay pauses gameplay. Continue revives in place. Checkpoint restores position. Inventory retained. Temporary damage protection. Dead save JSON restores full health/hunger and unlocks animation. No test data written to user save. Exit action not executed during verification.

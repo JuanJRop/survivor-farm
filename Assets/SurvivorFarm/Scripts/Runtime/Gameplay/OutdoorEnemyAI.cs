@@ -5,6 +5,8 @@ namespace SurvivorFarm.Runtime.Gameplay
     public sealed class OutdoorEnemyAI : EnemyAIBase
     {
         private OutdoorEnemyPool owner;
+        private bool engaged;
+        public override void ActivateFromPool(Vector3 position) { base.ActivateFromPool(position); engaged = false; }
         protected override HomeSafeZone ProjectileProtection => owner != null ? owner.SafeZone : null;
         public override bool CanLaunchProjectile => base.CanLaunchProjectile && owner != null && owner.CanChase && !owner.SafeZone.Contains(Target.position);
         protected override bool CanApplyKnockback(Vector2 position) => owner == null || !owner.SafeZone.Contains(position, 0.3f);
@@ -26,8 +28,12 @@ namespace SurvivorFarm.Runtime.Gameplay
                 ReturnToPool();
                 return;
             }
-            if (owner.SafeZone.Contains(Target.position)) { CancelAttack(); return; }
-            if (!IsPreparingAttack && Vector2.Distance(transform.position, Target.position) > owner.DetectionRange) { CancelAttack(); return; }
+            if (owner.SafeZone.Contains(Target.position)) { engaged = false; CalmDown(); CancelAttack(); return; }
+            float distance = Vector2.Distance(transform.position, Target.position);
+            if (distance <= owner.DetectionRange || IsProvoked) engaged = true;
+            float pursuitRange = IsProvoked ? 20f : 14f;
+            if (distance > pursuitRange) { engaged = false; CalmDown(); }
+            if (!engaged) { CancelAttack(); return; }
             base.TickEnemy();
         }
 

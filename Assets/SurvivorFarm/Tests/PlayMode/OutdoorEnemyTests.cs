@@ -161,25 +161,25 @@ namespace SurvivorFarm.Tests
         }
 
         [UnityTest]
-        public IEnumerator DistantPlayerIsIgnoredInDaylightAndPursuedAtNight()
+        public IEnumerator NightDetectionStartsPursuitAndDawnDoesNotImmediatelyForgetTarget()
         {
             var clock = Child("Clock").AddComponent<DayNightCycle>();
             pool.ConfigureClock(clock);
             inventory.transform.position = Vector3.right * 4f;
             var enemy = pool.GetComponentsInChildren<OutdoorEnemyAI>(true)[0];
-            enemy.ActivateFromPool(Vector3.right * 9f);
+            enemy.ActivateFromPool(Vector3.right * 11f);
             yield return null;
             yield return null;
-            Assert.AreEqual(9f, enemy.transform.position.x);
+            Assert.AreEqual(11f, enemy.transform.position.x);
             clock.Restore(1, 22f);
             yield return null;
             yield return null;
-            Assert.Less(enemy.transform.position.x, 9f);
+            Assert.Less(enemy.transform.position.x, 11f);
             clock.Restore(2, 8f);
             var position = enemy.transform.position;
             yield return null;
             yield return null;
-            Assert.AreEqual(position, enemy.transform.position);
+            Assert.Less(enemy.transform.position.x, position.x);
         }
     }
 }

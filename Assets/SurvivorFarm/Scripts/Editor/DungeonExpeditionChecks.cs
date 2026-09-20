@@ -69,7 +69,7 @@ namespace SurvivorFarm.Editor
                 player.GetComponent<PlayerCombatController>().Attack();
                 yield return new WaitForSeconds(.6f);
                 Check(box.Health < box.MaximumHealth && box.Health > 0, "Sword does not damage original-art destructibles over multiple hits.");
-                box.TakeDamage(10, player); Check(player.Wood == wood + 2 && !box.IsAlive, "Destructible did not grant its one-time materials.");
+                box.TakeDamage(10, player); Check(player.Wood == wood && !box.IsAlive && dungeon.GetComponentsInChildren<EnemyLootPickup>().Any(d=>d.Item.Kind==ItemKind.Experience), "Destructible did not scatter its one-time experience pickup.");
                 dungeon.Pool.Enemies[0].TakeDamage(100, player);
                 var chest0 = dungeon.Chests[0]; chest0.Interact(FarmTool.Sword, player);
                 campaign.Teleport(DungeonLayout.At(0, 4));
@@ -111,7 +111,11 @@ namespace SurvivorFarm.Editor
                 dungeon.Boss.TakeDamage(100, player); yield return new WaitForSeconds(.9f);
                 Check(dungeon.State.bossDefeated && !dungeon.Boss.IsAlive, "Boss completion or death animation failed.");
                 var relic = dungeon.Chests[3]; int coins = player.Coins;
-                relic.Interact(FarmTool.Sword, player); Check(player.Coins == coins + 80, "Boss relic reward missing.");
+                relic.Interact(FarmTool.Sword, player); Check(player.Coins == coins, "Opening the chest granted invisible rewards.");
+                var rewards = dungeon.GetComponentsInChildren<EnemyLootPickup>().Where(d => Vector2.Distance(d.transform.position, relic.transform.position)<.1f).ToArray();
+                yield return new WaitForSeconds(.7f);
+                foreach (var drop in rewards) drop.TryCollect(player);
+                Check(player.Coins == coins + 80, "Boss relic pickup reward missing.");
                 var victory = Snapshot(save); Restore(save, victory); relic.Interact(FarmTool.Sword, player);
                 Check(player.Coins == coins + 80 && !dungeon.BeginBoss(), "Victory/reload duplicates unique dungeon rewards.");
                 campaign.Teleport(DungeonLayout.At(0, 55)); yield return new WaitForSeconds(.2f);

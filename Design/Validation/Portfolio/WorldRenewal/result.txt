@@ -1,0 +1,2 @@
+PASS
+Windows executable: guided movement/combo/charge tutorial, charged sword shader and impact, real animated 1-2-3 combo, elite finisher, retracting construction drawer, continuous walls, corners, material upgrades, visual backpack, all four outer ore nodes, world work clock, crops, recipes, save/load, bounded raids, boss patterns, phase II, ending; staged screenshots captured. This is automated verification, not a human balance playtest.

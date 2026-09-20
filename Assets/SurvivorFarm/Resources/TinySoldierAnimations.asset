@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68d0619aa7cee74eb4f66b21a2a27a6, type: 3}
+  m_Name: TinySoldierAnimations
+  m_EditorClassIdentifier: SurvivorFarm.Runtime::SurvivorFarm.Runtime.Player.PlayerAnimationLibrary
+  Clips:
+  - Name: Idle
+    Atlas: {fileID: 2800000, guid: 4adfedefcb2d4dd8bfeca97d0c1878e0, type: 3}
+    Width: 100
+    Height: 100
+    Frames: 6
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 7
+    Loop: 1
+  - Name: Walk
+    Atlas: {fileID: 2800000, guid: a12e31b4e25c41178c2fcc417994d09d, type: 3}
+    Width: 100
+    Height: 100
+    Frames: 8
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 10
+    Loop: 1
+  - Name: Attack
+    Atlas: {fileID: 2800000, guid: 482524740f214009bb4e21e29eb675a0, type: 3}
+    Width: 100
+    Height: 100
+    Frames: 6
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 10
+    Loop: 0
+  - Name: Damage
+    Atlas: {fileID: 2800000, guid: 10b12cb176044682b6b8359116e18eb1, type: 3}
+    Width: 100
+    Height: 100
+    Frames: 4
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 16
+    Loop: 0
+  - Name: Dead
+    Atlas: {fileID: 2800000, guid: a38ef1366be24ad2bebb06f8bd7f250f, type: 3}
+    Width: 100
+    Height: 100
+    Frames: 4
+    Directions: 1
+    HorizontalDirections: 0
+    Pivot: {x: 0.5, y: 0.5}
+    FramesPerSecond: 8
+    Loop: 0

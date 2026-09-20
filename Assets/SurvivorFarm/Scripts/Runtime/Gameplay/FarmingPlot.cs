@@ -51,7 +51,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             if (state == 5)
             {
                 state = 2;
-                inventory.AddFruit(2);
+                inventory.AddFruit(2+(inventory.GetComponent<ToolMastery>()?.Level(FarmTool.Hoe)??1)-1);
                 inventory.AddSeeds(1);
                 FarmGameEvents.RaiseCropHarvested();
                 inventory.GetComponent<GameFeelFeedback>()?.Pulse("+2 fruta · +1 semilla", transform.position);
@@ -62,6 +62,8 @@ namespace SurvivorFarm.Runtime.Gameplay
                 inventory.GetComponent<PlayerCharacterAnimator>()?.PlayAction("Watering", 0, transform.position);
                 CultivationSoilVisual.Emit(transform.position, true);
                 FarmGameEvents.RaiseCropWatered();
+                inventory.GetComponent<ToolMastery>()?.Earn(FarmTool.WateringCan);
+                remainingGrowTime/=1+.15f*((inventory.GetComponent<ToolMastery>()?.Level(FarmTool.WateringCan)??1)-1);
             }
             else
             {
@@ -70,6 +72,7 @@ namespace SurvivorFarm.Runtime.Gameplay
                 inventory.GetComponent<PlayerCharacterAnimator>()?.PlayAction("Hoe", 0, transform.position);
                 CultivationSoilVisual.Emit(transform.position, false);
                 FarmGameEvents.RaiseSeedPlanted();
+                inventory.GetComponent<ToolMastery>()?.Earn(FarmTool.Hoe);
             }
             RefreshPlot();
         }

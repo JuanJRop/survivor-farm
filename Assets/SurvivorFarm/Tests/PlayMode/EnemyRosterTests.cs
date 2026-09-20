@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using SurvivorFarm.Runtime.Gameplay;
+using SurvivorFarm.Runtime.Core;
 using SurvivorFarm.Runtime.Player;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -69,6 +70,21 @@ namespace SurvivorFarm.Tests
             wall.AddComponent<BoxCollider2D>().size = size;
             Physics2D.SyncTransforms();
             return wall;
+        }
+
+        [UnityTest]
+        public IEnumerator PaddedEnemyHealthBarStaysNearItsHeadAfterArchetypeChanges()
+        {
+            var enemy=Enemy(EnemyCombatStyle.Soldier,Vector3.zero,true);
+            var readout=enemy.gameObject.AddComponent<WorldHealthReadout>();
+            yield return null;
+            enemy.TakeDamage(1,player);yield return null;
+            Assert.That(readout.Visible,Is.True);
+            var bar=enemy.transform.Find("Fondo de vida");
+            Assert.That(bar.position.y-enemy.transform.position.y,Is.InRange(.9f,1.4f),"Transparent padding must not push the bar far above the head.");
+            enemy.ReturnToPool();EnemyRoster.Configure(enemy,EnemyCombatStyle.ArcherGoblin,arrows);enemy.ActivateFromPool(Vector3.zero);
+            yield return null;enemy.TakeDamage(1,player);yield return null;
+            Assert.That(bar.position.y-enemy.transform.position.y,Is.LessThan(2f),"A reused original enemy must not inherit padded Tiny RPG bounds.");
         }
 
         [TestCase("SpearGoblinAnimations", 6)]
@@ -223,6 +239,89 @@ namespace SurvivorFarm.Tests
             yield return new WaitForSeconds(enemy.AttackWindup + .75f);
             Assert.AreEqual(4, stats.CurrentHealth);
             Assert.AreEqual(ally.MaximumHealth, ally.CurrentHealth);
+        }
+
+        [TestCase(EnemyCombatStyle.Soldier)]
+        [TestCase(EnemyCombatStyle.Orc)]
+        [TestCase(EnemyCombatStyle.Demon)]
+        [TestCase(EnemyCombatStyle.BloodMonster)]
+        public void TinyRpgEnemiesUseCompleteAuthoredSheetsAndKeepLateralFacing(EnemyCombatStyle style)
+        {
+            var library = Resources.Load<PlayerAnimationLibrary>(EnemyRoster.LibraryName(style));
+            Assert.That(library, Is.Not.Null);
+            foreach (string state in new[] { "Idle", "Walk", "Attack", "Damage", "Dead" })
+            {
+                var clip = library.Find(state);
+                Assert.That(clip, Is.Not.Null, state);
+                Assert.That(clip.Atlas, Is.Not.Null, state);
+                Assert.That(clip.Atlas.width, Is.EqualTo(clip.Frames * 100), state);
+                Assert.That(clip.Atlas.height, Is.EqualTo(100), state);
+                for (int frame = 0; frame < clip.Frames; frame++)
+                {
+                    var sprite = library.Frame(clip, 0, frame);
+                    Assert.That(sprite.rect, Is.EqualTo(new Rect(frame * 100, 0, 100, 100)), state);
+                    Assert.That(sprite.pixelsPerUnit, Is.EqualTo(16));
+                }
+            }
+            var enemy = Enemy(style, Vector3.zero, true);
+            Assert.That(enemy.CombatStyle, Is.EqualTo(style));
+            enemy.SpriteAnimation.Face(Vector2.left);
+            Assert.That(enemy.SpriteAnimation.Visual.flipX, Is.True);
+            enemy.SpriteAnimation.Face(Vector2.up);
+            Assert.That(enemy.SpriteAnimation.Visual.flipX, Is.True, "A lateral-only sprite must not turn right on vertical movement.");
+            enemy.SpriteAnimation.Face(Vector2.right);
+            Assert.That(enemy.SpriteAnimation.Visual.flipX, Is.False);
+            enemy.SpriteAnimation.PlayAttack(Vector2.left, .7f);
+            Assert.That(enemy.SpriteAnimation.Visual.sprite.texture, Is.SameAs(library.Find("Attack").Atlas));
+            enemy.TakeDamage(1, player);
+            Assert.That(enemy.SpriteAnimation.Visual.sprite.texture, Is.SameAs(library.Find("Damage").Atlas));
+            enemy.TakeDamage(999, player);
+            Assert.That(enemy.SpriteAnimation.Visual.sprite.texture, Is.SameAs(library.Find("Dead").Atlas));
+            Assert.That(enemy.IsDying, Is.True);
+            enemy.ReturnToPool(); enemy.ActivateFromPool(Vector3.zero);
+            Assert.That(enemy.SpriteAnimation.Visual.sprite.texture, Is.SameAs(library.Find("Idle").Atlas));
+            Assert.That(enemy.SpriteAnimation.Visual.flipX, Is.False);
+        }
+
+        [TestCase(EnemyCombatStyle.Soldier, EnemyCombatStyle.Orc)]
+        [TestCase(EnemyCombatStyle.ArcherGoblin, EnemyCombatStyle.BloodMonster)]
+        public void KilledPoolSlotCanChangeArchetypeAndStillReceiveSwordHits(EnemyCombatStyle previous, EnemyCombatStyle next)
+        {
+            var enemy = Enemy(previous, Vector3.zero, true);
+            enemy.TakeDamage(999, player);
+            Assert.That(enemy.IsDying, Is.True);
+            Assert.That(enemy.GetComponent<Collider2D>().enabled, Is.False);
+            enemy.ReturnToPool();
+
+            // Raid slots are reconfigured while inactive, before their next activation.
+            Assert.That(EnemyRoster.Configure(enemy, next, arrows), Is.True);
+            enemy.ActivateFromPool(player.transform.position + Vector3.right * .65f);
+            Physics2D.SyncTransforms();
+            Assert.That(enemy.GetComponent<Collider2D>().enabled, Is.True);
+            var combat = player.gameObject.AddComponent<PlayerCombatController>();
+            int healthBefore = enemy.CurrentHealth;
+            combat.AttackTarget(enemy);
+            Assert.That(enemy.CurrentHealth, Is.LessThan(healthBefore), "The actual sword overlap must find the reused enemy.");
+        }
+
+        [Test]
+        public void CampaignWavesIncludeAllFourTinyRpgEnemiesAndKeepRangedRoles()
+        {
+            var settings = ScriptableObject.CreateInstance<SliceSettings>();
+            try
+            {
+                var styles = new System.Collections.Generic.HashSet<EnemyCombatStyle>();
+                for (int day = 0; day < settings.days.Length; day++)
+                    for (int i = 0; i < settings.days[day].enemies.Length; i++)
+                    {
+                        var role = settings.days[day].enemies[i];
+                        var style = EnemyRoster.RaidStyle(role, day + 1, i);
+                        styles.Add(style);
+                        Assert.That(style == EnemyCombatStyle.ArcherGoblin, Is.EqualTo(role == RaidRole.Archer));
+                    }
+                CollectionAssert.IsSubsetOf(new[] { EnemyCombatStyle.Soldier, EnemyCombatStyle.Orc, EnemyCombatStyle.Demon, EnemyCombatStyle.BloodMonster }, styles);
+            }
+            finally { Object.DestroyImmediate(settings); }
         }
 
         [TestCase(EnemyCombatStyle.SpearGoblin, 12)]

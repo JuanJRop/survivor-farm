@@ -41,10 +41,10 @@ namespace SurvivorFarm.Tests
             Object.DestroyImmediate(root);
         }
 
-        [TestCase("IronSword", 6, 4)]
-        [TestCase("RubySword", 8, 4)]
-        [TestCase("HunterBow", 4, 6)]
-        [TestCase("DiamondBow", 4, 8)]
+        [TestCase("IronSword", 6, 11)]
+        [TestCase("RubySword", 8, 11)]
+        [TestCase("HunterBow", 4, 13)]
+        [TestCase("DiamondBow", 4, 15)]
         public void ActiveWeaponKeepsSharedBonusesWithoutBorrowingOtherWeapon(string weapon, int sword, int bow)
         {
             inventory.EquippedEquipment = new[] { "", "", "", weapon, "", "Gem", "DiamondAmulet", "FireElement" };
@@ -70,7 +70,7 @@ namespace SurvivorFarm.Tests
             Assert.That(crafting.WeaponLevel, Is.EqualTo(3));
             Assert.That(combat.ProgressionDamage, Is.EqualTo(4));
             Assert.That(combat.GetAttackDamage(FarmTool.Sword), Is.EqualTo(5));
-            Assert.That(combat.GetAttackDamage(FarmTool.Bow), Is.EqualTo(3));
+            Assert.That(combat.GetAttackDamage(FarmTool.Bow), Is.EqualTo(10));
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace SurvivorFarm.Tests
         }
 
         [Test]
-        public void SwordCueMatchesWholeDamageCircleAndDeduplicatesColliders()
+        public void SwordSweepHitsFacingArcOnlyAndDeduplicatesColliders()
         {
             var combat = inventory.gameObject.AddComponent<PlayerCombatController>();
             var front = Target(new Vector3(.8f, 0));
@@ -95,24 +95,25 @@ namespace SurvivorFarm.Tests
             combat.AttackTarget(front);
             combat.AttackTarget(front);
             Assert.That(front.Damage, Is.EqualTo(1));
-            Assert.That(behind.Damage, Is.EqualTo(1));
+            Assert.That(behind.Damage, Is.Zero);
             Assert.That(distant.Damage, Is.Zero);
-            var ring = inventory.GetComponentInChildren<LineRenderer>();
-            Assert.That(ring.loop, Is.True);
-            for (int i = 0; i < ring.positionCount; i++)
-                Assert.That(Vector2.Distance(ring.GetPosition(i), inventory.transform.position), Is.EqualTo(1.25f).Within(.001f));
+            var sweep = inventory.GetComponent<CombatFeelRangeCue>();
+            Assert.That(sweep.Radius, Is.EqualTo(1.1f).Within(.001f));
+            Assert.That(sweep.IsShowing, Is.True);
+            Assert.That(sweep.SweepVisual.sprite.texture, Is.SameAs(CombatFxLibrary.Atlas));
         }
 
         [Test]
         public void ArrowSpritesAreTheSameExistingAssetAcrossShots()
         {
+            inventory.AddEquipment("Bow"); inventory.AddItem("Arrow", 2);
             inventory.gameObject.AddComponent<PlayerToolbelt>().Select(FarmTool.Bow);
             var combat = inventory.gameObject.AddComponent<PlayerCombatController>();
             var target = Target(Vector3.right * 3f);
             Physics2D.SyncTransforms();
-            combat.AttackTarget(target);
+            combat.TryShootBowAt(target.Transform.position);
             Set(combat, "nextAttackTime", Time.time - 1f);
-            combat.AttackTarget(target);
+            combat.TryShootBowAt(target.Transform.position);
             Sprite sprite = CombatFeelVisuals.Arrow;
             Assert.That(sprite, Is.Not.Null);
             Assert.That(sprite.name, Is.EqualTo("Arrow_17"));
@@ -129,9 +130,10 @@ namespace SurvivorFarm.Tests
 
         [TestCase(false)]
         [TestCase(true)]
-        public void BowWithoutCameraAcquiresAnimalButStillRespectsCover(bool blocked)
+        public void BowCanFireWithoutACameraAndDoesNotNeedToAcquireATarget(bool blocked)
         {
             Assert.That(Camera.main, Is.Null, "This fixture exercises targeting without a camera.");
+            inventory.AddEquipment("Bow"); inventory.AddItem("Arrow", 1);
             inventory.gameObject.AddComponent<PlayerToolbelt>().Select(FarmTool.Bow);
             var combat = inventory.gameObject.AddComponent<PlayerCombatController>();
             var animalObject = Child("Animal");
@@ -145,7 +147,7 @@ namespace SurvivorFarm.Tests
                 wall.AddComponent<BoxCollider2D>().size = new Vector2(.2f, 2f);
             }
             Physics2D.SyncTransforms();
-            combat.Attack();
+            combat.TryShootBowAt(Vector3.right * 3);
             int count = 0;
             foreach (var arrow in Object.FindObjectsByType<ArrowProjectile>(FindObjectsSortMode.None))
             {
@@ -153,7 +155,8 @@ namespace SurvivorFarm.Tests
                 count++;
                 arrow.transform.SetParent(root.transform);
             }
-            Assert.That(count, Is.EqualTo(blocked ? 0 : 1));
+            Assert.That(count, Is.EqualTo(1), "Cover resolves in flight; a fired arrow is still consumed.");
+            Assert.AreEqual(0, inventory.GetItemCount("Arrow"));
         }
 
         [Test]
@@ -196,12 +199,13 @@ namespace SurvivorFarm.Tests
         [UnityTest]
         public IEnumerator BowReleaseWaitsForAnimationAndCanBeCancelled()
         {
+            inventory.AddEquipment("Bow"); inventory.AddItem("Arrow", 2);
             var animator = Animator();
             inventory.gameObject.AddComponent<PlayerToolbelt>().Select(FarmTool.Bow);
             var combat = inventory.gameObject.AddComponent<PlayerCombatController>();
             var target = Target(Vector3.right * 3f);
             Physics2D.SyncTransforms();
-            combat.AttackTarget(target);
+            combat.TryShootBowAt(target.Transform.position);
             Assert.That(Get<Coroutine>(combat, "bowRelease"), Is.Not.Null);
             Assert.That(Object.FindFirstObjectByType<ArrowProjectile>(), Is.Null);
             animator.CancelAction();
@@ -209,9 +213,10 @@ namespace SurvivorFarm.Tests
             Assert.That(target.Damage, Is.Zero);
             Assert.That(Object.FindFirstObjectByType<ArrowProjectile>(), Is.Null);
             Set(combat, "nextAttackTime", Time.time - 1f);
-            combat.AttackTarget(target);
+            combat.TryShootBowAt(target.Transform.position);
             yield return new WaitForSeconds(.85f);
-            Assert.That(target.Damage, Is.EqualTo(1));
+            Assert.That(target.Damage, Is.EqualTo(8));
+            Assert.AreEqual(1, inventory.GetItemCount("Arrow"), "An interrupted draw must not consume an arrow.");
         }
 
         [TestCase(true)]

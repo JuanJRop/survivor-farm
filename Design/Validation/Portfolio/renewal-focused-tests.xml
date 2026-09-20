@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Failed(Child)" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-15 09:28:09Z" end-time="2026-09-15 09:28:24Z" duration="15.3531657">
+  <test-suite type="TestSuite" id="1414" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="352" result="Failed" site="Child" start-time="2026-09-15 09:28:09Z" end-time="2026-09-15 09:28:24Z" duration="15.353166" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1408" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/QA/p/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="352" result="Failed" site="Child" start-time="2026-09-15 09:28:09Z" end-time="2026-09-15 09:28:24Z" duration="15.344420" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="27936" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1409" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="352" result="Failed" site="Child" start-time="2026-09-15 09:28:09Z" end-time="2026-09-15 09:28:24Z" duration="15.341121" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1410" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="352" result="Failed" site="Child" start-time="2026-09-15 09:28:09Z" end-time="2026-09-15 09:28:24Z" duration="15.337997" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="1401" name="WorldRenewalTests" fullname="SurvivorFarm.Tests.WorldRenewalTests" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-09-15 09:28:09Z" end-time="2026-09-15 09:28:24Z" duration="15.333525" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1405" name="FloraPaysOnceAndPersistsWithTheHouseDamage" fullname="SurvivorFarm.Tests.WorldRenewalTests.FloraPaysOnceAndPersistsWithTheHouseDamage" methodname="FloraPaysOnceAndPersistsWithTheHouseDamage" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1550400524" result="Failed" start-time="2026-09-15 09:28:09Z" end-time="2026-09-15 09:28:11Z" duration="2.873103" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'CircleCollider2D' attached to the "Vegetación agrupada" game object, but a script is trying to access it.
+You probably need to add a CircleCollider2D to the game object "Vegetación agrupada". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.CircleCollider2D.set_radius (System.Single value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.Gameplay.ForagePlant.Configure (System.Boolean fruit) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/ForagePlant.cs:20)
+SurvivorFarm.Runtime.World.FarmWorldPolish.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world, SurvivorFarm.Runtime.Player.PlayerInventory player) (at Assets/SurvivorFarm/Scripts/Runtime/World/FarmWorldPolish.cs:85)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:68)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1402" name="MenuHasSeparateHomeOptionsAndSaveBrowser" fullname="SurvivorFarm.Tests.WorldRenewalTests.MenuHasSeparateHomeOptionsAndSaveBrowser" methodname="MenuHasSeparateHomeOptionsAndSaveBrowser" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="1273736836" result="Failed" start-time="2026-09-15 09:28:11Z" end-time="2026-09-15 09:28:14Z" duration="2.484679" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'CircleCollider2D' attached to the "Vegetación agrupada" game object, but a script is trying to access it.
+You probably need to add a CircleCollider2D to the game object "Vegetación agrupada". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.CircleCollider2D.set_radius (System.Single value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.Gameplay.ForagePlant.Configure (System.Boolean fruit) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/ForagePlant.cs:20)
+SurvivorFarm.Runtime.World.FarmWorldPolish.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world, SurvivorFarm.Runtime.Player.PlayerInventory player) (at Assets/SurvivorFarm/Scripts/Runtime/World/FarmWorldPolish.cs:85)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:68)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1406" name="MoveAttachesPreviewAndCancelRestoresThenDemolitionRefundsOnlyPaidCosts" fullname="SurvivorFarm.Tests.WorldRenewalTests.MoveAttachesPreviewAndCancelRestoresThenDemolitionRefundsOnlyPaidCosts" methodname="MoveAttachesPreviewAndCancelRestoresThenDemolitionRefundsOnlyPaidCosts" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="2100615357" result="Failed" start-time="2026-09-15 09:28:14Z" end-time="2026-09-15 09:28:16Z" duration="2.492008" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'CircleCollider2D' attached to the "Vegetación agrupada" game object, but a script is trying to access it.
+You probably need to add a CircleCollider2D to the game object "Vegetación agrupada". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.CircleCollider2D.set_radius (System.Single value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.Gameplay.ForagePlant.Configure (System.Boolean fruit) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/ForagePlant.cs:20)
+SurvivorFarm.Runtime.World.FarmWorldPolish.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world, SurvivorFarm.Runtime.Player.PlayerInventory player) (at Assets/SurvivorFarm/Scripts/Runtime/World/FarmWorldPolish.cs:85)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:68)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1407" name="NativeEnvironmentFramesChangeAndMeleeRangeIsExpanded" fullname="SurvivorFarm.Tests.WorldRenewalTests.NativeEnvironmentFramesChangeAndMeleeRangeIsExpanded" methodname="NativeEnvironmentFramesChangeAndMeleeRangeIsExpanded" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="939214143" result="Failed" start-time="2026-09-15 09:28:16Z" end-time="2026-09-15 09:28:19Z" duration="2.487806" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'CircleCollider2D' attached to the "Vegetación agrupada" game object, but a script is trying to access it.
+You probably need to add a CircleCollider2D to the game object "Vegetación agrupada". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.CircleCollider2D.set_radius (System.Single value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.Gameplay.ForagePlant.Configure (System.Boolean fruit) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/ForagePlant.cs:20)
+SurvivorFarm.Runtime.World.FarmWorldPolish.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world, SurvivorFarm.Runtime.Player.PlayerInventory player) (at Assets/SurvivorFarm/Scripts/Runtime/World/FarmWorldPolish.cs:85)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:68)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1404" name="NoFreeCatAndPurchaseRequiresDayAndAllMaterials" fullname="SurvivorFarm.Tests.WorldRenewalTests.NoFreeCatAndPurchaseRequiresDayAndAllMaterials" methodname="NoFreeCatAndPurchaseRequiresDayAndAllMaterials" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="138795613" result="Failed" start-time="2026-09-15 09:28:19Z" end-time="2026-09-15 09:28:21Z" duration="2.490475" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'CircleCollider2D' attached to the "Vegetación agrupada" game object, but a script is trying to access it.
+You probably need to add a CircleCollider2D to the game object "Vegetación agrupada". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.CircleCollider2D.set_radius (System.Single value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.Gameplay.ForagePlant.Configure (System.Boolean fruit) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/ForagePlant.cs:20)
+SurvivorFarm.Runtime.World.FarmWorldPolish.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world, SurvivorFarm.Runtime.Player.PlayerInventory player) (at Assets/SurvivorFarm/Scripts/Runtime/World/FarmWorldPolish.cs:85)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:68)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1403" name="TreesHaveSingleGroundedVisualSolidTrunksAndTiersIncludingVillageProps" fullname="SurvivorFarm.Tests.WorldRenewalTests.TreesHaveSingleGroundedVisualSolidTrunksAndTiersIncludingVillageProps" methodname="TreesHaveSingleGroundedVisualSolidTrunksAndTiersIncludingVillageProps" classname="SurvivorFarm.Tests.WorldRenewalTests" runstate="Runnable" seed="782855487" result="Failed" start-time="2026-09-15 09:28:21Z" end-time="2026-09-15 09:28:24Z" duration="2.494811" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.WorldRenewalTests+<Setup>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\WorldRenewalTests.cs:22
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'CircleCollider2D' attached to the "Vegetación agrupada" game object, but a script is trying to access it.
+You probably need to add a CircleCollider2D to the game object "Vegetación agrupada". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.CircleCollider2D.set_radius (System.Single value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.Gameplay.ForagePlant.Configure (System.Boolean fruit) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/ForagePlant.cs:20)
+SurvivorFarm.Runtime.World.FarmWorldPolish.Configure (SurvivorFarm.Runtime.Gameplay.ValleyWorld world, SurvivorFarm.Runtime.Player.PlayerInventory player) (at Assets/SurvivorFarm/Scripts/Runtime/World/FarmWorldPolish.cs:85)
+SurvivorFarm.Runtime.World.PortfolioFarmSetup.Configure (SurvivorFarm.Runtime.Core.PortfolioSession session) (at Assets/SurvivorFarm/Scripts/Runtime/World/PortfolioFarmSetup.cs:68)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__97.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:80)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,2 @@
+PASS
+Native Windows checks passed: compact interaction and canopy fading, original livestock and reusable crafted saddle, mastery window, persistent village upgrades and trained guard, split dungeon wave and live miniboss, physical bow/arrows/chest loot, security and repair, animated shrines, destructible supplies, running dungeon clock, occupied town liberated without resurrecting civilians. Screenshots are arranged gameplay captures with QA supplies.

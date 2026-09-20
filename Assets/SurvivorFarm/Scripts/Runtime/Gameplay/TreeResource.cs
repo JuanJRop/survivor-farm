@@ -11,6 +11,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected override ItemKind ResourceKind => ItemKind.Wood;
         protected override float GatherDuration => 2.6f;
         protected override int GatherHitCount => 5;
+        protected override float HighlightScale => 1;
         protected override string GatherStartText => "Talando árbol...";
         protected override string GatherPresentText => "Talando árbol";
 

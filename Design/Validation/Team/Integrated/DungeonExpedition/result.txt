@@ -1,0 +1,2 @@
+PASS: connected physical paths to all five exploration rooms; separate sealed boss arena; no NPCs or village overlap.
+PASS: real sword destruction, real corridor walking, room camera captures, pooled deaths, full GameSaveSystem roundtrip, boss telegraph/dodge/retry, unique relic reward and exit.

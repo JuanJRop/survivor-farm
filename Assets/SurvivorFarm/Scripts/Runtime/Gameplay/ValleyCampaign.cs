@@ -514,7 +514,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             ClearGathering();
             if(animator!=null&&animator.CurrentClip==clip)animator.CancelAction();
         }
-        void OnDisable()=>CancelGathering();
+        protected override void OnDisable(){CancelGathering();base.OnDisable();}
         void ClearGathering()
         {
             if(activeStats!=null)activeStats.StatsChanged-=CheckGathererHealth;

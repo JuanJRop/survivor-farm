@@ -1,0 +1,1 @@
+Succeeded | errors=0 | bytes=98844649 | duration=00:01:00.2163463

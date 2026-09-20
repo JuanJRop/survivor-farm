@@ -16,13 +16,13 @@ namespace SurvivorFarm.Runtime.World
 
         private void Awake() => lens = GetComponent<Camera>();
 
-        public void Impact(Vector3 point, bool heavy, bool finisher)
+        public void Impact(Vector3 point, bool heavy, bool finisher,bool charged=false)
         {
             if (!GameFeelFeedback.Enabled || CombatTimeFeedback.ReducedMotion) return;
             float now = Time.unscaledTime;
-            float requested = finisher ? .105f : heavy ? .075f : .035f;
+            float requested = charged?.16f:finisher ? .14f : heavy ? .11f : .043f;
             if (now >= until || requested >= amplitude) { amplitude = requested; startedAt = now; }
-            until = Mathf.Max(until, now + (heavy ? .14f : .09f));
+            until = Mathf.Max(until, now + (charged?.19f:heavy ? .16f : .09f));
             if (finisher) { zoomUntil = now + .32f; actionPoint = point; }
         }
 

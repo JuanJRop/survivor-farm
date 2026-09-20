@@ -41,6 +41,14 @@ namespace SurvivorFarm.Runtime.Gameplay
         public void Face(Vector2 facing)
         {
             if (dead || visual == null || facing.sqrMagnitude < .0001f) return;
+            // Tiny RPG supplies a single lateral view. Keep its last horizontal
+            // facing while moving vertically instead of snapping back to the right.
+            if (library != null && library.Find("Idle")?.Directions == 1)
+            {
+                direction = 0;
+                if (Mathf.Abs(facing.x) > .001f) visual.flipX = facing.x < 0;
+                return;
+            }
             direction = Mathf.Abs(facing.x) > Mathf.Abs(facing.y) ? 2 : facing.y > 0 ? 1 : 0;
             visual.flipX = direction == 2 && facing.x < 0;
         }

@@ -91,7 +91,7 @@ namespace SurvivorFarm.Runtime.UI
             {
                 var stock=Rect(content,"Materiales disponibles",24,68,800,38);
                 MaterialCostBadge.Create(stock,"Wood",12,3,240).Set(inventory.Wood,0,true);MaterialCostBadge.Create(stock,"Stone",276,3,240).Set(inventory.Stone,0,true);MaterialCostBadge.Create(stock,"Iron",540,3,240).Set(progress.Data.iron,0,true);
-                string[] kinds={"Campfire","Fence","Chest","Workbench","Beacon"};
+                string[] kinds={"Campfire","Bed","Chest","Workbench","Beacon"};
                 for(int i=0;i<kinds.Length;i++)
                 {
                     string kind=kinds[i];ConstructionSystem.Cost(kind,out var w,out var s,out var iron);

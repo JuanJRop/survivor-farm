@@ -2,78 +2,73 @@ using UnityEngine;
 
 namespace SurvivorFarm.Runtime.Gameplay
 {
+    /// <summary>Supplied pixel-art sword sweeps and charge animation, synchronized to accepted attacks.</summary>
     public sealed class CombatFeelRangeCue : MonoBehaviour
     {
-        private const int Segments = 48;
-        private const float Duration = 0.18f;
-        private LineRenderer ring;
-        private LineRenderer slash;
-        private Vector3 center;
-        private float radius;
-        private bool heavy;
-        private int step;
-        private Material material;
-        private float until;
+        private CombatSpriteEffect sweep;
+        private SpriteRenderer charge;
+        private CombatSpriteEffect areaBurst;
+        private float chargeStartedAt;
+        public float Radius { get; private set; }
+        public bool IsShowing => sweep != null && sweep.IsPlaying;
+        public bool IsCharging => charge != null && charge.enabled;
+        public SpriteRenderer SweepVisual => sweep != null ? sweep.Visual : null;
+        public SpriteRenderer ChargeVisual => charge;
 
-        public void Show(Vector3 center, float radius, bool heavy = false, int step = 1)
+        private void Ensure()
         {
-            this.center = center; this.radius = radius; this.heavy = heavy; this.step = step;
-            if (ring == null)
-            {
-                var child = new GameObject("Barrido de espada");
-                child.transform.SetParent(transform, false);
-                ring = child.AddComponent<LineRenderer>();
-                material = new Material(Shader.Find("Sprites/Default")) { hideFlags = HideFlags.DontSave };
-                ring.sharedMaterial = material;
-                ring.useWorldSpace = true;
-                ring.loop = true;
-                ring.positionCount = Segments;
-                ring.widthMultiplier = 0.035f;
-                ring.sortingOrder = 11998;
-                var stroke = new GameObject("Trazo de espada");
-                stroke.transform.SetParent(transform, false);
-                slash = stroke.AddComponent<LineRenderer>();
-                slash.sharedMaterial = material; slash.useWorldSpace = true;
-                slash.positionCount = 28; slash.sortingOrder = 11999;
-                slash.widthCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(.7f, 1), new Keyframe(1, .15f));
-            }
-            for (int i = 0; i < Segments; i++)
-            {
-                float angle = i * Mathf.PI * 2f / Segments;
-                ring.SetPosition(i, center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius);
-            }
-            until = Time.unscaledTime + Duration;
-            ring.enabled = true;
-            Refresh();
+            if (sweep != null) return;
+            var trail = new GameObject("Estela de espada · Combat FX");
+            trail.transform.SetParent(transform, false);
+            sweep = trail.AddComponent<CombatSpriteEffect>();
+            var energy = new GameObject("Carga de espada · Combat FX");
+            energy.transform.SetParent(transform, false);
+            charge = energy.AddComponent<SpriteRenderer>();
+            charge.sortingOrder = 11997; charge.enabled = false;
         }
 
-        private void Update() => Refresh();
-
-        private void Refresh()
+        public void Show(Vector3 center, float radius, bool heavy = false, int step = 1, bool charged = false, Vector2 heading = default, int swordTier = 2)
         {
-            if (ring == null) return;
-            float fade = Mathf.Clamp01((until - Time.unscaledTime) / Duration);
-            Color tint = heavy ? new Color(1f, .76f, .32f) : new Color(.94f, .99f, .86f);
-            ring.startColor = ring.endColor = new Color(tint.r, tint.g, tint.b, fade * (heavy ? .35f : .17f));
-            ring.enabled = fade > 0f;
-            slash.enabled = ring.enabled;
-            slash.widthMultiplier = heavy ? .145f : .075f;
-            slash.startColor = new Color(tint.r, tint.g, tint.b, 0);
-            slash.endColor = new Color(tint.r, tint.g, tint.b, fade * .9f);
-            float direction = step == 2 ? -1 : 1;
-            for (int i = 0; i < slash.positionCount; i++)
+            Ensure(); HideCharge(); Radius = radius;
+            sweep.transform.position = center;
+            sweep.transform.rotation = Quaternion.Euler(0, 0,
+                heading.sqrMagnitude > .01f ? Mathf.Atan2(heading.y, heading.x) * Mathf.Rad2Deg : 0);
+            int row = charged && swordTier >= 2 ? CombatFxLibrary.ChargedSweep : heavy ? CombatFxLibrary.HeavySweep : CombatFxLibrary.NormalSweep;
+            Color tint = charged ? Color.white : swordTier >= 3 ? new Color(.55f, .87f, 1) : Color.white;
+            sweep.Play(row, charged ? .36f : heavy ? .28f : .21f, radius * 2f, 11998, tint, step == 2);
+            if (charged && swordTier >= 3)
             {
-                float angle = direction * ((1 - fade) * 5.5f + i / 27f * 2.3f);
-                slash.SetPosition(i, center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius * .96f);
+                if (areaBurst == null)
+                {
+                    var go = new GameObject("Onda de maestría III"); go.transform.SetParent(transform, false);
+                    areaBurst = go.AddComponent<CombatSpriteEffect>();
+                }
+                areaBurst.transform.position = center;
+                // An opaque golden ring communicates the area without stacking a
+                // second spiked explosion over the player and the actual hit spark.
+                areaBurst.Play(CombatFxLibrary.ChargeSpark, .32f, radius * 2, 11996, Color.white);
             }
         }
 
-        private void OnDisable() { if (ring != null) ring.enabled = false; if(slash != null)slash.enabled=false; until = 0f; }
-        private void OnDestroy()
+        public void ShowCharge(Vector3 center, float progress, Vector2 heading, int swordTier = 2)
         {
-            if (material != null) Destroy(material);
-            if (ring != null) Destroy(ring.gameObject);
-            if (slash != null) Destroy(slash.gameObject);
+            if (swordTier < 2) { HideCharge(); return; }
+            Ensure();
+            if (!charge.enabled) chargeStartedAt = Time.unscaledTime;
+            var aim = heading.sqrMagnitude > .01f ? heading.normalized : Vector2.down;
+            Vector3 position = center + (Vector3)aim * .45f + Vector3.up * .12f;
+            charge.transform.position = new Vector3(Mathf.Round(position.x * 16) / 16f, Mathf.Round(position.y * 16) / 16f, position.z);
+            // Fixed scales and nearest-neighbour sampling preserve the original pixel edges while charging.
+            charge.transform.localScale = Vector3.one * (swordTier >= 3 ? .5f : .375f);
+            // Keep the authored golden sparkle alive while the player holds the charge.
+            float phase = .12f + Mathf.Repeat((Time.unscaledTime - chargeStartedAt) / .75f, .67f);
+            charge.sprite = CombatFxLibrary.At(CombatFxLibrary.ChargeSpark, phase);
+            if (charge.sprite != null) charge.sprite.texture.filterMode = FilterMode.Point;
+            charge.color = swordTier >= 3 ? new Color(.6f, .9f, 1, 1) : Color.white;
+            charge.enabled = GameFeelFeedback.Enabled && charge.sprite != null;
         }
+
+        public void HideCharge() { if (charge != null) charge.enabled = false; }
+        private void OnDisable() { HideCharge(); if (sweep != null) sweep.Stop(); if (areaBurst != null) areaBurst.Stop(); }
     }
 }

@@ -1,0 +1,2 @@
+PASS
+Native Windows checks passed: security and repair, physical chest loot, persistent rewards, stone entrances, solid animated shrines, destructible supplies, dungeon clock advances, occupied town liberated without resurrecting residents. Screenshots are arranged gameplay captures.

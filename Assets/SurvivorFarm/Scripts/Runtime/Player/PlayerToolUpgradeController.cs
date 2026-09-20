@@ -81,6 +81,8 @@ namespace SurvivorFarm.Runtime.Player
         {
             if (tool != FarmTool.Axe && tool != FarmTool.Pickaxe) return false;
             int currentLevel = GetToolLevel(tool);
+            var mastery=GetComponent<ToolMastery>();
+            if(mastery!=null&&!mastery.CanUnlock(tool)){FarmNotificationCenter.Show(mastery.Requirement(tool));return false;}
             if (currentLevel >= MaxToolLevel)
             {
                 FarmNotificationCenter.Show($"{PlayerToolbelt.GetDisplayName(tool)} ya esta al maximo.");

@@ -128,7 +128,7 @@ namespace SurvivorFarm.Tests
             Assert.Less(Vector2.Distance(enemy.transform.position, home), .2f);
             Assert.IsFalse(enemy.IsPreparingAttack);
             Assert.IsFalse(camp.CanOccupy(Vector2.zero));
-            Assert.IsFalse(camp.CanOccupy(camp.transform.position + Vector3.left * 7));
+            Assert.IsTrue(camp.CanOccupy(camp.transform.position + Vector3.left * 7));
             foreach (var guard in camp.Members) Assert.IsFalse(VillageLayout.IsVillage(guard.transform.position));
         }
 
@@ -165,8 +165,8 @@ namespace SurvivorFarm.Tests
             Assert.AreEqual(3, camp.Remaining);
         }
 
-        [Test]
-        public void LastGuardAutomaticallyRewardsOnceWithoutReachingTheChest()
+        [UnityTest]
+        public IEnumerator LastGuardUnlocksChestAndPhysicalRewardsPayOnlyOnce()
         {
             var camp = Camp();
             Assert.IsFalse(camp.TryClaim(player));
@@ -175,8 +175,14 @@ namespace SurvivorFarm.Tests
             Assert.IsFalse(camp.Claimed);
             foreach (var guard in camp.Members.Skip(1)) guard.TakeDamage(100, player);
             Assert.IsTrue(camp.IsCleared);
-            Assert.IsTrue(camp.Claimed);
+            Assert.IsFalse(camp.Claimed);
             Assert.IsFalse(camp.TryClaim(player));
+            foreach (var drop in camp.GetComponentsInChildren<EnemyLootPickup>()) drop.Discard();
+            player.transform.position = camp.Chest.transform.position;
+            Assert.IsTrue(camp.TryClaim(player));
+            Assert.AreEqual(0, player.Coins);
+            yield return new WaitForSeconds(.7f);
+            foreach (var drop in camp.GetComponentsInChildren<EnemyLootPickup>()) drop.TryCollect(player);
             Assert.AreEqual(camp.Definition.Coins, player.Coins);
             Assert.AreEqual(camp.Definition.Food, player.Food);
             Assert.AreEqual(camp.Definition.Iron, player.GetComponent<AdventureProgress>().Data.iron);
@@ -188,12 +194,17 @@ namespace SurvivorFarm.Tests
         }
 
         [UnityTest]
-        public IEnumerator LegacyClearedChestPaysOnceAfterRestoreButClaimedChestNeverPaysAgain()
+        public IEnumerator LegacyClearedChestWaitsForInteractionAndClaimedChestNeverPaysAgain()
         {
             var camp = Camp();
             camp.Restore(new EnemyCampState { id = state.id, center = state.center, defeatedMask = 7 });
             Assert.AreEqual(0, player.Coins, "Restore must finish before rewards are added.");
             yield return null;
+            Assert.AreEqual(0, player.Coins);
+            player.transform.position = camp.Chest.transform.position;
+            Assert.IsTrue(camp.TryClaim(player));
+            yield return new WaitForSeconds(.7f);
+            foreach (var drop in camp.GetComponentsInChildren<EnemyLootPickup>()) drop.TryCollect(player);
             Assert.AreEqual(camp.Definition.Coins, player.Coins);
             Assert.IsTrue(camp.Claimed);
             camp.Restore(new EnemyCampState { id = state.id, center = state.center, defeatedMask = 7, claimed = true });
@@ -201,14 +212,18 @@ namespace SurvivorFarm.Tests
             Assert.AreEqual(camp.Definition.Coins, player.Coins);
         }
 
-        [Test]
-        public void ReentrantVictoryCallbacksCannotDuplicateCampSupplies()
+        [UnityTest]
+        public IEnumerator ReentrantPickupCallbacksCannotDuplicateCampSupplies()
         {
             var camp = Camp();
             player.transform.position = camp.Chest.transform.position;
             System.Action repeat = () => { camp.Defeated(2); camp.TryClaim(player); };
+            foreach (var guard in camp.Members) guard.TakeDamage(100, player);
+            foreach (var drop in camp.GetComponentsInChildren<EnemyLootPickup>()) drop.Discard();
+            Assert.IsTrue(camp.TryClaim(player));
+            yield return new WaitForSeconds(.7f);
             player.InventoryChanged += repeat;
-            try { foreach (var guard in camp.Members) guard.TakeDamage(100, player); }
+            try { foreach (var drop in camp.GetComponentsInChildren<EnemyLootPickup>()) drop.TryCollect(player); }
             finally { player.InventoryChanged -= repeat; }
             Assert.AreEqual(camp.Definition.Coins, player.Coins);
             Assert.AreEqual(camp.Definition.Food, player.Food);
@@ -235,9 +250,27 @@ namespace SurvivorFarm.Tests
             Assert.AreEqual(0, player.Coins); Assert.IsFalse(camp.Claimed);
             stats.Restore(5, 5, 1);
             yield return null;
+            Assert.AreEqual(0, player.Coins); Assert.IsFalse(camp.Claimed);
+            player.transform.position = camp.Chest.transform.position;
+            Assert.IsTrue(camp.TryClaim(player));
+            yield return new WaitForSeconds(.7f);
+            foreach (var drop in camp.GetComponentsInChildren<EnemyLootPickup>()) drop.TryCollect(player);
             Assert.AreEqual(camp.Definition.Coins, player.Coins); Assert.IsTrue(camp.Claimed);
             yield return null;
             Assert.AreEqual(camp.Definition.Coins, player.Coins);
+        }
+
+        [Test]
+        public void AttackingGuardKeepsAggroBeyondOldCampRadiusUntilVeryFarAway()
+        {
+            var camp = Camp(1); var guard = camp.Members[0];
+            guard.TakeDamage(1, player);
+            player.transform.position = guard.transform.position + Vector3.down * 14;
+            Assert.IsTrue(guard.IsProvoked); Assert.IsTrue(camp.CanPursue(guard));
+            player.transform.position = guard.transform.position + Vector3.down * 24;
+            Assert.IsFalse(camp.CanPursue(guard));
+            guard.ReturnToPool(); guard.ActivateFromPool(guard.GuardPosition);
+            Assert.IsFalse(guard.IsProvoked);
         }
 
         [Test]

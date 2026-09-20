@@ -26,7 +26,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             Refresh();
         }
 
-        private void OnEnable() => Refresh();
+        protected override void OnEnable() { base.OnEnable(); Refresh(); }
         public override string GetInteractionLabel(FarmTool selectedTool) => repaired ? string.Empty :
             $"Reparar puente: {woodCost} madera y {stoneCost} piedra";
         public override void SetHighlighted(bool highlighted) { }

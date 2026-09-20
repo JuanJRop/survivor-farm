@@ -1,0 +1,9 @@
+Combat FX 1.1
+Artwork by Raphael Hatencia (@RaphaelHatencia), RagnaPixel Studio (@ragnapixel).
+Source: https://ragnapixel.itch.io/
+License: Creative Commons Attribution 4.0 International (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+
+Integrated in Survival Farm as sprite animations. Changes: frame slicing, playback
+speed, rotation, scaling, and surface-specific color tinting. Original artwork
+and original public-license.txt are included with the project.

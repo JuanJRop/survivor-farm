@@ -62,6 +62,8 @@ namespace SurvivorFarm.Tests
         public void ToolbeltOnlyCyclesWeaponsAndRejectsRetiredTools()
         {
             var belt = player.AddComponent<PlayerToolbelt>();
+            belt.SelectNext(); Assert.AreEqual(FarmTool.Sword, belt.SelectedTool, "Bow must be found before cycling to it.");
+            inventory.AddEquipment("Bow");
             belt.SelectNext(); Assert.AreEqual(FarmTool.Bow, belt.SelectedTool);
             belt.SelectNext(); Assert.AreEqual(FarmTool.Sword, belt.SelectedTool);
             belt.SelectPrevious(); Assert.AreEqual(FarmTool.Bow, belt.SelectedTool);

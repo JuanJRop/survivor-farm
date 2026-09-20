@@ -98,6 +98,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         }
         protected override void OnDefeated(PlayerInventory inventory)
         {
+            DropLoot();
             if(farmSession!=null){farmPattern.Stop();farmSession.Win();FarmGameEvents.RaiseEnemyDefeated();return;}
             warning.enabled = false; expedition.CompleteBoss(); FarmGameEvents.RaiseEnemyDefeated();
         }

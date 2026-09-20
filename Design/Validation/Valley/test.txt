@@ -1,0 +1,3 @@
+Valley Play Mode verification
+All progression and encounter assertions passed.
+PASS: gates, six zones, village quests, rank rewards, actual interactions, guardian, boss phases and retry, reward idempotence, save roundtrip.

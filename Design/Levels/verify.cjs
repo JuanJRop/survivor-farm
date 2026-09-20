@@ -1,0 +1,20 @@
+const {chromium}=require('C:/Users/Juan Jose/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const path=require('path');
+const {pathToFileURL}=require('url');
+(async()=>{
+ const browser=await chromium.launch({headless:true,channel:'chrome'});
+ const page=await browser.newPage({viewport:{width:800,height:1000},deviceScaleFactor:1});
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(pathToFileURL(path.join(__dirname,'preview.html')).href);
+ const frame=page.frameLocator('iframe');
+ await frame.locator('#sf-four-zones[data-ready="true"]').waitFor({timeout:15000});
+ await frame.locator('#sf-four-zones').screenshot({path:path.join(__dirname,'cuatro-zonas.png')});
+ await frame.getByRole('button',{name:'4 · Jefe',exact:true}).click();
+ if(await frame.locator('section[data-map]:visible').count()!==1)throw Error('Zone selection failed');
+ await frame.getByRole('button',{name:'Las cuatro zonas',exact:true}).click();
+ await page.setViewportSize({width:360,height:1100});
+ if(await page.evaluate(()=>document.documentElement.scrollWidth>360))throw Error('Mobile overflow');
+ if(errors.length)throw Error(errors.join('\n'));
+ console.log('PASS: sprites loaded, four-zone overview, detail selection, 360px layout.');
+ await browser.close();
+})();

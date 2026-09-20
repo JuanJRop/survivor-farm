@@ -1,0 +1,1 @@
+PASS: exterior storefronts, armory, food and material services, direct close, unchanged player/camera, outside bed placement/sleep, legacy shop/house save recovery with furniture and resources preserved.

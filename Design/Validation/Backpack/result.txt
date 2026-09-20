@@ -1,0 +1,2 @@
+PASS
+Original sprite icons loaded. Dynamic stacks beyond 50 slots. Drag reorder. Categories. Save JSON roundtrip preserves 350 seeds and slot order. Equipment ownership, slot compatibility, accessory uniqueness, weapon activation and equipment JSON roundtrip verified. Separate windows and no weapons in backpack. Test data excluded from disk saves.

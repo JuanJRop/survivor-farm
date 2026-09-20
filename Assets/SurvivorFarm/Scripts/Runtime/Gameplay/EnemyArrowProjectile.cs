@@ -9,6 +9,9 @@ namespace SurvivorFarm.Runtime.Gameplay
         private readonly RaycastHit2D[] hits = new RaycastHit2D[32];
         private Transform target;
         private PlayerSurvivalStats stats;
+        private VillageResidentHealth resident;
+        private FarmDefense defense;
+        private VillageHouseHealth house;
         private HomeSafeZone safeZone;
         private Vector2 direction;
         private int generation, damage;
@@ -22,6 +25,9 @@ namespace SurvivorFarm.Runtime.Gameplay
             generation = source.SpawnGeneration;
             target = player;
             stats = player.GetComponent<PlayerSurvivalStats>();
+            resident=player.GetComponent<VillageResidentHealth>();
+            defense=player.GetComponent<FarmDefense>();
+            house=player.GetComponent<VillageHouseHealth>();
             safeZone = protection;
             direction = heading.sqrMagnitude > .0001f ? heading.normalized : Vector2.down;
             damage = amount;
@@ -36,6 +42,9 @@ namespace SurvivorFarm.Runtime.Gameplay
             Source = null;
             target = null;
             stats = null;
+            resident=null;
+            defense=null;
+            house=null;
             safeZone = null;
             direction = Vector2.zero;
             expiresAt = 0;
@@ -45,7 +54,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         private void Update()
         {
             if (Source == null || Source.SpawnGeneration != generation || !Source.CanLaunchProjectile ||
-                target == null || !target.gameObject.activeInHierarchy || stats == null || stats.CurrentHealth <= 0 || Time.time >= expiresAt ||
+                target == null || !target.gameObject.activeInHierarchy || (house!=null?!house.IsAlive:defense!=null?!defense.IsAlive:resident!=null?!resident.IsAlive:stats == null || stats.CurrentHealth <= 0) || Time.time >= expiresAt ||
                 (safeZone != null && safeZone.Contains(target.position)))
             {
                 ReturnToPool();
@@ -77,10 +86,17 @@ namespace SurvivorFarm.Runtime.Gameplay
             if (collision != null)
             {
                 bool playerHit = collision.transform.IsChildOf(target);
-                var victim = stats;
+                var victim = collision.GetComponentInParent<PlayerSurvivalStats>();
+                var civilian=collision.GetComponentInParent<VillageResidentHealth>();
+                var structure=collision.GetComponentInParent<FarmDefense>();
+                var home=collision.GetComponentInParent<VillageHouseHealth>();
+                bool attackStructure=structure!=null&&(!FortressPieces.IsWall(structure.Kind)||!(Source is RaidEnemy raid)||raid.SelectedTarget==structure.transform);
                 int amount = damage;
                 ReturnToPool();
-                if (playerHit) victim.TakeDamage(amount);
+                if(attackStructure)structure.TakeDamage(amount,null);
+                else if(home!=null)home.TakeDamage(amount,null);
+                else if(civilian!=null)civilian.TakeDamage(amount,null);
+                else victim?.TakeDamage(amount);
                 return;
             }
             transform.position = new Vector3(end.x, end.y, transform.position.z);

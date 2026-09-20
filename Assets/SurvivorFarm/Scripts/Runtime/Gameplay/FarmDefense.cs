@@ -13,7 +13,10 @@ namespace SurvivorFarm.Runtime.Gameplay
         private ConstructionSystem construction;
         private PlayerInventory player;
         private SpriteRenderer visual;
-        private float nextShot, nextRepair;
+        private float nextShot, nextRepair, nextScan;
+        private PlayerProjectilePool projectiles;
+        private readonly List<Collider2D> targets = new List<Collider2D>(32);
+        private readonly List<RaycastHit2D> sightHits = new List<RaycastHit2D>(16);
         private int health, maximum;
         private CombatTelegraph range;
         public bool IsCore { get; private set; }
@@ -24,16 +27,16 @@ namespace SurvivorFarm.Runtime.Gameplay
         public string Kind => IsCore ? "Core" : data?.kind;
         public Vector2 ContactPoint(Vector2 from)
         {
-            var collider=GetComponent<BoxCollider2D>();
+            var collider=GetComponent<Collider2D>();
             return collider!=null?collider.ClosestPoint(from):(Vector2)transform.position;
         }
-        public override bool IsAvailable => IsAlive && health < maximum;
+        public override bool IsAvailable => !IsCore && IsAlive && health < maximum;
         public static bool IsDefense(string kind) => FortressPieces.IsWall(kind) || kind == "Trap" || kind == "Turret";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetRegistry() => all.Clear();
-        private void OnEnable() { if(!all.Contains(this))all.Add(this); }
-        private void OnDisable() => all.Remove(this);
+        protected override void OnEnable() { base.OnEnable(); if(!all.Contains(this))all.Add(this); }
+        protected override void OnDisable() { all.Remove(this); base.OnDisable(); }
 
         public void Configure(BuildingData state, ConstructionSystem owner, PlayerInventory inventory)
         {
@@ -47,7 +50,12 @@ namespace SurvivorFarm.Runtime.Gameplay
                 GetComponent<Collider2D>().isTrigger=true;
                 if(visual!=null){visual.color=new Color(.75f,.84f,.95f);visual.transform.localScale*=.85f;}
             }
-            if(Kind=="Turret")range=CombatTelegraph.Create(transform,"Ballesta · alcance");
+            if(Kind=="Turret")
+            {
+                range=CombatTelegraph.Create(transform,"Ballesta · alcance");
+                if(projectiles==null)projectiles=PlayerProjectilePool.Create(transform,1,2,4);
+            }
+            nextScan=Time.time+(Mathf.Abs(GetInstanceID())%15)*.01f;
             Refresh();
         }
         public void ConfigureCore(PlayerInventory inventory, int maxHealth)
@@ -56,6 +64,8 @@ namespace SurvivorFarm.Runtime.Gameplay
             visual=GetComponentInChildren<SpriteRenderer>();
         }
         public void RestoreHealth(int value) { health=Mathf.Clamp(value,1,maximum); Refresh(); }
+        public void ReduceStrength(int amount)
+        {if(!IsCore)return;maximum=Mathf.Max(12,maximum-Mathf.Max(0,amount));health=Mathf.Min(health,maximum);Refresh();}
         public override string GetInteractionLabel(FarmTool tool) =>
             $"Reparar {(IsCore?"pozo":ConstructionSystem.Label(Kind))} · 2 madera · {health}/{maximum}";
         public override void Interact(FarmTool tool, PlayerInventory inventory) => Repair(inventory);
@@ -70,14 +80,13 @@ namespace SurvivorFarm.Runtime.Gameplay
         }
         public void TakeDamage(int amount,PlayerInventory source)
         {
-            if(!IsAlive||amount<=0)return;
-            health=Mathf.Max(0,health-amount);Refresh();VisibleHitFeedback.Play(gameObject);
+            if(!IsAlive||amount<=0||IsCore)return;
+            health=Mathf.Max(0,health-amount);Refresh();VisibleHitFeedback.Play(gameObject,.12f,false);
             player?.GetComponent<GameFeelFeedback>()?.Pulse("−"+amount,transform.position,true,false,false);
             player?.GetComponent<AudioFeedback>()?.Play(health<=0?CombatSound.Break:CombatSound.Chop,transform.position,.7f);
             CombatHitParticles.Spawn(transform.position,transform.parent,Kind=="StoneWall"||Kind=="ReinforcedWall"?ImpactSurface.Stone:ImpactSurface.Wood,false,health<=0);
             if(health>0)return;
-            if(IsCore)PortfolioSession.Instance?.Lose("El pozo ha caído. La granja necesita sus defensas.");
-            else construction?.RemoveDestroyed(data);
+            construction?.RemoveDestroyed(data);
         }
         private void Refresh()
         {
@@ -91,11 +100,13 @@ namespace SurvivorFarm.Runtime.Gameplay
         }
         private void Update()
         {
-            if(!IsAlive||!PortfolioSession.Active||!PortfolioSession.Instance.InCombat||Time.time<nextShot)return;
+            if(!IsAlive||!PortfolioSession.Active||!PortfolioSession.Instance.InCombat||Time.time<nextShot||Time.time<nextScan)return;
             float reach=Kind=="Trap"?.8f:Kind=="Turret"?4.5f:0;
             if(reach==0)return;
+            nextScan=Time.time+.15f;
             IDamageable nearest=null;float distance=reach*reach;
-            foreach(var collider in Physics2D.OverlapCircleAll(transform.position,reach))
+            Physics2D.OverlapCircle(transform.position,reach,new ContactFilter2D{useTriggers=true},targets);
+            foreach(var collider in targets)
             {
                 var target=collider.GetComponentInParent<IDamageable>();
                 if(!DamageRules.CanPlayerHit(target)||!(target is EnemyAIBase))continue;
@@ -105,24 +116,30 @@ namespace SurvivorFarm.Runtime.Gameplay
                 nearest=target;distance=d;
             }
             if(nearest==null)return;
-            nextShot=Time.time+(Kind=="Trap"?1.5f:2.3f);
             if(Kind=="Trap")
             {
+                nextShot=Time.time+1.5f;
                 nearest.TakeDamage(3,player);
                 CultivationSoilVisual.Emit(transform.position,false);
             }
             else
             {
-                var arrow=new GameObject("Ballesta · flecha");arrow.transform.position=transform.position;
-                var art=arrow.AddComponent<SpriteRenderer>();art.sprite=CombatFeelVisuals.Arrow;art.sortingOrder=15000;
-                arrow.AddComponent<ArrowProjectile>().Configure(nearest,2,player,false);
+                if(projectiles==null)projectiles=PlayerProjectilePool.Create(transform,1,2,4);
+                var arrow=projectiles.Rent();if(arrow==null)return;
+                nextShot=Time.time+2.3f;
+                arrow.transform.position=transform.position;arrow.transform.localScale=Vector3.one;
+                var art=arrow.GetComponent<SpriteRenderer>();art.sprite=CombatFeelVisuals.Arrow;art.sortingOrder=15000;
+                art.enabled=true;art.color=Color.white;art.flipX=false;art.flipY=false;
+                arrow.Configure(nearest,2,player,false,transform);arrow.gameObject.SetActive(true);
             }
         }
         private bool Clear(IDamageable target)
         {
-            foreach(var hit in Physics2D.LinecastAll(transform.position,target.Transform.position))
-                if(!hit.collider.isTrigger&&!hit.transform.IsChildOf(transform)&&!hit.transform.IsChildOf(target.Transform))return false;
+            Physics2D.Linecast(transform.position,target.Transform.position,new ContactFilter2D{useTriggers=false},sightHits);
+            foreach(var hit in sightHits)
+                if(!hit.transform.IsChildOf(transform)&&!hit.transform.IsChildOf(target.Transform))return false;
             return true;
         }
+        private void OnDestroy(){if(projectiles!=null)Destroy(projectiles.gameObject);}
     }
 }

@@ -1,0 +1,9 @@
+PASS
+Player and camera match requested start, including after loading saved progress.
+All seven toolbar buttons select the correct tool and refresh the selected frame.
+Wallet and day reflect the current game state.
+Health and hunger update through their live events; test state restored.
+Backpack opens inventory and the Close button closes it.
+Attack and interaction actions have persistent bindings.
+Toolbar fits the active game viewport.
+Viewport: 1536 x 2048

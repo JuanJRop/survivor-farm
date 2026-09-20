@@ -1,31 +1,68 @@
 # Survival Farm · entrega de la vertical slice
 
-14 de septiembre de 2026 · Unity 6000.3.9f1 · Windows x64.
+Actualizado el 15 de septiembre de 2026 · Unity 6000.3.9f1 · Windows x64.
+
+## Laboratorios de práctica
+
+El menú añade **Escenas de práctica**: `ArenaCombate` (cinco oleadas, todos los
+arquetipos de la demo y Custodio) y `TallerGranja` (cultivos, construcción,
+recolección, minería y cocina sin cuenta atrás). F6 abre sus controles; no
+modifican los guardados normales. Las tres escenas están incluidas en la build.
+
+Ver `Design/Development/PRACTICE-SCENES.md`. Paquete actualizado:
+`Builds/SurvivalFarm-Practicas-Windows.zip`.
 
 ## Jugar
 
 Ejecutar `Builds/Portfolio/SurvivalFarm.exe` conservando sus archivos y carpetas
 acompañantes. No requiere el editor. En Unity, abrir la escena Main y pulsar Play.
-La pantalla inicial ofrece una partida nueva y, cuando existe, continuar.
+El menú inicial ofrece Continuar, Nueva partida, Cargar partida, Opciones y Salir,
+con el rótulo DEMO. Cargar enumera las partidas válidas; Nueva partida no borra las
+anteriores. Volumen e impacto reducido se pueden ajustar antes de jugar.
 
 La experiencia conecta tres días de preparación, tres defensas nocturnas y el
 Custodio final. La duración prevista es 18–23 minutos sin adelantar los días;
-no es una duración medida con jugadores. «Listo para la noche» adelanta el día.
+no es una duración medida con jugadores. La noche llega automáticamente: ya no
+hay botón para adelantar el día. El tutorial inicial pausa el reloj durante
+la lectura y la práctica: movimiento real, combo sobre un rival seguro y descarga.
 Proteger el pozo es tan importante como mantener vivo al personaje.
 
 WASD mueve; Shift corre; E interactúa y elige herramienta contextual; clic ataca;
 1/2 seleccionan espada/arco; Espacio esquiva; Q consume ración; F abre recetas;
 I abre mochila. Z abre la paleta continua; X/C seleccionan trampa/ballesta;
+mantener clic 1,05 s con espada y soltar ejecuta una descarga potente.
 R gira muros, clic coloca otra pieza; Esc o clic derecho terminan la construcción.
+M selecciona y mueve piezas sin coste; K abre maestrías y permite comprar niveles
+previamente desbloqueados por uso de espada, arco, hacha, pico, azada y regadera.
 La mochila y el taller también tienen acceso a la paleta. Esc fuera de menús abre la pausa.
+B activa desmontar y devuelve el 69% de cada material pagado, redondeado hacia
+abajo. Las mejoras acumulan inversión; las defensas iniciales gratuitas no dan
+materiales. Al mover, la pieza queda en el cursor hasta confirmar; Esc restaura
+la original. Un cofre debe vaciarse antes de desmontarlo.
+La pestaña inferior despliega la paleta al acercar el cursor y la retrae al
+volver al mundo; el modo de colocación sigue activo. El encaje toma los extremos
+de los muros existentes, también los originales fuera de la retícula global.
 
-Ampliación de fortaleza: módulos de 2 unidades, empalizada → piedra → reforzado
+Ampliación de fortaleza: módulos horizontales de 2 unidades y verticales de 4,
+empalizada → piedra → reforzado
 (hierro y oro). Seleccionar material superior sobre un muro permite mejorarlo
 con el coste completo, conservando el porcentaje de daño. El valle ahora abarca
 64 × 36 unidades sobre el mismo terreno: bosque al oeste, cantera al este y
 salientes minerales al noreste/sureste. El puente permanece abierto en la demo,
 también al cargar partidas anteriores. El pico contextual extrae 3 de hierro por
-veta; los salientes dan además 2 de oro. Cada veta se recupera al día siguiente.
+veta de nivel 2; los salientes de nivel 3 dan además 2 de oro. Se exige el nivel
+correspondiente de pico y cada veta se recupera al día siguiente. Los recursos
+ordinarios también tienen tres niveles. Los vecinos deambulan con colisión,
+reciben ataques enemigos y cada muerte reduce 3 puntos la vida máxima del pozo.
+Las gallinas ahora pueden cazarse. Muros y casas dejan ver al jugador tras ellos.
+Los troncos son sólidos y los árboles conservan su opacidad y profundidad por
+los pies; también los del pueblo son recursos con nivel. Orillas, fogata, árboles,
+mariposas y liebres usan fotogramas del pack; el puente usa su variante de tablones.
+E retira flores o arbustos a cambio de semillas/frutos, guardando el despeje.
+El gato no se entrega de entrada: Rolo lo vende desde el día 2 por 180 monedas,
+12 hierro y 3 oro mineral. Las casas tienen 32 puntos de vida y los demoledores
+pueden derribarlas; el daño y las ruinas se guardan. Perder una casa no termina
+automáticamente la partida. Espada: alcance base de 1,60 unidades.
 
 ## Recorrido y decisiones
 
@@ -92,6 +129,26 @@ que no se sustituyeron. La rama de trabajo separa un checkpoint de los cambios
 previos del usuario y un commit de integración de esta modalidad.
 
 ## Verificación reproducible
+
+Valle renovado (15/09): 355/355 PlayMode, build Windows con cero errores y
+recorrido automático completo PASS. Evidencias y 42 capturas:
+`Design/Validation/Portfolio/WorldRenewal`; informe de pruebas:
+`Design/Validation/Portfolio/renewal-delivery-tests.xml`.
+Detalle y limitaciones: `WORLD-RENEWAL-2026-09-15.md`. No se ha realizado un
+playtest humano completo; la comprobación por teclado/ratón espera permiso
+para abrir una ventana visible de QA. ZIP actual:
+`Builds/SurvivalFarm-ValleRenovado-Windows.zip`.
+
+Validación de Impacto (15/09): suite completa 346/346, familias afectadas 83/83;
+build Windows con 0 errores. Recorrido automático del tutorial, combate,
+construcción, recolección y tres noches hasta el final: PASS. Se revisaron las
+capturas renderizadas por el ejecutable, incluido el shader y ambos estados
+del cajón. La comprobación de teclado/ratón por control de ventanas no pudo
+realizarse: el sistema no consiguió activar la ventana de la demo tras reintentar.
+No se atribuye a esta versión la revisión manual de la iteración anterior.
+Detalle, informes y límites: `COMBAT-JUICE-2026-09-15.md`.
+
+Los siguientes informes documentan la integración inicial:
 
 - Referencia anterior a cambios: 301 pruebas PlayMode aprobadas.
 - Suite ampliada: 304/304 aprobadas, cero fallos y cero omitidas

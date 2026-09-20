@@ -211,16 +211,28 @@ namespace SurvivorFarm.Tests
             Assert.That(Time.timeScale, Is.LessThan(.1f));
         }
 
-        [Test]
-        public void CratesRejectDuplicateRewardsAndUseBreakingSound()
+        [UnityTest]
+        public IEnumerator CratesDropOneExperiencePickupAndUseBreakingSound()
         {
             var actor = new GameObject("Crate"); actor.transform.SetParent(root.transform);
             actor.AddComponent<SpriteRenderer>(); actor.AddComponent<BoxCollider2D>();
             var crate = actor.AddComponent<DungeonDestructible>(); crate.Configure(false);
             int wood = player.Wood;
             crate.TakeDamage(9, player); crate.TakeDamage(9, player);
-            Assert.That(player.Wood, Is.EqualTo(wood + 2));
+            Assert.That(player.Wood, Is.EqualTo(wood));
+            var drops = root.GetComponentsInChildren<EnemyLootPickup>();
+            Assert.That(drops.Length, Is.EqualTo(1));
+            Assert.That(drops[0].Item.Kind, Is.EqualTo(ItemKind.Experience));
+            Assert.That(drops[0].TryCollect(player), Is.False, "Experience must finish its scattering animation first.");
             Assert.That(player.GetComponent<AudioFeedback>().LastSound, Is.EqualTo(CombatSound.Break));
+            int experience = drops[0].Amount;
+            var mastery = player.GetComponent<ToolMastery>();
+            int before = mastery != null ? mastery.Uses(FarmTool.Sword, 1) : 0;
+            player.transform.position = Vector3.right * 20;
+            yield return new WaitForSeconds(.7f);
+            Assert.IsTrue(drops[0].TryCollect(player));
+            Assert.IsFalse(drops[0].TryCollect(player));
+            Assert.AreEqual(before + experience, player.GetComponent<ToolMastery>().Uses(FarmTool.Sword, 1));
         }
     }
 }

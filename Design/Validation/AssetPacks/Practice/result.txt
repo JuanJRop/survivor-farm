@@ -1,0 +1,2 @@
+PASS
+Scene navigation, native arena roster, boss, crops, continuous construction, farm stations and return to title. Automated verification, not a manual playtest.

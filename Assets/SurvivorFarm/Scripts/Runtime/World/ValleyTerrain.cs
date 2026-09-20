@@ -11,6 +11,7 @@ namespace SurvivorFarm.Runtime.World
     {
         readonly Dictionary<string,Sprite> sprites=new Dictionary<string,Sprite>();
         public int EdgeQuarters {get;private set;}
+        public int ConcaveQuarters {get;private set;}
         public int PlantCount {get;private set;}
         GameObject farmLayer;TilemapRenderer farmRenderer;
         readonly List<KeyValuePair<FarmingPlot,SpriteRenderer>> farmPlants=new List<KeyValuePair<FarmingPlot,SpriteRenderer>>();
@@ -65,7 +66,7 @@ namespace SurvivorFarm.Runtime.World
                 if(Physics2D.OverlapCircleAll(p,.7f).Any(c=>c.GetComponentInParent<FarmingPlot>()==null&&!c.isTrigger))continue;
                 var go=new GameObject("Flores silvestres de la granja");go.transform.SetParent(transform,false);go.transform.position=p;
                 var sr=go.AddComponent<SpriteRenderer>();sr.sprite=count%3==0?Slice("BushAtlas",48,32,48,32):Slice("SunflowerAtlas",80,0,16,32);
-                go.transform.localScale=Vector3.one*(count%3==0?0.24f:0.35f);go.AddComponent<WorldSpriteDepth>().Visual=sr;
+                go.transform.localScale=Vector3.one*.5f;go.AddComponent<WorldSpriteDepth>().Visual=sr;
                 sr.enabled=plot.StateId==0;farmPlants.Add(new KeyValuePair<FarmingPlot,SpriteRenderer>(plot,sr));PlantCount++;if(++count>=40)break;
             }
         }
@@ -81,10 +82,12 @@ namespace SurvivorFarm.Runtime.World
                 bool left=qx==0,top=qy==1;
                 var h=new Vector2Int(left?-1:1,0);var v=new Vector2Int(0,top?1:-1);
                 bool edgeH=!cells.Contains(cell+h),edgeV=!cells.Contains(cell+v),inner=!edgeH&&!edgeV&&!cells.Contains(cell+h+v);
-                int x=edgeH?(left?64:112):88,y=edgeV?(top?128:176):152;
-                x+=qx*8;y+=(top?0:8);
-                // The isolated grass tuft in the atlas supplies the matching inward corner.
-                if(inner){x=left?30:22;y=top?144:136;}
+                // The 48px inset has grass outside all four edges. The old 64px
+                // transition patch starts with dirt on its left corners, producing
+                // the square spikes at every path end and junction.
+                int x=edgeH?(left?16:56):edgeV?32+qx*8:88;
+                int y=edgeV?(top?128:168):edgeH?144:152;
+                if(inner){x=left?32:24;y=top?144:136;ConcaveQuarters++;}
                 var go=new GameObject(edgeH||edgeV||inner?"Borde de pasto":"Tierra");go.transform.SetParent(transform,false);
                 go.transform.position=origin+dx*(cell.x+qx*.5f+.25f)+dy*(cell.y+qy*.5f+.25f);
                 go.transform.localScale=new Vector3(dx.magnitude,dy.magnitude,1);
@@ -108,9 +111,10 @@ namespace SurvivorFarm.Runtime.World
                 points.Add(p);int kind=rng.Next(5);
                 var go=new GameObject("Planta decorativa");go.transform.SetParent(transform,false);go.transform.position=position;
                 var sr=go.AddComponent<SpriteRenderer>();
-                if(kind<2){sr.sprite=Slice("TerrainAtlas",144,64,16,16);go.transform.localScale=Vector3.one*.7f;sr.sortingOrder=-29800;}
-                else if(kind==2&&zone!=5){sr.sprite=Slice("SunflowerAtlas",80,0,16,32);go.transform.localScale=Vector3.one*.6f;go.AddComponent<WorldSpriteDepth>().Visual=sr;}
-                else {sr.sprite=Slice("BushAtlas",48,kind==4?32:0,48,32);go.transform.localScale=Vector3.one*.35f;go.AddComponent<WorldSpriteDepth>().Visual=sr;}
+                go.transform.localScale=Vector3.one*.5f;
+                if(kind<2){sr.sprite=Slice("TerrainAtlas",144,64,16,16);sr.sortingOrder=-29800;}
+                else if(kind==2&&zone!=5){sr.sprite=Slice("SunflowerAtlas",80,0,16,32);go.AddComponent<WorldSpriteDepth>().Visual=sr;}
+                else {sr.sprite=Slice("BushAtlas",48,kind==4?32:0,48,32);go.AddComponent<WorldSpriteDepth>().Visual=sr;}
                 PlantCount++;
             }
         }

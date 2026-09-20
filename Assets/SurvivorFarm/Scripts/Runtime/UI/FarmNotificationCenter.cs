@@ -34,12 +34,62 @@ namespace SurvivorFarm.Runtime.UI
             canvasRect = button.transform.parent as RectTransform;
             fixedInteractionButton = false;
             interactionScreenOffset = Vector2.zero;
+            ConfigureCompactInteraction();
+        }
+
+        private void ConfigureCompactInteraction()
+        {
+            if (interactionButtonRect == null) return;
+            interactionButtonRect.sizeDelta = new Vector2(48f, 26f);
+            if (interactionButton.image != null) interactionButton.image.color = Color.clear;
+            var key = interactionButton.transform.Find("Keycap") as RectTransform;
+            if (key == null)
+            {
+                key = new GameObject("Keycap", typeof(RectTransform), typeof(Image), typeof(Outline)).GetComponent<RectTransform>();
+                key.SetParent(interactionButton.transform, false); key.SetAsFirstSibling();
+                key.anchorMin = Vector2.zero; key.anchorMax = Vector2.one;
+                key.offsetMin = new Vector2(24, 2); key.offsetMax = new Vector2(-2, -2);
+                var image = key.GetComponent<Image>(); image.color = new Color32(247, 237, 205, 245); image.raycastTarget = false;
+                var outline = key.GetComponent<Outline>(); outline.effectColor = new Color32(66, 45, 36, 230); outline.effectDistance = new Vector2(1, -2);
+            }
+            if (interactionButtonText != null)
+            {
+                var rect = interactionButtonText.rectTransform;
+                rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
+                rect.offsetMin = new Vector2(24f, 2f); rect.offsetMax = new Vector2(-2f, -2f);
+                interactionButtonText.text = "E";
+                interactionButtonText.fontSize = 14;
+                interactionButtonText.color = new Color32(64, 44, 31, 255);
+                interactionButtonText.fontStyle = FontStyle.Bold;
+                interactionButtonText.resizeTextForBestFit = false;
+                interactionButtonText.alignment = TextAnchor.MiddleCenter;
+                interactionButtonText.raycastTarget = false;
+            }
+            foreach (var icon in interactionButton.GetComponentsInChildren<Image>(true))
+            {
+                if (icon.name != "Hand Icon") continue;
+                icon.gameObject.SetActive(true);
+                icon.rectTransform.anchorMin = icon.rectTransform.anchorMax = new Vector2(0f, .5f);
+                icon.rectTransform.pivot = new Vector2(0f, .5f);
+                icon.rectTransform.anchoredPosition = new Vector2(0f, 0f);
+                icon.rectTransform.sizeDelta = new Vector2(20f, 20f);
+                icon.raycastTarget = false;
+            }
+            if (interactionButton.GetComponent<InteractionPromptAnimation>() == null)
+                interactionButton.gameObject.AddComponent<InteractionPromptAnimation>();
         }
 
         public static void PulseInteraction()
         {
             if (instance != null && instance.interactionButton != null)
                 instance.interactionButton.GetComponent<InteractionPromptAnimation>()?.Press();
+        }
+
+        public static Vector2 InteractionBadgeScreenSize(bool repair)
+        {
+            var canvas = instance != null && instance.interactionButton != null
+                ? instance.interactionButton.GetComponentInParent<Canvas>() : null;
+            return new Vector2(repair ? 112f : 48f, 26f) * (canvas != null ? canvas.scaleFactor : 1f);
         }
 
         private float hideNotificationAt;
@@ -397,9 +447,13 @@ namespace SurvivorFarm.Runtime.UI
 
         private void SetInteractionButtonLabel(string label)
         {
+            bool repair = label == "Reparar" || label == "Mejorar";
+            if (interactionButtonRect != null) interactionButtonRect.sizeDelta = new Vector2(repair ? 112f : 48f, 26f);
             if (interactionButtonText != null)
             {
-                interactionButtonText.text = label;
+                interactionButtonText.text = repair ? "E · " + label : "E";
+                interactionButtonText.fontSize = repair ? 12 : 14;
+                interactionButtonText.color = new Color32(64, 44, 31, 255);
             }
         }
 

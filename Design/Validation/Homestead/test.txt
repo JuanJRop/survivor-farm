@@ -1,0 +1,28 @@
+Homestead play-mode checks
+PASS: Tutorial adds 14 harvestable trees and 6 rocks
+PASS: Four teaching stations and two supply caches
+PASS: Supply reward only once
+PASS: Practice enemy rewards three hits
+PASS: Practice can repeat without duplicating reward
+PASS: Campfire crafting succeeds
+PASS: Crafted fire is a carried item, not an automatic building
+PASS: Backpack fire starts placement preview
+PASS: Cancel keeps carried fire
+PASS: Invalid placement keeps carried fire
+PASS: Tutorial retains buildable space
+PASS: Place fire at chosen position
+PASS: Placement consumes one kit without paying twice
+PASS: Cannot place nonexistent second kit
+PASS: Cooking unlocks after placement
+PASS: Sell uses shop prices and exact selected quantity
+PASS: Discard removes exact quantity without gold
+PASS: Fruit usable from backpack
+PASS: Select seed from backpack
+PASS: Plant selected seed rather than spending rare seed
+PASS: Save/load preserves kits, chosen seed and tutorial resource state
+PASS: Old fixed campfire migrates to a placeable item without loss
+PASS: Hover reveals place action
+PASS: Inventory action opens placement
+PASS: Soil darkens after tilling and watering
+PASS: Hoe adds three visible furrows
+ALL PASSED

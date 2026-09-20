@@ -58,11 +58,11 @@ namespace SurvivorFarm.Runtime.Player
             .Where(stack => stack != null && SurvivalItemCatalog.IsSeed(stack.id))
             .Sum(stack => (long)Mathf.Max(0, stack.count)));
         public int PackedCount(string kind) => PackedBuildings?.FirstOrDefault(p=>p.kind==kind)?.count??0;
-        public void AddPacked(string kind,int amount=1){if(amount<=0)return;PackedBuildings??=new List<PackedBuilding>();var p=PackedBuildings.FirstOrDefault(p=>p.kind==kind);if(p==null){p=new PackedBuilding{kind=kind};PackedBuildings.Add(p);}p.count=AddSafe(p.count,amount);InventoryChanged?.Invoke();}
+        public void AddPacked(string kind,int amount=1){if(amount<=0||!BackpackActions.IsBuilding(kind))return;PackedBuildings??=new List<PackedBuilding>();var p=PackedBuildings.FirstOrDefault(p=>p.kind==kind);if(p==null){p=new PackedBuilding{kind=kind};PackedBuildings.Add(p);}p.count=AddSafe(p.count,amount);InventoryChanged?.Invoke();}
         public bool RemovePacked(string kind,int amount=1){var p=PackedBuildings?.FirstOrDefault(p=>p.kind==kind);if(amount<=0||p==null||p.count<amount)return false;p.count-=amount;InventoryChanged?.Invoke();return true;}
         public void RestorePacked(List<PackedBuilding> items){PackedBuildings=(items??new List<PackedBuilding>()).Where(p=>p!=null&&p.count>0&&BackpackActions.IsBuilding(p.kind)).Select(p=>new PackedBuilding{kind=p.kind,count=p.count}).ToList();InventoryChanged?.Invoke();}
         public string[] BackpackOrder = new string[0];
-        public string[] OwnedEquipment = { "Sword", "Bow" };
+        public string[] OwnedEquipment = { "Sword" };
         public string[] EquippedEquipment = { "", "", "", "Sword", "", "", "", "" };
         public bool HasEquipped(string id) => Array.IndexOf(EquippedEquipment,id)>=0;
         public float ArmorReduction => Mathf.Clamp(EquippedDefinitions.Sum(item => item.DefenseBonus), 0f, 0.75f);
@@ -208,7 +208,7 @@ namespace SurvivorFarm.Runtime.Player
         }
         public void RestoreEquipment(string[] owned, string[] equipped)
         {
-            OwnedEquipment = owned ?? new[] { "Sword", "Bow" };
+            OwnedEquipment = owned ?? new[] { "Sword" };
             EquippedEquipment = new string[8];
             if (equipped == null) EquippedEquipment[3] = OwnsEquipment("Sword") ? "Sword" : "";
             else for (int i = 0; i < Math.Min(8,equipped.Length); i++)

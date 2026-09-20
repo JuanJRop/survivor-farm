@@ -80,7 +80,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             foreach (var p in new[] { new Vector2(-4, 14), new Vector2(4, 20), new Vector2(15, 19), new Vector2(-21, 19), new Vector2(-4, 35), new Vector2(4, 35) })
             {
                 var statue = Prop("Ancient stone shrine", DungeonLayout.At(p.x, p.y), art.Slice(art.Statue, 7, 0, 48, 48), .6f, true);
-                var body = statue.GetComponent<BoxCollider2D>(); body.size = new Vector2(1.6f, 1); body.offset = Vector2.down * .5f;
+                DungeonShrinePresentation.Configure(statue, art);
             }
         }
 
@@ -172,7 +172,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             var gateArt = Prop("Custodian gate", DungeonLayout.At(0, 43), art.Slice(art.Door, 0, 0, 32, 32), 1, false);
             var gateBody = gateArt.gameObject.AddComponent<BoxCollider2D>(); gateBody.size = new Vector2(4, .6f);
             gate = gateArt.gameObject.AddComponent<DungeonBossGate>(); gate.Configure(this);
-            var portal = Prop("Return stairs", DungeonLayout.At(6, 58), art.Story("Portal"), 1, false);
+            var portal = Prop("Return stairs", DungeonLayout.At(6, 58), art.Slice(art.Door, 96, 0, 32, 32), 1, false);
             if (portal.sprite != null) portal.transform.localScale = Vector3.one * (1.5f / portal.sprite.bounds.size.x);
             portal.gameObject.AddComponent<CircleCollider2D>().isTrigger = true;
             portal.gameObject.AddComponent<DungeonExit>().Configure(entrance);
@@ -184,13 +184,15 @@ namespace SurvivorFarm.Runtime.Gameplay
         public bool CanEngage(EnemyAIBase enemy)
         {
             int index = IndexOf(enemy);
-            return present && index >= 0 && !IsDefeated(index) && Vector2.Distance(player.position, guardPositions[index]) < 9 &&
-                Vector2.Distance(player.position, enemy.transform.position) < 8;
+            return present && index >= 0 && !IsDefeated(index) &&
+                (enemy.IsProvoked || Vector2.Distance(player.position, guardPositions[index]) < 11) &&
+                Vector2.Distance(player.position, enemy.transform.position) < (enemy.IsProvoked ? 24 : 11);
         }
         public bool CanOccupy(EnemyAIBase enemy, Vector2 p)
         {
             int index = IndexOf(enemy);
-            return index >= 0 && DungeonLayout.Walkable(p) && Vector2.Distance(p, guardPositions[index]) < 8;
+            return index >= 0 && DungeonLayout.Walkable(p) &&
+                (enemy.IsProvoked || Vector2.Distance(p, guardPositions[index]) < 11);
         }
         private int IndexOf(EnemyAIBase enemy) { for (int i = 0; i < pool.Enemies.Count; i++) if (pool.Enemies[i] == enemy) return i; return -1; }
         public void SetPresent(bool value)

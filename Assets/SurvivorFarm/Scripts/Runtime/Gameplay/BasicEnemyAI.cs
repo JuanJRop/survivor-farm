@@ -6,7 +6,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         float retreatUntil;
         public override void ActivateFromPool(Vector3 position)
         {
-            if(EnemyName=="Golem")ConfigureStats("Golem",16,2,1.1f,.85f,1.8f,12);
+            if(EnemyName=="Golem")ConfigureStats("Golem",16,2,1.3f,1.25f,1.65f,12);
             base.ActivateFromPool(position);retreatUntil=0;
         }
         protected override void TickEnemy()
@@ -27,6 +27,16 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected override void AttackTarget(SurvivorFarm.Runtime.Player.PlayerSurvivalStats stats)
         {base.AttackTarget(stats);if(EnemyName=="Murcielago")retreatUntil=Time.time+1.1f;}
         protected override void OnDefeated(SurvivorFarm.Runtime.Player.PlayerInventory inventory)
-        {base.OnDefeated(inventory);if(EnemyName=="Golem"&&inventory!=null){inventory.AddEquipment("Gem");inventory.AddEquipment("EarthElement");inventory.AddItem("EmeraldShard",1);inventory.AddItem("Emerald",1);inventory.AddItem("GoldOre",2);inventory.AddItem("EarthEssence",1);if(Random.value<.35f)inventory.AddItem("Diamond",1);inventory.GetComponent<SurvivorFarm.Runtime.Player.AdventureProgress>()?.DefeatGolem();SurvivorFarm.Runtime.UI.FarmNotificationCenter.Show("Golem derrotado: gema azul, elemento tierra, esmeralda y oro raro disponibles.");}}
+        {
+            base.OnDefeated(inventory);
+            if (EnemyName != "Golem" || inventory == null) return;
+            inventory.AddEquipment("Gem"); inventory.AddEquipment("EarthElement");
+            EnemyLootPickup.Scatter(transform.position, transform.parent, ItemKind.EmeraldShard, 1);
+            EnemyLootPickup.Scatter(transform.position, transform.parent, ItemKind.Emerald, 1);
+            EnemyLootPickup.Scatter(transform.position, transform.parent, ItemKind.GoldOre, 2);
+            EnemyLootPickup.Scatter(transform.position, transform.parent, ItemKind.EarthEssence, 1);
+            if (Random.value < .35f) EnemyLootPickup.Scatter(transform.position, transform.parent, ItemKind.Diamond, 1);
+            inventory.GetComponent<SurvivorFarm.Runtime.Player.AdventureProgress>()?.DefeatGolem();
+        }
     }
 }

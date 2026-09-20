@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Passed" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-20 11:44:43Z" end-time="2026-09-20 11:44:45Z" duration="2.5997555">
+  <test-suite type="TestSuite" id="1550" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="465" result="Passed" start-time="2026-09-20 11:44:43Z" end-time="2026-09-20 11:44:45Z" duration="2.599756" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1544" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/QA/p/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="465" result="Passed" start-time="2026-09-20 11:44:43Z" end-time="2026-09-20 11:44:45Z" duration="2.589514" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="28420" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1545" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="465" result="Passed" start-time="2026-09-20 11:44:43Z" end-time="2026-09-20 11:44:45Z" duration="2.586945" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1546" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="465" result="Passed" start-time="2026-09-20 11:44:43Z" end-time="2026-09-20 11:44:45Z" duration="2.584407" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1178" name="FloatingFeedbackPoolTests" fullname="SurvivorFarm.Tests.FloatingFeedbackPoolTests" classname="SurvivorFarm.Tests.FloatingFeedbackPoolTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-20 11:44:43Z" end-time="2026-09-20 11:44:45Z" duration="2.578105" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1182" name="DisablingOrDestroyingLabelsDoesNotLeaveActiveLeases" fullname="SurvivorFarm.Tests.FloatingFeedbackPoolTests.DisablingOrDestroyingLabelsDoesNotLeaveActiveLeases" methodname="DisablingOrDestroyingLabelsDoesNotLeaveActiveLeases" classname="SurvivorFarm.Tests.FloatingFeedbackPoolTests" runstate="Runnable" seed="593794127" result="Passed" start-time="2026-09-20 11:44:43Z" end-time="2026-09-20 11:44:43Z" duration="0.097272" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1181" name="LabelBudgetCapsCosmeticObjectsAndReopensWhenOneReturns" fullname="SurvivorFarm.Tests.FloatingFeedbackPoolTests.LabelBudgetCapsCosmeticObjectsAndReopensWhenOneReturns" methodname="LabelBudgetCapsCosmeticObjectsAndReopensWhenOneReturns" classname="SurvivorFarm.Tests.FloatingFeedbackPoolTests" runstate="Runnable" seed="1534607172" result="Passed" start-time="2026-09-20 11:44:43Z" end-time="2026-09-20 11:44:43Z" duration="0.003551" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1180" name="LabelsKeepScaledLifetimeAndCanBeReusedAfterExpiration" fullname="SurvivorFarm.Tests.FloatingFeedbackPoolTests.LabelsKeepScaledLifetimeAndCanBeReusedAfterExpiration" methodname="LabelsKeepScaledLifetimeAndCanBeReusedAfterExpiration" classname="SurvivorFarm.Tests.FloatingFeedbackPoolTests" runstate="Runnable" seed="783546433" result="Passed" start-time="2026-09-20 11:44:43Z" end-time="2026-09-20 11:44:45Z" duration="2.457064" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1179" name="RepeatedDamageLabelsReuseTheirTextMeshAndResetTextColorAndPosition" fullname="SurvivorFarm.Tests.FloatingFeedbackPoolTests.RepeatedDamageLabelsReuseTheirTextMeshAndResetTextColorAndPosition" methodname="RepeatedDamageLabelsReuseTheirTextMeshAndResetTextColorAndPosition" classname="SurvivorFarm.Tests.FloatingFeedbackPoolTests" runstate="Runnable" seed="779354647" result="Passed" start-time="2026-09-20 11:44:45Z" end-time="2026-09-20 11:44:45Z" duration="0.003779" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1183" name="SceneUnloadCleansUpActiveLabelsIdleLabelsAndTheRegistry" fullname="SurvivorFarm.Tests.FloatingFeedbackPoolTests.SceneUnloadCleansUpActiveLabelsIdleLabelsAndTheRegistry" methodname="SceneUnloadCleansUpActiveLabelsIdleLabelsAndTheRegistry" classname="SurvivorFarm.Tests.FloatingFeedbackPoolTests" runstate="Runnable" seed="1721129305" result="Passed" start-time="2026-09-20 11:44:45Z" end-time="2026-09-20 11:44:45Z" duration="0.005088" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

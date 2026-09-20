@@ -76,9 +76,12 @@ namespace SurvivorFarm.Tests
             entrance.EnterDungeon(); var box = dungeon.Destructibles[0]; int wood = player.Wood;
             box.TakeDamage(3, player); Assert.IsTrue(box.IsAlive); Assert.AreEqual(wood, player.Wood);
             var saved = dungeon.Capture(); dungeon.Restore(saved); Assert.AreEqual(2, box.Health);
-            box.TakeDamage(3, player); Assert.IsFalse(box.IsAlive); Assert.AreEqual(wood + 2, player.Wood);
+            box.TakeDamage(3, player); Assert.IsFalse(box.IsAlive); Assert.AreEqual(wood, player.Wood);
+            var drops = dungeon.GetComponentsInChildren<EnemyLootPickup>();
+            Assert.AreEqual(1, drops.Length); Assert.AreEqual(ItemKind.Experience, drops[0].Item.Kind);
             var depleted = JsonUtility.FromJson<DungeonExpeditionState>(JsonUtility.ToJson(dungeon.Capture()));
-            dungeon.Restore(depleted); box.TakeDamage(99, player); Assert.AreEqual(wood + 2, player.Wood);
+            dungeon.Restore(depleted); box.TakeDamage(99, player); Assert.AreEqual(wood, player.Wood);
+            Assert.AreEqual(1, dungeon.GetComponentsInChildren<EnemyLootPickup>().Length);
             Assert.IsFalse(box.GetComponent<Collider2D>().enabled);
         }
 
@@ -104,9 +107,10 @@ namespace SurvivorFarm.Tests
             Assert.IsTrue(dungeon.BossDoorReady); Assert.IsTrue(dungeon.BeginBoss()); Assert.IsFalse(dungeon.BeginBoss());
             dungeon.Boss.TakeDamage(3, player); Assert.IsTrue(dungeon.Boss.IsAlive);
             dungeon.Boss.TakeDamage(100, player); Assert.IsTrue(dungeon.State.bossDefeated); Assert.IsFalse(dungeon.BossFightActive);
-            chest.Interact(FarmTool.Sword, player); Assert.AreEqual(coins + 80, player.Coins);
-            Assert.AreEqual(8, player.GetComponent<AdventureProgress>().Data.iron);
-            chest.Interact(FarmTool.Sword, player); Assert.AreEqual(coins + 80, player.Coins);
+            chest.Interact(FarmTool.Sword, player); Assert.AreEqual(coins, player.Coins);
+            Assert.IsTrue(dungeon.GetComponentsInChildren<EnemyLootPickup>().Any(d => d.Item.Kind == ItemKind.Coins && d.Amount == 80));
+            int count = dungeon.GetComponentsInChildren<EnemyLootPickup>().Length;
+            chest.Interact(FarmTool.Sword, player); Assert.AreEqual(count, dungeon.GetComponentsInChildren<EnemyLootPickup>().Length);
             var state = dungeon.Capture(); entrance.ExitDungeon(); entrance.EnterDungeon(); dungeon.Restore(state);
             Assert.IsFalse(dungeon.Boss.IsAlive); Assert.IsFalse(dungeon.BeginBoss());
         }

@@ -81,7 +81,7 @@ namespace SurvivorFarm.Runtime.World
 
         public bool CanGrowAt(ResourceSpawnPoint point, Vector3 position)
         {
-            if(Core.PortfolioSession.Active&&!FarmExploration.Contains(position,2))return false;
+            if(Core.PortfolioSession.Active&&(!FarmExploration.Contains(position,2)||FarmExploration.IsRiver(position,1)))return false;
             if (point == null || point.Instance == null || ground == null || Vector2.Distance(position, point.transform.position) > 6.1f ||
                 Vector2.Distance(position, transform.position) < 4 || Vector2.Distance(position, point.Instance.transform.position) < 1) return false;
             // Keep the plaza and shop approaches clear; only the village's outer green areas regrow.

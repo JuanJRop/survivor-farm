@@ -1,0 +1,1 @@
+Each parcel: 24 x 14 world units. Camera at 16:9 and size 6 sees 21.33 x 12. Existing farming cells: 220. Additional cells: 738. Original sprites and actor scales retained. Old plot names and resource IDs retained.

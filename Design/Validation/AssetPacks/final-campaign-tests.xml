@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-15 11:46:15Z" end-time="2026-09-15 11:46:33Z" duration="17.8537424">
+  <test-suite type="TestSuite" id="1449" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="381" result="Passed" start-time="2026-09-15 11:46:15Z" end-time="2026-09-15 11:46:33Z" duration="17.853742" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1443" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/QA/p/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="381" result="Passed" start-time="2026-09-15 11:46:15Z" end-time="2026-09-15 11:46:33Z" duration="17.845156" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="37028" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1444" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="381" result="Passed" start-time="2026-09-15 11:46:15Z" end-time="2026-09-15 11:46:33Z" duration="17.842313" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1445" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="381" result="Passed" start-time="2026-09-15 11:46:15Z" end-time="2026-09-15 11:46:33Z" duration="17.839713" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1303" name="PortfolioIntegrationTests" fullname="SurvivorFarm.Tests.PortfolioIntegrationTests" classname="SurvivorFarm.Tests.PortfolioIntegrationTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-15 11:46:15Z" end-time="2026-09-15 11:46:33Z" duration="17.834715" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1306" name="CoreDestructionEndsEncounterAndCancelsSpawning" fullname="SurvivorFarm.Tests.PortfolioIntegrationTests.CoreDestructionEndsEncounterAndCancelsSpawning" methodname="CoreDestructionEndsEncounterAndCancelsSpawning" classname="SurvivorFarm.Tests.PortfolioIntegrationTests" runstate="Runnable" seed="535576345" result="Passed" start-time="2026-09-15 11:46:15Z" end-time="2026-09-15 11:46:21Z" duration="6.016072" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1304" name="ExistingFarmSupportsCropsRepairDamageAndSave" fullname="SurvivorFarm.Tests.PortfolioIntegrationTests.ExistingFarmSupportsCropsRepairDamageAndSave" methodname="ExistingFarmSupportsCropsRepairDamageAndSave" classname="SurvivorFarm.Tests.PortfolioIntegrationTests" runstate="Runnable" seed="1335353468" result="Passed" start-time="2026-09-15 11:46:21Z" end-time="2026-09-15 11:46:27Z" duration="5.832681" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1305" name="ThreeBoundedNightsLeadToTwoPhaseBossAndVictory" fullname="SurvivorFarm.Tests.PortfolioIntegrationTests.ThreeBoundedNightsLeadToTwoPhaseBossAndVictory" methodname="ThreeBoundedNightsLeadToTwoPhaseBossAndVictory" classname="SurvivorFarm.Tests.PortfolioIntegrationTests" runstate="Runnable" seed="1671734337" result="Passed" start-time="2026-09-15 11:46:27Z" end-time="2026-09-15 11:46:33Z" duration="5.975066" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Survivor Farm started.
+Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

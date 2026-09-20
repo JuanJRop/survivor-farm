@@ -1,0 +1,25 @@
+Usability play mode verification
+PASS: New game shows only first objective without future mission list
+PASS: Reading note advances to axe instruction
+PASS: One completed task reveals next tool
+PASS: Context prompts require correct resource tool
+PASS: Player and tree have narrow foot colliders
+PASS: All farm cells share aligned grid
+PASS: No overlapping farm cells
+PASS: All crops remain off roads
+PASS: Pointer selects exact cell, not nearest neighbour
+PASS: Out of reach cell cannot be dug
+PASS: Road rejects cultivation
+PASS: Passage between house and tree is clear
+PASS: Sword cannot interact with ground
+PASS: Dig completes on selected grass cell
+PASS: Hoe prepares same cell
+PASS: Sword cannot plant or consume seeds
+PASS: Seed planted with hoe
+PASS: Watering follows planted crop
+PASS: Save roundtrip restores every crop by stable identity
+PASS: Story enemy flashes white after damage
+PASS: Hit emits visible particles
+PASS: Flash ends after hit
+PASS: Dropped gold has larger readable sprite
+ALL PASSED

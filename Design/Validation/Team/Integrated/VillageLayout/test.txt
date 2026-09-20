@@ -1,0 +1,1 @@
+PASS: connected streets, reachable village services and house doors, consistent house scale, no village world labels, compact HUD, garden layout, board interaction, screenshots at 1920x1080 and 1280x720.

@@ -46,6 +46,7 @@ namespace SurvivorFarm.Runtime.Player
         }
 
         public void ResetChain() { nextIndex = 0; expiresAt = 0; StepNumber = 0; }
+        public ComboAttack BeginCharged() { ResetChain(); return definition.chargedAttack; }
         private void Update() { if (StepNumber > 0 && Time.time > expiresAt) ResetChain(); }
         private void OnDisable() => ResetChain();
         private void OnDestroy() { if (fallback != null) Destroy(fallback); }

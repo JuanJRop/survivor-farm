@@ -10,6 +10,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         [SerializeField] private SpriteRenderer[] renderers = new SpriteRenderer[0];
 
         protected override float HighlightScale => 1.08f;
+        public override bool IsAvailable=>GetComponent<VillageHouseHealth>()==null||GetComponent<VillageHouseHealth>().IsAlive;
 
         public void Configure(params SpriteRenderer[] houseRenderers)
         {
@@ -23,6 +24,7 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         public override void Interact(FarmTool selectedTool, PlayerInventory inventory)
         {
+            if(!IsAvailable)return;
             inventory?.GetComponent<HouseSystem>()?.OpenServices();
         }
     }

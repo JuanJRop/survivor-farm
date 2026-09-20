@@ -1,0 +1,2 @@
+PASS
+Windows executable: title, real animated 1-2-3 combo, elite finisher, continuous walls, corners, material upgrades, visual backpack, all four outer ore nodes, crops, recipes, save/load, bounded raids, boss patterns, phase II, ending; staged screenshots captured. This is automated verification, not a human balance playtest.

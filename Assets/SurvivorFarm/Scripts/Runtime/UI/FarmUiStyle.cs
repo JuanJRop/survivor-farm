@@ -21,6 +21,16 @@ namespace SurvivorFarm.Runtime.UI
         public static Sprite ItemIcon(string name)
         {
             if (cropIcons.TryGetValue(name, out var cached) && cached != null) return cached;
+            if (name == "Arrow" || name == "Saddle") return MakeEquipmentIcon(name);
+            if (name == "Well")
+            {
+                var atlas = Resources.Load<Texture2D>("StoryArt/Well");
+                if (atlas != null)
+                {
+                    var well = Sprite.Create(atlas, new Rect(0, 0, atlas.width, atlas.height), Vector2.one * .5f, 16);
+                    well.hideFlags = HideFlags.DontSave; cropIcons[name] = well; return well;
+                }
+            }
             var sprite = Resources.Load<Sprite>("BackpackIcons/" + name);
             if (sprite == null || !SurvivalItemCatalog.IsFood(name)) return sprite;
             // The pack's 16px crop strips end with the harvested item, not the seed.
@@ -31,6 +41,31 @@ namespace SurvivorFarm.Runtime.UI
             sprite.texture.filterMode = FilterMode.Point;
             cropIcons[name] = sprite;
             return sprite;
+        }
+
+        private static Sprite MakeEquipmentIcon(string name)
+        {
+            string[] rows = name == "Arrow" ? new[] {
+                "................", "...........dddd.", "............ddd.", "...........dwd..",
+                "..........dwd...", ".........dwd....", "........dbd.....", ".......dbd......",
+                "......dbd.......", ".....dbd........", "....dbd.........", ".wwdbd..........",
+                "..wbw...........", ".ww.w...........", "................", "................"
+            } : new[] {
+                "................", "..dd......dd....", "..dbd....dbd....", "..dbbddddbbd....",
+                "..dbbbbbbbbd....", "...dbbbbbbd.....", "...dddddddd.....", "..dyyyyyyyyd....",
+                "..dybbbbbbbd....", "..dybbbbbbbd....", "..dddddddddd....", "...d......d.....",
+                "...d......d.....", "..dwd....dwd....", "..ddd....ddd....", "................"
+            };
+            var texture = new Texture2D(16, 16, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, name = name + " icon", hideFlags = HideFlags.DontSave };
+            var pixels = new Color32[256];
+            for (int y = 0; y < 16; y++) for (int x = 0; x < 16; x++)
+                pixels[(15 - y) * 16 + x] = rows[y][x] switch {
+                    'd' => new Color32(54, 34, 29, 255), 'b' => new Color32(163, 91, 49, 255),
+                    'w' => new Color32(225, 240, 228, 255), 'y' => new Color32(229, 183, 86, 255), _ => new Color32(0, 0, 0, 0)
+                };
+            texture.SetPixels32(pixels); texture.Apply(false, true);
+            var result = Sprite.Create(texture, new Rect(0, 0, 16, 16), Vector2.one * .5f, 16);
+            result.name = name; result.hideFlags = HideFlags.DontSave; cropIcons[name] = result; return result;
         }
 
         public static void Frame(Image image, bool control = false)

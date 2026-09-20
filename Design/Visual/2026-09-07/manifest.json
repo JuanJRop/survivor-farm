@@ -1,0 +1,76 @@
+{
+  "project": "Survivor Farm",
+  "date": "2026-09-07",
+  "kind": "visual-concepts",
+  "generator": "image_gen integrated tool",
+  "freeServicesResearched": [
+    "https://www.leonardo.ai/pricing",
+    "https://www.bing.com/images/create",
+    "https://www.adobe.com/products/firefly.html"
+  ],
+  "deliverables": [
+    {
+      "file": "01-pantallas-aventura.png",
+      "screens": [
+        "inicio",
+        "granja",
+        "mazmorra"
+      ]
+    },
+    {
+      "file": "02-pantallas-gestion-v2.png",
+      "screens": [
+        "inventario",
+        "tienda y taller",
+        "personaje"
+      ]
+    },
+    {
+      "file": "03-desarrollo-personajes.png",
+      "characters": [
+        "Josh",
+        "Lyria"
+      ],
+      "stages": [
+        "novato",
+        "explorador",
+        "veterano"
+      ],
+      "type": "reference board, not animation atlas"
+    },
+    {
+      "file": "04-armas-herramientas.png",
+      "families": [
+        "espada",
+        "arco",
+        "hacha",
+        "pico",
+        "azada",
+        "pala",
+        "regadera"
+      ],
+      "visualLevels": 3
+    },
+    {
+      "file": "05-enemigos.png",
+      "enemies": [
+        "limo",
+        "murcielago",
+        "golem"
+      ],
+      "type": "design and attack concept"
+    }
+  ],
+  "limitations": [
+    "Concept art, not screenshots of a running build",
+    "Generated raster presentation boards; no verified pixel grid, transparency, animation, atlas slicing, or runtime integration",
+    "Character specializations, extra weapon levels, telegraphs and enemy loot are proposals"
+  ],
+  "promptsFile": "PROMPTS.md",
+  "developmentFile": "DESARROLLO.md",
+  "notes": [
+    "Reference boards generated at 1536x1024; individual screens and sprites are not separate image exports.",
+    "Earlier 02-pantallas-gestion.png is a local draft and is excluded from the delivery ZIP."
+  ],
+  "correctionPromptsFile": "PROMPTS-CORRECCIONES.md"
+}

@@ -8,6 +8,7 @@ namespace SurvivorFarm.Runtime.Gameplay
     {
         public string LotId;
         public ValleyCampaign Campaign;
+        public override bool IsAvailable=>GetComponent<VillageHouseHealth>()==null||GetComponent<VillageHouseHealth>().IsAlive;
         protected override float HighlightScale => 1f;
         public override string GetInteractionLabel(FarmTool tool) => LotId switch
         {
@@ -19,7 +20,7 @@ namespace SurvivorFarm.Runtime.Gameplay
 
         public override void Interact(FarmTool tool, PlayerInventory inventory)
         {
-            if (Campaign == null || inventory != Campaign.Inventory || Vector2.Distance(inventory.transform.position, transform.position) > 2f) return;
+            if (!IsAvailable || Campaign == null || inventory != Campaign.Inventory || Vector2.Distance(inventory.transform.position, transform.position) > 2f) return;
             if (LotId == "nico")
             {
                 if (!Campaign.WorkshopRestored) { Campaign.TalkToVillager("village:blacksmith", transform); return; }

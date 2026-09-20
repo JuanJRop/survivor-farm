@@ -17,6 +17,7 @@ namespace SurvivorFarm.Runtime.Player
         private bool depletedVisual;
         private PlayerCharacterAnimator activeAnimator;
         private int animationVersion;
+        private World.WorldActionClock workClock;
         public bool IsDepleted=>dailyProgress!=null&&Index>=0&&Index<dailyProgress.Data.minedDays.Length&&dailyProgress.Data.minedDays[Index]>=(clock!=null?clock.Day:1);
         void Start()
         {
@@ -25,10 +26,10 @@ namespace SurvivorFarm.Runtime.Player
         }
         bool mining;PlayerInventory activeInventory;AdventureProgress activeProgress;int activeDay,activePickaxeLevel,completedHits;float mineStartedAt,mineEndsAt,nextHitAt;
         const float MineDuration=2.8f;const int MineHits=5;
-        public override string GetInteractionLabel(FarmTool tool)=>IsDepleted?"Veta agotada · vuelve mañana":mining?"Picando veta "+ProgressText():PortfolioSession.Active?(Precious?"Pico · hierro y oro para muros reforzados":"Pico · hierro para fortificar"):"Veta rica: hierro, oro y gemas (pico Nv.2, se renueva al día siguiente)";
+        public override string GetInteractionLabel(FarmTool tool)=>IsDepleted?"Veta agotada · vuelve mañana":mining?"Picando veta":PortfolioSession.Active?(Precious?"Veta Nv.3 · E extraer":"Veta Nv.2 · E extraer"):"Veta rica: hierro, oro y gemas (pico Nv.2, se renueva al día siguiente)";
         public override void Interact(FarmTool tool,PlayerInventory inventory)
         {
-            if(mining){FarmNotificationCenter.Show("Picando veta "+ProgressText());return;}
+            if(mining)return;
             if(!CanMine(tool,inventory,out var progress,out var day,out var pickaxeLevel))return;
             PlayerCharacterAnimator animator=inventory.GetComponent<PlayerCharacterAnimator>();
             if(animator!=null&&Application.isPlaying){BeginMining(inventory,progress,day,pickaxeLevel,animator);return;}
@@ -40,6 +41,8 @@ namespace SurvivorFarm.Runtime.Player
             progress=inventory!=null?inventory.GetComponent<AdventureProgress>():null;var clock=FindFirstObjectByType<DayNightCycle>();day=clock!=null?clock.Day:1;
             pickaxeLevel=inventory!=null&&inventory.GetComponent<PlayerToolUpgradeController>()!=null?inventory.GetComponent<PlayerToolUpgradeController>().PickaxeLevel:0;
             if(progress==null)return false;
+            int required=Precious?3:2;
+            if(PortfolioSession.Active&&pickaxeLevel<required){FarmNotificationCenter.Show($"Veta Nv.{required} · desbloquea y compra el pico en Maestrías [K].");return false;}
             if(tool!=FarmTool.Pickaxe||!PortfolioSession.Active&&pickaxeLevel<2){FarmNotificationCenter.Show(PortfolioSession.Active?"Equipa el pico para extraer el mineral.":"Mejora el pico a nivel 2 en el taller F.");return false;}
             if(Vector2.Distance(inventory.transform.position,transform.position)>1.6f)return false;
             if(Index<0||Index>=progress.Data.minedDays.Length){FarmNotificationCenter.Show("Esta veta todavía no está registrada.");return false;}
@@ -51,7 +54,7 @@ namespace SurvivorFarm.Runtime.Player
             activeInventory=inventory;activeProgress=progress;activeDay=day;activePickaxeLevel=pickaxeLevel;completedHits=0;mineStartedAt=Time.time;mineEndsAt=Time.time+MineDuration;nextHitAt=mineStartedAt+MineDuration/(MineHits+1f);mining=true;
             animator.PlayAction("Pickaxe",MineDuration,transform.position);
             activeAnimator=animator;animationVersion=animator.ActionVersion;
-            FarmNotificationCenter.Show("Picando veta "+ProgressText());
+            workClock=World.WorldActionClock.For(inventory.gameObject);workClock.Show(this,0);
         }
         void Update()
         {
@@ -68,10 +71,9 @@ namespace SurvivorFarm.Runtime.Player
                 completedHits++;VisibleHitFeedback.Play(gameObject,.08f,false);
                 activeInventory.GetComponent<AudioFeedback>()?.Play(CombatSound.Mine,transform.position);
                 CombatHitParticles.Spawn(transform.position,transform.parent,ImpactSurface.Stone,false,false);
-                activeInventory.GetComponent<GameFeelFeedback>()?.Pulse("Golpe "+completedHits+"/"+MineHits,transform.position,false,false,false);
                 nextHitAt=mineStartedAt+MineDuration*(completedHits+1f)/(MineHits+1f);
             }
-            FarmNotificationCenter.SetPrompt("Picando veta "+ProgressText());
+            workClock?.Show(this,Progress);
             if(Time.time<mineEndsAt)return;
             var inventory=activeInventory;var progress=activeProgress;int day=activeDay,pickaxeLevel=activePickaxeLevel;ClearMining();
             CompleteMine(inventory,progress,day,pickaxeLevel);
@@ -80,17 +82,16 @@ namespace SurvivorFarm.Runtime.Player
         {
             if(Index<0||Index>=progress.Data.minedDays.Length||progress.Data.minedDays[Index]>=day)return;
             progress.Data.minedDays[Index]=day;progress.AddIron(3);
+            inventory.GetComponent<ToolMastery>()?.Earn(FarmTool.Pickaxe,Precious?3:2);
             string rareDrop;
             if(PortfolioSession.Active){if(Precious)inventory.AddItem("GoldOre",2);rareDrop=Precious?"+2 oro mineral":"";}
             else rareDrop=GrantRareDrop(inventory,pickaxeLevel);
             inventory.GetComponent<GameFeelFeedback>()?.Pulse(string.IsNullOrEmpty(rareDrop)?"+3 hierro":"+3 hierro "+rareDrop,transform.position);
             FarmNotificationCenter.Show(PortfolioSession.Active?(Precious?"+3 hierro · +2 oro mineral. Listo para muros reforzados.":"+3 hierro. Hay oro en los salientes más alejados. Las vetas se recuperan mañana."):string.IsNullOrEmpty(rareDrop)?"+3 hierro. Úsalo para armaduras, armas y construcciones.":"+3 hierro y "+rareDrop+". Material para equipo avanzado.");
         }
-        void ClearMining(){mining=false;activeInventory=null;activeProgress=null;activeAnimator=null;activeDay=0;activePickaxeLevel=0;completedHits=0;mineStartedAt=0;mineEndsAt=0;nextHitAt=0;}
-        void OnDisable()=>ClearMining();
+        void ClearMining(){workClock?.Hide(this);mining=false;activeInventory=null;activeProgress=null;activeAnimator=null;activeDay=0;activePickaxeLevel=0;completedHits=0;mineStartedAt=0;mineEndsAt=0;nextHitAt=0;}
+        protected override void OnDisable(){ClearMining();base.OnDisable();}
         float Progress=>mining?Mathf.Clamp01((Time.time-mineStartedAt)/MineDuration):1f;
-        string ProgressText(){int percent=Mathf.RoundToInt(Progress*100f);return "["+BuildProgressBar(Progress)+"] "+percent+"%";}
-        static string BuildProgressBar(float progress){const int segmentCount=10;int filled=Mathf.RoundToInt(Mathf.Clamp01(progress)*segmentCount);return new string('#',filled)+new string('-',segmentCount-filled);}
         static string GrantRareDrop(PlayerInventory inventory,int pickaxeLevel)
         {
             float roll=UnityEngine.Random.value;

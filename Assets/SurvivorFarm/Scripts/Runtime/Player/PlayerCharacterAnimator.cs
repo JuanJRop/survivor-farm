@@ -15,12 +15,14 @@ namespace SurvivorFarm.Runtime.Player
         private bool repeatAction;
         private float meleeDuration, meleeImpact;
         private bool heavyMelee;
+        private bool chargingSword;
         private Vector2 facing = Vector2.down;
         private int direction;
         public PlayerAnimationLibrary Library => library;
         public string CurrentClip => active != null ? active.Name : string.Empty;
         public int CurrentFrame { get; private set; }
         public int CurrentDirection => direction;
+        public Vector2 Facing => facing;
         public int ActionVersion { get; private set; }
         public bool MovementLocked => stats != null && stats.CurrentHealth <= 0 || action != null && Time.time < actionEndsAt;
         public void Configure(SpriteRenderer renderer, string characterName, string fallbackName)
@@ -41,7 +43,8 @@ namespace SurvivorFarm.Runtime.Player
             Vector2 velocity = body != null ? body.linearVelocity : Vector2.zero;
             if (stats != null && stats.CurrentHealth <= 0)
             { Switch("Dead", false); elapsed += Time.deltaTime; Render(); return; }
-            if (action != null && Time.time < actionEndsAt) Switch(action, false);
+            if (chargingSword) Switch("Sword",false);
+            else if (action != null && Time.time < actionEndsAt) Switch(action, false);
             else
             {
                 action = null;
@@ -62,7 +65,7 @@ namespace SurvivorFarm.Runtime.Player
         {
             var clip = library != null ? library.Find(name) : null;
             if (clip == null || stats != null && stats.CurrentHealth <= 0 && name != "Dead") return;
-            ActionVersion++; meleeDuration = 0;
+            ActionVersion++; meleeDuration = 0; chargingSword=false;
             if (target.HasValue) FaceWorldPosition(target.Value);
             GetComponent<PlayerMovementController>()?.StopMovement();
             action = name; repeatAction = duration > clip.Frames / clip.FramesPerSecond;
@@ -78,7 +81,14 @@ namespace SurvivorFarm.Runtime.Player
             heavyMelee = heavy; repeatAction = false;
             actionEndsAt = Time.time + meleeDuration;
         }
-        public void CancelAction() { ActionVersion++; meleeDuration = 0; action = null; actionEndsAt = 0; Switch("Idle",true); Render(); }
+        public void PoseSwordCharge(Vector3 target)
+        {
+            if(!chargingSword){PlayAction("Sword",0,target);chargingSword=action=="Sword";}
+            if(!chargingSword)return;
+            actionEndsAt=Time.time+.15f;FaceWorldPosition(target);Render();
+        }
+        public bool IsChargingSword=>chargingSword;
+        public void CancelAction() { ActionVersion++; meleeDuration = 0; chargingSword=false; action = null; actionEndsAt = 0; Switch("Idle",true); Render(); }
         private void Switch(string name, bool restart)
         {
             if (library == null || !restart && CurrentClip == name) return;
@@ -102,6 +112,7 @@ namespace SurvivorFarm.Runtime.Player
             }
             bool loop = active.Loop || action != null && repeatAction;
             CurrentFrame = loop ? frame % active.Frames : Mathf.Min(frame, active.Frames - 1);
+            if(chargingSword)CurrentFrame=Mathf.Min(1,active.Frames-1);
             spriteRenderer.sprite = library.Frame(active,direction,CurrentFrame);
             // Josh's side-view frames face right; mirror only when facing left.
             spriteRenderer.flipX = direction == 2 && facing.x < 0;

@@ -140,7 +140,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             HitFeedback.Report(gameObject, source, amount*(Vulnerable?2:1), Health==0, boss||guardian);
             if(Health==0){
                 var loot=FindObjectsByType<EnemyAIBase>(FindObjectsInactive.Include,FindObjectsSortMode.None).Select(e=>e.LootPrefab).FirstOrDefault(p=>p!=null);
-                EnemyLootPickup.Spawn(loot,transform.position,world.transform,ResourceFlyweights.Item(ItemKind.Coins),boss?15:guardian?8:2);
+                EnemyLootTable.Drop(transform.position,world.transform,EnemyCombatStyle.Legacy,boss||guardian,boss?15:guardian?8:2,loot);
                 engaged=false;warning.enabled=false;visual.transform.localPosition=restingVisualPosition;RefreshPresentation(false);FarmGameEvents.RaiseEnemyDefeated();if(boss||guardian)campaign.Defeated(boss);}
             else RefreshPresentation(true);
         }

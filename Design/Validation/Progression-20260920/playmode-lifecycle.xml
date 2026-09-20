@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="13" result="Passed" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-20 10:43:37Z" end-time="2026-09-20 10:43:39Z" duration="1.9262876">
+  <test-suite type="TestSuite" id="1511" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="432" result="Passed" start-time="2026-09-20 10:43:37Z" end-time="2026-09-20 10:43:39Z" duration="1.926288" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1505" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/QA/p/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="432" result="Passed" start-time="2026-09-20 10:43:37Z" end-time="2026-09-20 10:43:39Z" duration="1.912551" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="7520" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1506" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="432" result="Passed" start-time="2026-09-20 10:43:37Z" end-time="2026-09-20 10:43:39Z" duration="1.909834" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1507" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="432" result="Passed" start-time="2026-09-20 10:43:37Z" end-time="2026-09-20 10:43:39Z" duration="1.907145" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1356" name="ResourceLifecycleTests" fullname="SurvivorFarm.Tests.ResourceLifecycleTests" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-09-20 10:43:37Z" end-time="2026-09-20 10:43:39Z" duration="1.902680" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1362" name="AnimalInteractionUsesSwordCooldownAndBowProjectile" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.AnimalInteractionUsesSwordCooldownAndBowProjectile" methodname="AnimalInteractionUsesSwordCooldownAndBowProjectile" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="1609217270" result="Passed" start-time="2026-09-20 10:43:37Z" end-time="2026-09-20 10:43:39Z" duration="1.313718" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
++2 comida, +4 oro
+]]></output>
+            </test-case>
+            <test-case id="1360" name="AnimalRequiresLethalDamageAndPaysFoodOnlyOnce" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.AnimalRequiresLethalDamageAndPaysFoodOnlyOnce" methodname="AnimalRequiresLethalDamageAndPaysFoodOnlyOnce" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="1697663455" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.003535" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Selecciona espada o arco para cazar.
++2 comida, +4 oro
+]]></output>
+            </test-case>
+            <test-case id="1366" name="BowProjectileStopsAtLockedZoneCollider" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.BowProjectileStopsAtLockedZoneCollider" methodname="BowProjectileStopsAtLockedZoneCollider" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="2111810159" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.503684" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1365" name="EatingFoodRestoresLifeAndConsumesOneUnit" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.EatingFoodRestoresLifeAndConsumesOneUnit" methodname="EatingFoodRestoresLifeAndConsumesOneUnit" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="674845375" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.003675" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Comiste una ración: +2 vida.
+]]></output>
+            </test-case>
+            <test-case id="1370" name="HudRestoresInteractionAndInventoryBindingsAfterSceneActivation" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.HudRestoresInteractionAndInventoryBindingsAfterSceneActivation" methodname="HudRestoresInteractionAndInventoryBindingsAfterSceneActivation" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="1668815904" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.020385" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1363" name="OldArrowCannotDamageRespawnedAnimal" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.OldArrowCannotDamageRespawnedAnimal" methodname="OldArrowCannotDamageRespawnedAnimal" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="391444735" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.005386" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
++2 comida, +4 oro
+]]></output>
+            </test-case>
+            <test-case id="1367" name="PooledEnemyCannotDropLootTwiceAfterDefeat" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.PooledEnemyCannotDropLootTwiceAfterDefeat" methodname="PooledEnemyCannotDropLootTwiceAfterDefeat" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="1763611863" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.008241" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Limo recibio 10 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1368" name="ResourceInteractionTakesPriorityOverUnderlyingGrass" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.ResourceInteractionTakesPriorityOverUnderlyingGrass" methodname="ResourceInteractionTakesPriorityOverUnderlyingGrass" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="1752995183" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.006842" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[+2 madera, +4 oro
+]]></output>
+            </test-case>
+            <test-case id="1361" name="SaveRestoresDepletionHealthAndFoodBySpawnId" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.SaveRestoresDepletionHealthAndFoodBySpawnId" methodname="SaveRestoresDepletionHealthAndFoodBySpawnId" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="257340972" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.013229" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[+2 comida, +4 oro
++2 comida, +4 oro
+]]></output>
+            </test-case>
+            <test-case id="1364" name="SpawnPointInstantiatesOnlyOneResourceAndReusesIt" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.SpawnPointInstantiatesOnlyOneResourceAndReusesIt" methodname="SpawnPointInstantiatesOnlyOneResourceAndReusesIt" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="319840922" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.002082" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[+2 madera, +4 oro
+]]></output>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1359" name="ToolsRewardOnceAndRemoveEveryVisualAndCollider" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.ToolsRewardOnceAndRemoveEveryVisualAndCollider" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.008787" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1357" name="ToolsRewardOnceAndRemoveEveryVisualAndCollider(True)" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.ToolsRewardOnceAndRemoveEveryVisualAndCollider(True)" methodname="ToolsRewardOnceAndRemoveEveryVisualAndCollider" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="176890390" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.003684" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Necesitas el hacha para talar.
++2 madera, +4 oro
++2 madera, +4 oro
+]]></output>
+              </test-case>
+              <test-case id="1358" name="ToolsRewardOnceAndRemoveEveryVisualAndCollider(False)" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.ToolsRewardOnceAndRemoveEveryVisualAndCollider(False)" methodname="ToolsRewardOnceAndRemoveEveryVisualAndCollider" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="2034088900" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.002376" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Necesitas el pico para romper roca.
++2 piedra, +4 oro
++2 piedra, +4 oro
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-case id="1369" name="VersionFiveSaveKeepsResourceOrderWhenAnimalsAreAdded" fullname="SurvivorFarm.Tests.ResourceLifecycleTests.VersionFiveSaveKeepsResourceOrderWhenAnimalsAreAdded" methodname="VersionFiveSaveKeepsResourceOrderWhenAnimalsAreAdded" classname="SurvivorFarm.Tests.ResourceLifecycleTests" runstate="Runnable" seed="1824952837" result="Passed" start-time="2026-09-20 10:43:39Z" end-time="2026-09-20 10:43:39Z" duration="0.001912" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

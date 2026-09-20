@@ -6,6 +6,6 @@ namespace SurvivorFarm.Runtime.Gameplay
     public static class DamageRules
     {
         public static bool CanPlayerHit(IDamageable target) => target != null && target.IsAlive &&
-            !(target is PlayerSurvivalStats) && !(target is FarmDefense);
+            !(target is PlayerSurvivalStats) && !(target is FarmDefense) && !(target is VillageResidentHealth) && !(target is VillageHouseHealth);
     }
 }

@@ -1,0 +1,1 @@
+PASS: UI captures at 1280x720 and 1920x1080, shared village lots, runtime footprint recorded. Campaign and layout regression follow.

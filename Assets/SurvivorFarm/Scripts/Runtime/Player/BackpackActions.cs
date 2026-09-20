@@ -6,7 +6,8 @@ namespace SurvivorFarm.Runtime.Player
 {
     public static class BackpackActions
     {
-        public static bool IsBuilding(string id)=>FortressPieces.IsWall(id)||new[]{"Campfire","Trap","Turret","Chest","Workbench","Beacon","Bed","Cabinet","Furnace"}.Contains(id);
+        public static bool IsRetiredDefense(string id)=>FortressPieces.IsWall(id)||id=="Trap"||id=="Turret";
+        public static bool IsBuilding(string id)=>new[]{"Campfire","Chest","Workbench","Beacon","Bed","Cabinet","Furnace"}.Contains(id);
         public static int Price(string id)=>SurvivalItemCatalog.Find(id)?.SellPrice ?? id switch{"CommonSeeds"=>1,"MineralSeeds"=>5,"MagicSeeds"=>12,"Wood"=>3,"Stone"=>4,"Fruit"=>6,"Food"=>10,"Iron"=>8,"Campfire"=>10,"Fence"=>2,"Chest"=>12,"Workbench"=>20,"Beacon"=>40,"Bed"=>12,"Cabinet"=>25,"Furnace"=>40,_=>0};
         public static int Count(PlayerInventory inv,string id)=>inv==null||string.IsNullOrEmpty(id)?0:SurvivalItemCatalog.IsKnown(id)?inv.GetAvailableItemCount(id):id switch{"CommonSeeds"=>inv.GetAvailableSeedCount(SeedRarity.Common),"MineralSeeds"=>inv.GetAvailableSeedCount(SeedRarity.Mineral),"MagicSeeds"=>inv.GetAvailableSeedCount(SeedRarity.Magic),"Wood"=>inv.Wood,"Stone"=>inv.Stone,"Fruit"=>inv.Fruit,"Food"=>inv.Food,"Iron"=>inv.GetComponent<AdventureProgress>()?.Data.iron??0,_=>inv.PackedCount(id)};
         public static bool Remove(PlayerInventory inv,string id,int amount)

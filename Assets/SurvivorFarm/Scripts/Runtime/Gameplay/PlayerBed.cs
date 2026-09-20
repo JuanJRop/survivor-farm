@@ -21,8 +21,9 @@ namespace SurvivorFarm.Runtime.Gameplay
             RefreshVisual();
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             if (crafting == null) crafting = FindFirstObjectByType<PlayerCraftingController>();
             if (clock == null) clock = FindFirstObjectByType<DayNightCycle>();
             Subscribe();
@@ -41,7 +42,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             if (crafting != null) crafting.CraftingChanged -= RefreshVisual;
         }
 
-        private void OnDisable() => Unsubscribe();
+        protected override void OnDisable() { Unsubscribe(); base.OnDisable(); }
 
         private void RefreshVisual()
         {

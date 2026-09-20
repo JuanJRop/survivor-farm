@@ -20,6 +20,9 @@ namespace SurvivorFarm.Runtime.Gameplay
     {
         [Min(.1f)] public float continuationWindow = .6f;
         [Range(0f, .25f)] public float inputBuffer = .16f;
+        public ComboAttack chargedAttack = new ComboAttack { label="Descarga",duration=.66f,
+            impactFraction=.34f,damageMultiplier=3f,bonusDamage=2,heavy=true };
+        [Range(1f,2f)] public float chargedRangeMultiplier=1.3f;
         public ComboAttack[] attacks =
         {
             new ComboAttack(),

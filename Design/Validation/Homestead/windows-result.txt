@@ -1,0 +1,1 @@
+PASS: Windows x64 boot, six-zone valley campaign, portal/boss art, journal UI and save/load. QA slot isolated.

@@ -26,8 +26,8 @@ namespace SurvivorFarm.Runtime.Gameplay
             EnsureLoaded();
             if (items.TryGetValue(kind, out ItemDefinition item)) return item;
             item = Create<ItemDefinition>(kind.ToString());
-            string[] labels = { "madera", "piedra", "fruta", "comida", "oro", "semilla comun", "semilla mineral", "semilla magica" };
-            item.Initialize(kind, labels[(int)kind]);
+            string[] labels = { "madera", "piedra", "fruta", "comida", "oro", "semilla comun", "semilla mineral", "semilla magica", "experiencia", "hierro", "oro bruto", "rubí", "esmeralda", "diamante", "esmeralda menor", "esencia de tierra" };
+            item.Initialize(kind, kind == ItemKind.Arrow ? "flechas" : kind == ItemKind.Leather ? "cuero" : kind == ItemKind.Bow ? "arco antiguo" : labels[(int)kind]);
             items.Add(kind, item);
             return item;
         }

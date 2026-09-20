@@ -10,6 +10,7 @@ namespace SurvivorFarm.Runtime.Player
         [SerializeField] private FarmTool selectedTool = FarmTool.Sword;
 
         public FarmTool SelectedTool => selectedTool;
+        public bool BowUnlocked => GetComponent<PlayerInventory>() != null && GetComponent<PlayerInventory>().OwnsEquipment("Bow");
 
         public event Action<FarmTool> ToolChanged;
 
@@ -21,7 +22,7 @@ namespace SurvivorFarm.Runtime.Player
 
         private void Start()
         {
-            if (Array.IndexOf(Tools, selectedTool) < 0)
+            if (Array.IndexOf(Tools, selectedTool) < 0 || selectedTool == FarmTool.Bow && !BowUnlocked)
             {
                 selectedTool = FarmTool.Sword;
             }
@@ -31,7 +32,7 @@ namespace SurvivorFarm.Runtime.Player
 
         private void Update()
         {
-            if (SurvivorFarm.Runtime.UI.InventoryPanelSystem.IsOpen) return;
+            if (SurvivorFarm.Runtime.UI.InventoryPanelSystem.IsOpen || FarmIntroduction.IsOpen) return;
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 Select(FarmTool.Sword);
@@ -44,6 +45,8 @@ namespace SurvivorFarm.Runtime.Player
 
         public void Select(FarmTool tool)
         {
+            if (tool == FarmTool.Bow && !BowUnlocked) return;
+            if(FarmIntroduction.IsOpen&&tool!=FarmTool.Sword)return;
             var inventory = GetComponent<PlayerInventory>();
             if (inventory != null && (tool == FarmTool.Sword || tool == FarmTool.Bow))
             {

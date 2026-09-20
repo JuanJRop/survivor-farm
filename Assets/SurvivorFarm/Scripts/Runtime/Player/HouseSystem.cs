@@ -43,8 +43,15 @@ namespace SurvivorFarm.Runtime.Player
             Wall(Center+Vector3.left*(Size.x/2+.15f),new Vector2(.3f,Size.y));Wall(Center+Vector3.right*(Size.x/2+.15f),new Vector2(.3f,Size.y));
             var exit=new GameObject("Puerta de salida");exit.transform.SetParent(shell,false);exit.transform.position=Center+Vector3.down*(Size.y/2-.65f);var sr=exit.AddComponent<SpriteRenderer>();sr.sprite=HouseSprites.Slice("HouseTiles",0,0,64,64);sr.sortingOrder=100;exit.transform.localScale=Vector3.one*.2f;exit.AddComponent<CircleCollider2D>().isTrigger=true;exit.AddComponent<HouseExit>().Owner=this;
             var text=new GameObject("Ayuda de la casa");text.transform.SetParent(shell,false);text.transform.position=Center+Vector3.up*(Size.y/2+.65f);var label=text.AddComponent<TextMesh>();label.text=Names[Data.level]+" · H: amueblar y ampliar";label.characterSize=.075f;label.fontSize=40;label.anchor=TextAnchor.MiddleCenter;label.color=new Color(.3f,.16f,.1f);text.GetComponent<MeshRenderer>().sortingOrder=2000;
-            if(exteriorCollider!=null)exteriorCollider.size=new Vector2((2.2f+Data.level*.4f)*.8f,.8f);
-            if(facade!=null){facade.sprite=HouseSprites.Facade(Data.level);if(facade.sprite!=null)facade.transform.localScale=Vector3.one*((2.2f+Data.level*.4f)/facade.sprite.bounds.size.x);}
+            if(facade!=null)
+            {
+                facade.sprite=HouseSprites.Facade(Data.level);
+                if(facade.sprite!=null)
+                {
+                    facade.transform.localScale=Vector3.one*.5f;
+                    if(exteriorCollider!=null)exteriorCollider.size=new Vector2(facade.sprite.bounds.size.x*.4f,.8f);
+                }
+            }
         }
         public void Enter(bool notify=true)
         {

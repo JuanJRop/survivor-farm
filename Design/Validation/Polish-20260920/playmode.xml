@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="32" result="Failed(Child)" total="32" passed="15" failed="17" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:42:21Z" duration="28.33532">
+  <test-suite type="TestSuite" id="1464" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="392" result="Failed" site="Child" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:42:21Z" duration="28.335320" total="32" passed="15" failed="17" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1458" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/QA/p/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="392" result="Failed" site="Child" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:42:21Z" duration="28.326913" total="32" passed="15" failed="17" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="17472" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1459" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="392" result="Failed" site="Child" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:42:21Z" duration="28.324964" total="32" passed="15" failed="17" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1460" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="392" result="Failed" site="Child" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:42:21Z" duration="28.323467" total="32" passed="15" failed="17" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="1052" name="CombatLootTests" fullname="SurvivorFarm.Tests.CombatLootTests" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" testcasecount="5" result="Failed" site="Child" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:41:53Z" duration="0.345322" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1053" name="DefeatDropsCoinsAndPickupPaysOnlyOnce" fullname="SurvivorFarm.Tests.CombatLootTests.DefeatDropsCoinsAndPickupPaysOnlyOnce" methodname="DefeatDropsCoinsAndPickupPaysOnlyOnce" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="1860429329" result="Failed" label="Error" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:41:53Z" duration="0.328259" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp : UnityEngine.MissingComponentException : There is no 'SpriteRenderer' attached to the "Loot icon" game object, but a script is trying to access it.
+You probably need to add a SpriteRenderer to the game object "Loot icon". Or your script needs to check if the component is attached before using it.]]></message>
+                <stack-trace><![CDATA[--SetUp
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x000cd] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.SpriteRenderer.set_sprite (UnityEngine.Sprite value) [0x00006] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Configure (SurvivorFarm.Runtime.Gameplay.ItemDefinition definition, System.Int32 count, UnityEngine.Transform sprite) [0x00070] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\EnemyLootPickup.cs:35 
+  at SurvivorFarm.Tests.CombatLootTests.SetUp () [0x00078] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\CombatLootTests.cs:36 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1eb9db207454431c84a47bcd81e79c37>:0 ]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="1057" name="HiddenDungeonLootKeepsItsRegionForSaving" fullname="SurvivorFarm.Tests.CombatLootTests.HiddenDungeonLootKeepsItsRegionForSaving" methodname="HiddenDungeonLootKeepsItsRegionForSaving" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="774837771" result="Failed" label="Error" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:41:53Z" duration="0.001429" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp : UnityEngine.MissingComponentException : There is no 'SpriteRenderer' attached to the "Loot icon" game object, but a script is trying to access it.
+You probably need to add a SpriteRenderer to the game object "Loot icon". Or your script needs to check if the component is attached before using it.]]></message>
+                <stack-trace><![CDATA[--SetUp
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x000cd] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.SpriteRenderer.set_sprite (UnityEngine.Sprite value) [0x00006] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Configure (SurvivorFarm.Runtime.Gameplay.ItemDefinition definition, System.Int32 count, UnityEngine.Transform sprite) [0x00070] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\EnemyLootPickup.cs:35 
+  at SurvivorFarm.Tests.CombatLootTests.SetUp () [0x00078] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\CombatLootTests.cs:36 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1eb9db207454431c84a47bcd81e79c37>:0 ]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="1054" name="HitFlashesAndKnockbackCannotCrossWall" fullname="SurvivorFarm.Tests.CombatLootTests.HitFlashesAndKnockbackCannotCrossWall" methodname="HitFlashesAndKnockbackCannotCrossWall" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="681085062" result="Failed" label="Error" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:41:53Z" duration="0.001672" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp : UnityEngine.MissingComponentException : There is no 'SpriteRenderer' attached to the "Loot icon" game object, but a script is trying to access it.
+You probably need to add a SpriteRenderer to the game object "Loot icon". Or your script needs to check if the component is attached before using it.]]></message>
+                <stack-trace><![CDATA[--SetUp
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x000cd] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.SpriteRenderer.set_sprite (UnityEngine.Sprite value) [0x00006] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Configure (SurvivorFarm.Runtime.Gameplay.ItemDefinition definition, System.Int32 count, UnityEngine.Transform sprite) [0x00070] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\EnemyLootPickup.cs:35 
+  at SurvivorFarm.Tests.CombatLootTests.SetUp () [0x00078] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\CombatLootTests.cs:36 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1eb9db207454431c84a47bcd81e79c37>:0 ]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="1055" name="ReturningToPoolWithoutDefeatDropsNothing" fullname="SurvivorFarm.Tests.CombatLootTests.ReturningToPoolWithoutDefeatDropsNothing" methodname="ReturningToPoolWithoutDefeatDropsNothing" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="1759048692" result="Failed" label="Error" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:41:53Z" duration="0.000529" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp : UnityEngine.MissingComponentException : There is no 'SpriteRenderer' attached to the "Loot icon" game object, but a script is trying to access it.
+You probably need to add a SpriteRenderer to the game object "Loot icon". Or your script needs to check if the component is attached before using it.]]></message>
+                <stack-trace><![CDATA[--SetUp
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x000cd] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.SpriteRenderer.set_sprite (UnityEngine.Sprite value) [0x00006] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Configure (SurvivorFarm.Runtime.Gameplay.ItemDefinition definition, System.Int32 count, UnityEngine.Transform sprite) [0x00070] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\EnemyLootPickup.cs:35 
+  at SurvivorFarm.Tests.CombatLootTests.SetUp () [0x00078] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\CombatLootTests.cs:36 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1eb9db207454431c84a47bcd81e79c37>:0 ]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="1056" name="UncollectedLootSurvivesSaveRoundTrip" fullname="SurvivorFarm.Tests.CombatLootTests.UncollectedLootSurvivesSaveRoundTrip" methodname="UncollectedLootSurvivesSaveRoundTrip" classname="SurvivorFarm.Tests.CombatLootTests" runstate="Runnable" seed="476038426" result="Failed" label="Error" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:41:53Z" duration="0.000394" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp : UnityEngine.MissingComponentException : There is no 'SpriteRenderer' attached to the "Loot icon" game object, but a script is trying to access it.
+You probably need to add a SpriteRenderer to the game object "Loot icon". Or your script needs to check if the component is attached before using it.]]></message>
+                <stack-trace><![CDATA[--SetUp
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x000cd] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.SpriteRenderer.set_sprite (UnityEngine.Sprite value) [0x00006] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Configure (SurvivorFarm.Runtime.Gameplay.ItemDefinition definition, System.Int32 count, UnityEngine.Transform sprite) [0x00070] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\EnemyLootPickup.cs:35 
+  at SurvivorFarm.Tests.CombatLootTests.SetUp () [0x00078] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\CombatLootTests.cs:36 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1eb9db207454431c84a47bcd81e79c37>:0 ]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1058" name="CombatPolishTests" fullname="SurvivorFarm.Tests.CombatPolishTests" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:41:58Z" duration="5.257654" total="13" passed="11" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1061" name="AnimatedSwordHitsOnContactFrameAndCannotHitTwice" fullname="SurvivorFarm.Tests.CombatPolishTests.AnimatedSwordHitsOnContactFrameAndCannotHitTwice" methodname="AnimatedSwordHitsOnContactFrameAndCannotHitTwice" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="757798020" result="Passed" start-time="2026-09-20 09:41:53Z" end-time="2026-09-20 09:41:54Z" duration="0.962966" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Elite recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1068" name="AudioBankIsBoundedDistinctAndUsesPitchVariation" fullname="SurvivorFarm.Tests.CombatPolishTests.AudioBankIsBoundedDistinctAndUsesPitchVariation" methodname="AudioBankIsBoundedDistinctAndUsesPitchVariation" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="559837523" result="Passed" start-time="2026-09-20 09:41:54Z" end-time="2026-09-20 09:41:54Z" duration="0.046651" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1063" name="BufferedInputContinuesOnceAndPauseClearsIt" fullname="SurvivorFarm.Tests.CombatPolishTests.BufferedInputContinuesOnceAndPauseClearsIt" methodname="BufferedInputContinuesOnceAndPauseClearsIt" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="615653330" result="Passed" start-time="2026-09-20 09:41:54Z" end-time="2026-09-20 09:41:54Z" duration="0.465009" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1067" name="CameraFeedbackReturnsExactlyToBaseWithoutDrift" fullname="SurvivorFarm.Tests.CombatPolishTests.CameraFeedbackReturnsExactlyToBaseWithoutDrift" methodname="CameraFeedbackReturnsExactlyToBaseWithoutDrift" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1356947982" result="Passed" start-time="2026-09-20 09:41:54Z" end-time="2026-09-20 09:41:55Z" duration="0.504885" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1059" name="ComboDataIsConfiguredAndThirdHitIsStronger" fullname="SurvivorFarm.Tests.CombatPolishTests.ComboDataIsConfiguredAndThirdHitIsStronger" methodname="ComboDataIsConfiguredAndThirdHitIsStronger" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="172044225" result="Passed" start-time="2026-09-20 09:41:55Z" end-time="2026-09-20 09:41:55Z" duration="0.002855" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1071" name="CratesRejectDuplicateRewardsAndUseBreakingSound" fullname="SurvivorFarm.Tests.CombatPolishTests.CratesRejectDuplicateRewardsAndUseBreakingSound" methodname="CratesRejectDuplicateRewardsAndUseBreakingSound" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1956886587" result="Failed" label="Error" start-time="2026-09-20 09:41:55Z" end-time="2026-09-20 09:41:55Z" duration="0.009934" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[UnityEngine.MissingComponentException : There is no 'SpriteRenderer' attached to the "Loot icon" game object, but a script is trying to access it.
+You probably need to add a SpriteRenderer to the game object "Loot icon". Or your script needs to check if the component is attached before using it.]]></message>
+                <stack-trace><![CDATA[  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x000cd] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at UnityEngine.SpriteRenderer.set_sprite (UnityEngine.Sprite value) [0x00006] in <31f3cd5c2a074982a9d5664e7709cac1>:0 
+  at SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Configure (SurvivorFarm.Runtime.Gameplay.ItemDefinition definition, System.Int32 count, UnityEngine.Transform sprite) [0x00070] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\EnemyLootPickup.cs:35 
+  at SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Spawn (SurvivorFarm.Runtime.Gameplay.EnemyLootPickup prefab, UnityEngine.Vector3 position, UnityEngine.Transform parent, SurvivorFarm.Runtime.Gameplay.ItemDefinition item, System.Int32 amount) [0x00077] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\EnemyLootPickup.cs:79 
+  at SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Scatter (UnityEngine.Vector3 origin, UnityEngine.Transform parent, SurvivorFarm.Runtime.Gameplay.ItemKind kind, System.Int32 amount, SurvivorFarm.Runtime.Gameplay.EnemyLootPickup prefab, System.Single angle) [0x00000] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\EnemyLootPickup.cs:86 
+  at SurvivorFarm.Runtime.Gameplay.DungeonDestructible.TakeDamage (System.Int32 amount, SurvivorFarm.Runtime.Player.PlayerInventory source) [0x000c1] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Scripts\Runtime\Gameplay\DungeonDestructible.cs:34 
+  at SurvivorFarm.Tests.CombatPolishTests.CratesRejectDuplicateRewardsAndUseBreakingSound () [0x00046] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\CombatPolishTests.cs:221 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1eb9db207454431c84a47bcd81e79c37>:0 ]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="1069" name="DebrisIsBoundedAndCleansUpDuringPause" fullname="SurvivorFarm.Tests.CombatPolishTests.DebrisIsBoundedAndCleansUpDuringPause" methodname="DebrisIsBoundedAndCleansUpDuringPause" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1522061313" result="Passed" start-time="2026-09-20 09:41:55Z" end-time="2026-09-20 09:41:56Z" duration="0.604488" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1066" name="DisablingTimeEffectRestoresPreexistingSpeedAndReducedMotionSkipsIt" fullname="SurvivorFarm.Tests.CombatPolishTests.DisablingTimeEffectRestoresPreexistingSpeedAndReducedMotionSkipsIt" methodname="DisablingTimeEffectRestoresPreexistingSpeedAndReducedMotionSkipsIt" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1234791368" result="Passed" start-time="2026-09-20 09:41:56Z" end-time="2026-09-20 09:41:56Z" duration="0.000800" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1060" name="ExpiredWindowAndWeaponSwitchRestartAtFirstAttack" fullname="SurvivorFarm.Tests.CombatPolishTests.ExpiredWindowAndWeaponSwitchRestartAtFirstAttack" methodname="ExpiredWindowAndWeaponSwitchRestartAtFirstAttack" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1560134039" result="Passed" start-time="2026-09-20 09:41:56Z" end-time="2026-09-20 09:41:56Z" duration="0.000548" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1062" name="InterruptedWindupDealsNoDamageAndResetsChain" fullname="SurvivorFarm.Tests.CombatPolishTests.InterruptedWindupDealsNoDamageAndResetsChain" methodname="InterruptedWindupDealsNoDamageAndResetsChain" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="2088501579" result="Passed" start-time="2026-09-20 09:41:56Z" end-time="2026-09-20 09:41:56Z" duration="0.253291" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1070" name="PassiveDamageDoesNotFreezeThePlayerButDirectWeaponContactDoes" fullname="SurvivorFarm.Tests.CombatPolishTests.PassiveDamageDoesNotFreezeThePlayerButDirectWeaponContactDoes" methodname="PassiveDamageDoesNotFreezeThePlayerButDirectWeaponContactDoes" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1117654188" result="Passed" start-time="2026-09-20 09:41:56Z" end-time="2026-09-20 09:41:56Z" duration="0.002353" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Elite recibio 1 de dano.
+Elite recibio 1 de dano.
+]]></output>
+            </test-case>
+            <test-case id="1065" name="TemporaryTimeEffectRestoresAndCannotUnpauseGame" fullname="SurvivorFarm.Tests.CombatPolishTests.TemporaryTimeEffectRestoresAndCannotUnpauseGame" methodname="TemporaryTimeEffectRestoresAndCannotUnpauseGame" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1730658422" result="Passed" start-time="2026-09-20 09:41:56Z" end-time="2026-09-20 09:41:57Z" duration="0.803313" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+]]></output>
+            </test-case>
+            <test-case id="1064" name="ThreeActualStrikesDeliverOneOneThreeAndEliteFinisher" fullname="SurvivorFarm.Tests.CombatPolishTests.ThreeActualStrikesDeliverOneOneThreeAndEliteFinisher" methodname="ThreeActualStrikesDeliverOneOneThreeAndEliteFinisher" classname="SurvivorFarm.Tests.CombatPolishTests" runstate="Runnable" seed="1517693980" result="Failed" start-time="2026-09-20 09:41:57Z" end-time="2026-09-20 09:41:58Z" duration="1.596223" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[Unhandled log message: '[Exception] MissingComponentException: There is no 'SpriteRenderer' attached to the "Loot icon" game object, but a script is trying to access it.
+You probably need to add a SpriteRenderer to the game object "Loot icon". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                <stack-trace><![CDATA[UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.SpriteRenderer.set_sprite (UnityEngine.Sprite value) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Configure (SurvivorFarm.Runtime.Gameplay.ItemDefinition definition, System.Int32 count, UnityEngine.Transform sprite) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyLootPickup.cs:35)
+SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Spawn (SurvivorFarm.Runtime.Gameplay.EnemyLootPickup prefab, UnityEngine.Vector3 position, UnityEngine.Transform parent, SurvivorFarm.Runtime.Gameplay.ItemDefinition item, System.Int32 amount) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyLootPickup.cs:79)
+SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Scatter (UnityEngine.Vector3 origin, UnityEngine.Transform parent, SurvivorFarm.Runtime.Gameplay.ItemKind kind, System.Int32 amount, SurvivorFarm.Runtime.Gameplay.EnemyLootPickup prefab, System.Single angle) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyLootPickup.cs:86)
+SurvivorFarm.Runtime.Gameplay.EnemyLootTable.Drop (UnityEngine.Vector3 position, UnityEngine.Transform parent, SurvivorFarm.Runtime.Gameplay.EnemyCombatStyle style, System.Boolean elite, System.Int32 reward, SurvivorFarm.Runtime.Gameplay.EnemyLootPickup prefab) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyLootTable.cs:23)
+SurvivorFarm.Runtime.Gameplay.EnemyAIBase.DropLoot () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyAIBase.cs:395)
+SurvivorFarm.Runtime.Gameplay.EnemyAIBase.OnDefeated (SurvivorFarm.Runtime.Player.PlayerInventory inventory) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyAIBase.cs:391)
+SurvivorFarm.Runtime.Gameplay.EnemyAIBase.TakeDamage (System.Int32 amount, SurvivorFarm.Runtime.Player.PlayerInventory source) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyAIBase.cs:239)
+SurvivorFarm.Runtime.Gameplay.HitFeedback.ApplyDamage (SurvivorFarm.Runtime.Gameplay.IDamageable target, System.Int32 damage, SurvivorFarm.Runtime.Player.PlayerInventory source, System.Boolean heavy, SurvivorFarm.Runtime.Gameplay.FarmTool tool, System.Boolean charged) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HitFeedback.cs:49)
+SurvivorFarm.Runtime.Player.PlayerCombatController.PerformSwordAreaAttack (System.Int32 damage, System.Boolean heavy, System.Boolean charged) (at Assets/SurvivorFarm/Scripts/Runtime/Player/PlayerCombatController.cs:267)
+SurvivorFarm.Runtime.Player.PlayerCombatController+<ReleaseSword>d__57.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Player/PlayerCombatController.cs:247)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+Elite recibio 1 de dano.
+Elite recibio 1 de dano.
+Elite recibio 3 de dano.
+MissingComponentException: There is no 'SpriteRenderer' attached to the "Loot icon" game object, but a script is trying to access it.
+You probably need to add a SpriteRenderer to the game object "Loot icon". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.SpriteRenderer.set_sprite (UnityEngine.Sprite value) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Configure (SurvivorFarm.Runtime.Gameplay.ItemDefinition definition, System.Int32 count, UnityEngine.Transform sprite) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyLootPickup.cs:35)
+SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Spawn (SurvivorFarm.Runtime.Gameplay.EnemyLootPickup prefab, UnityEngine.Vector3 position, UnityEngine.Transform parent, SurvivorFarm.Runtime.Gameplay.ItemDefinition item, System.Int32 amount) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyLootPickup.cs:79)
+SurvivorFarm.Runtime.Gameplay.EnemyLootPickup.Scatter (UnityEngine.Vector3 origin, UnityEngine.Transform parent, SurvivorFarm.Runtime.Gameplay.ItemKind kind, System.Int32 amount, SurvivorFarm.Runtime.Gameplay.EnemyLootPickup prefab, System.Single angle) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyLootPickup.cs:86)
+SurvivorFarm.Runtime.Gameplay.EnemyLootTable.Drop (UnityEngine.Vector3 position, UnityEngine.Transform parent, SurvivorFarm.Runtime.Gameplay.EnemyCombatStyle style, System.Boolean elite, System.Int32 reward, SurvivorFarm.Runtime.Gameplay.EnemyLootPickup prefab) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyLootTable.cs:23)
+SurvivorFarm.Runtime.Gameplay.EnemyAIBase.DropLoot () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyAIBase.cs:395)
+SurvivorFarm.Runtime.Gameplay.EnemyAIBase.OnDefeated (SurvivorFarm.Runtime.Player.PlayerInventory inventory) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyAIBase.cs:391)
+SurvivorFarm.Runtime.Gameplay.EnemyAIBase.TakeDamage (System.Int32 amount, SurvivorFarm.Runtime.Player.PlayerInventory source) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/EnemyAIBase.cs:239)
+SurvivorFarm.Runtime.Gameplay.HitFeedback.ApplyDamage (SurvivorFarm.Runtime.Gameplay.IDamageable target, System.Int32 damage, SurvivorFarm.Runtime.Player.PlayerInventory source, System.Boolean heavy, SurvivorFarm.Runtime.Gameplay.FarmTool tool, System.Boolean charged) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/HitFeedback.cs:49)
+SurvivorFarm.Runtime.Player.PlayerCombatController.PerformSwordAreaAttack (System.Int32 damage, System.Boolean heavy, System.Boolean charged) (at Assets/SurvivorFarm/Scripts/Runtime/Player/PlayerCombatController.cs:267)
+SurvivorFarm.Runtime.Player.PlayerCombatController+<ReleaseSword>d__57.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Player/PlayerCombatController.cs:247)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1094" name="DungeonPresentationTests" fullname="SurvivorFarm.Tests.DungeonPresentationTests" classname="SurvivorFarm.Tests.DungeonPresentationTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-20 09:41:58Z" end-time="2026-09-20 09:42:00Z" duration="2.192298" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1096" name="DungeonTimeReachesNightAndSuppliesPersist" fullname="SurvivorFarm.Tests.DungeonPresentationTests.DungeonTimeReachesNightAndSuppliesPersist" methodname="DungeonTimeReachesNightAndSuppliesPersist" classname="SurvivorFarm.Tests.DungeonPresentationTests" runstate="Runnable" seed="505781183" result="Failed" start-time="2026-09-20 09:41:58Z" end-time="2026-09-20 09:42:00Z" duration="2.077334" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[Unhandled log message: '[Exception] MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                <stack-trace><![CDATA[UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></output>
+            </test-case>
+            <test-case id="1095" name="ShrineFootprintBlocksMovementAndCandlesAnimate" fullname="SurvivorFarm.Tests.DungeonPresentationTests.ShrineFootprintBlocksMovementAndCandlesAnimate" methodname="ShrineFootprintBlocksMovementAndCandlesAnimate" classname="SurvivorFarm.Tests.DungeonPresentationTests" runstate="Runnable" seed="1476707849" result="Failed" start-time="2026-09-20 09:42:00Z" end-time="2026-09-20 09:42:00Z" duration="0.113776" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[Unhandled log message: '[Exception] ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                <stack-trace><![CDATA[System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1175" name="InteractionPromptTests" fullname="SurvivorFarm.Tests.InteractionPromptTests" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-20 09:42:00Z" end-time="2026-09-20 09:42:01Z" duration="0.105097" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1177" name="OnlyHouseRepairAddsAWordToThePrompt" fullname="SurvivorFarm.Tests.InteractionPromptTests.OnlyHouseRepairAddsAWordToThePrompt" methodname="OnlyHouseRepairAddsAWordToThePrompt" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="411717495" result="Passed" start-time="2026-09-20 09:42:00Z" end-time="2026-09-20 09:42:00Z" duration="0.001636" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1178" name="PromptAnimatesWithoutChangingItsLayoutSize" fullname="SurvivorFarm.Tests.InteractionPromptTests.PromptAnimatesWithoutChangingItsLayoutSize" methodname="PromptAnimatesWithoutChangingItsLayoutSize" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="501780297" result="Passed" start-time="2026-09-20 09:42:00Z" end-time="2026-09-20 09:42:01Z" duration="0.065295" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1176" name="PromptShowsOnlyEAndHidesWithoutAnAvailableTarget" fullname="SurvivorFarm.Tests.InteractionPromptTests.PromptShowsOnlyEAndHidesWithoutAnAvailableTarget" methodname="PromptShowsOnlyEAndHidesWithoutAnAvailableTarget" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="925010949" result="Passed" start-time="2026-09-20 09:42:01Z" end-time="2026-09-20 09:42:01Z" duration="0.001039" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1179" name="ShopIsDiscoverableByTheSameInteractionSelector" fullname="SurvivorFarm.Tests.InteractionPromptTests.ShopIsDiscoverableByTheSameInteractionSelector" methodname="ShopIsDiscoverableByTheSameInteractionSelector" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="658016025" result="Passed" start-time="2026-09-20 09:42:01Z" end-time="2026-09-20 09:42:01Z" duration="0.026086" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1347" name="RiverPresentationTests" fullname="SurvivorFarm.Tests.RiverPresentationTests" classname="SurvivorFarm.Tests.RiverPresentationTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-20 09:42:01Z" end-time="2026-09-20 09:42:06Z" duration="5.278223" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1349" name="FarmPracticeUsesTheSameWaterAndKeepsTheBridgeCrossing" fullname="SurvivorFarm.Tests.RiverPresentationTests.FarmPracticeUsesTheSameWaterAndKeepsTheBridgeCrossing" methodname="FarmPracticeUsesTheSameWaterAndKeepsTheBridgeCrossing" classname="SurvivorFarm.Tests.RiverPresentationTests" runstate="Runnable" seed="1124797892" result="Failed" start-time="2026-09-20 09:42:01Z" end-time="2026-09-20 09:42:02Z" duration="1.539896" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[  Every upper-bank tile must animate, including both river ends.
+  Expected: 86
+  But was:  0
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.RiverPresentationTests+<VerifyRiver>d__4.MoveNext () [0x000f3] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\RiverPresentationTests.cs:58
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+]]></output>
+            </test-case>
+            <test-case id="1348" name="MainHasSynchronizedUpperWaterAndStaticGrassBelow" fullname="SurvivorFarm.Tests.RiverPresentationTests.MainHasSynchronizedUpperWaterAndStaticGrassBelow" methodname="MainHasSynchronizedUpperWaterAndStaticGrassBelow" classname="SurvivorFarm.Tests.RiverPresentationTests" runstate="Runnable" seed="757924012" result="Failed" start-time="2026-09-20 09:42:02Z" end-time="2026-09-20 09:42:06Z" duration="3.733050" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[Unhandled log message: '[Exception] MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                <stack-trace><![CDATA[UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1373" name="VillageAdventureTests" fullname="SurvivorFarm.Tests.VillageAdventureTests" classname="SurvivorFarm.Tests.VillageAdventureTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-20 09:42:06Z" end-time="2026-09-20 09:42:11Z" duration="5.507756" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1374" name="CampsFightByDayAndChestsRequireInteractionAndPersistExactlyOnce" fullname="SurvivorFarm.Tests.VillageAdventureTests.CampsFightByDayAndChestsRequireInteractionAndPersistExactlyOnce" methodname="CampsFightByDayAndChestsRequireInteractionAndPersistExactlyOnce" classname="SurvivorFarm.Tests.VillageAdventureTests" runstate="Runnable" seed="1939425161" result="Failed" start-time="2026-09-20 09:42:06Z" end-time="2026-09-20 09:42:09Z" duration="2.769166" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.VillageAdventureTests+<OpenVillage>d__2.MoveNext () [0x00093] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\VillageAdventureTests.cs:28
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+]]></output>
+            </test-case>
+            <test-case id="1375" name="DungeonKeepsVillageClockRunningFramesCameraAndReturnsWithPersistentProgress" fullname="SurvivorFarm.Tests.VillageAdventureTests.DungeonKeepsVillageClockRunningFramesCameraAndReturnsWithPersistentProgress" methodname="DungeonKeepsVillageClockRunningFramesCameraAndReturnsWithPersistentProgress" classname="SurvivorFarm.Tests.VillageAdventureTests" runstate="Runnable" seed="1293425938" result="Failed" start-time="2026-09-20 09:42:09Z" end-time="2026-09-20 09:42:11Z" duration="2.735977" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.VillageAdventureTests+<OpenVillage>d__2.MoveNext () [0x00093] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\VillageAdventureTests.cs:28
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1398" name="VillageSecurityTests" fullname="SurvivorFarm.Tests.VillageSecurityTests" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-20 09:42:11Z" end-time="2026-09-20 09:42:21Z" duration="9.614797" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1399" name="DamageAndAidAffectVillageSecurityWithoutChangingTheWell" fullname="SurvivorFarm.Tests.VillageSecurityTests.DamageAndAidAffectVillageSecurityWithoutChangingTheWell" methodname="DamageAndAidAffectVillageSecurityWithoutChangingTheWell" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" seed="1868548560" result="Failed" start-time="2026-09-20 09:42:11Z" end-time="2026-09-20 09:42:14Z" duration="2.396733" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.VillageSecurityTests+<OpenVillage>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\VillageSecurityTests.cs:24
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+]]></output>
+            </test-case>
+            <test-case id="1400" name="DestroyedHomeCanBeRebuiltAtItsDoorAndCasualtiesStayDead" fullname="SurvivorFarm.Tests.VillageSecurityTests.DestroyedHomeCanBeRebuiltAtItsDoorAndCasualtiesStayDead" methodname="DestroyedHomeCanBeRebuiltAtItsDoorAndCasualtiesStayDead" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" seed="1871676255" result="Failed" start-time="2026-09-20 09:42:14Z" end-time="2026-09-20 09:42:16Z" duration="2.398245" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.VillageSecurityTests+<OpenVillage>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\VillageSecurityTests.cs:24
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+]]></output>
+            </test-case>
+            <test-case id="1401" name="LegacySnapshotWithoutResidentsRestoresHealthyDefaultsAtHome" fullname="SurvivorFarm.Tests.VillageSecurityTests.LegacySnapshotWithoutResidentsRestoresHealthyDefaultsAtHome" methodname="LegacySnapshotWithoutResidentsRestoresHealthyDefaultsAtHome" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" seed="125044379" result="Failed" start-time="2026-09-20 09:42:16Z" end-time="2026-09-20 09:42:19Z" duration="2.401034" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.VillageSecurityTests+<OpenVillage>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\VillageSecurityTests.cs:24
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+]]></output>
+            </test-case>
+            <test-case id="1402" name="OccupationPersistsItsGarrisonAndRequiresCombatAndRebuildingToLiberate" fullname="SurvivorFarm.Tests.VillageSecurityTests.OccupationPersistsItsGarrisonAndRequiresCombatAndRebuildingToLiberate" methodname="OccupationPersistsItsGarrisonAndRequiresCombatAndRebuildingToLiberate" classname="SurvivorFarm.Tests.VillageSecurityTests" runstate="Runnable" seed="1753065606" result="Failed" start-time="2026-09-20 09:42:19Z" end-time="2026-09-20 09:42:21Z" duration="2.415727" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[SetUp :   Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at SurvivorFarm.Tests.VillageSecurityTests+<OpenVillage>d__1.MoveNext () [0x00088] in C:\Users\Juan Jose\Documents\ProyectosUnity\Juegos\Survivor Farm\QA\p\Assets\SurvivorFarm\Tests\PlayMode\VillageSecurityTests.cs:24
+at UnityEngine.TestTools.EnumeratorHelper+<ProgressOnEnumerator>d__5.MoveNext () [0x00017] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\EnumeratorHelper.cs:35
+at UnityEngine.TestTools.BeforeAfterTestCommandBase`1+<ExecuteEnumerable>d__16[T].MoveNext () [0x00132] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Commands\BeforeAfterTestCommandBase.cs:155
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Survivor Farm started.
+MissingComponentException: There is no 'BoxCollider2D' attached to the "Estatua antigua" game object, but a script is trying to access it.
+You probably need to add a BoxCollider2D to the game object "Estatua antigua". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+UnityEngine.Collider2D.set_isTrigger (System.Boolean value) (at <97aefd7896ad46ca8aa0eecadce704ac>:0)
+SurvivorFarm.Runtime.World.DungeonShrinePresentation.Configure (UnityEngine.SpriteRenderer visual, SurvivorFarm.Runtime.World.DungeonArtCatalog art) (at Assets/SurvivorFarm/Scripts/Runtime/World/DungeonShrinePresentation.cs:21)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.BuildDungeon (System.Int32 index) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:123)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Configure (SurvivorFarm.Runtime.Core.PortfolioSession owner, SurvivorFarm.Runtime.Gameplay.ValleyWorld valley) (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:83)
+SurvivorFarm.Runtime.Core.PortfolioSession+<Start>d__109.MoveNext () (at Assets/SurvivorFarm/Scripts/Runtime/Core/PortfolioSession.cs:87)
+UnityEngine.SetupCoroutine.InvokeMoveNext (System.Collections.IEnumerator enumerator, System.IntPtr returnValueAddress) (at <31f3cd5c2a074982a9d5664e7709cac1>:0)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+System.Collections.Generic.List`1[T].get_Item (System.Int32 index) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+SurvivorFarm.Runtime.Gameplay.VillageAdventure.Update () (at Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageAdventure.cs:263)
+
+Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

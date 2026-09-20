@@ -1,0 +1,9 @@
+Assets/SurvivorFarm/Scripts/Runtime/Player/PlayerAnimationLibrary.cs before=SurvivorFarm.Runtime.Player.PlayerAnimationLibrary, SurvivorFarm.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+after=SurvivorFarm.Runtime.Player.PlayerAnimationLibrary, SurvivorFarm.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+Assets/SurvivorFarm/Scripts/Runtime/Gameplay/FlyweightCatalog.cs before=SurvivorFarm.Runtime.Gameplay.FlyweightCatalog, SurvivorFarm.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+after=SurvivorFarm.Runtime.Gameplay.FlyweightCatalog, SurvivorFarm.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+Assets/SurvivorFarm/Scripts/Runtime/Gameplay/CombatFeelVisuals.cs before=SurvivorFarm.Runtime.Gameplay.CombatFeelVisuals, SurvivorFarm.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+after=SurvivorFarm.Runtime.Gameplay.CombatFeelVisuals, SurvivorFarm.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+Assets/SurvivorFarm/Scripts/Runtime/Gameplay/VillageNpcArtCatalog.cs before=SurvivorFarm.Runtime.Gameplay.VillageNpcArtCatalog, SurvivorFarm.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+after=SurvivorFarm.Runtime.Gameplay.VillageNpcArtCatalog, SurvivorFarm.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+Animation=True Arrow=True Villagers=True

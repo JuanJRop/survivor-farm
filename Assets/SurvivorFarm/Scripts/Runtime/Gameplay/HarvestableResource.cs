@@ -38,6 +38,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         private string activeGatherClip;
         private const float GatherReach = 1.35f;
         private int lastFeedbackFrame = -1;
+        private World.WorldActionClock workClock;
 
         public override bool IsAvailable => !harvested && isActiveAndEnabled;
         public bool IsHarvested => harvested;
@@ -126,10 +127,11 @@ namespace SurvivorFarm.Runtime.Gameplay
 
             if (gathering)
             {
-                return $"{GatherPresentText} {GetProgressText()}";
+                return GatherPresentText;
             }
 
-            return InteractionText;
+            var tier=GetComponent<ResourceTier>();
+            return tier!=null?$"{(this is TreeResource?"Árbol":"Roca")} Nv.{tier.Tier} · E recolectar":InteractionText;
         }
 
         public override void Interact(FarmTool selectedTool, PlayerInventory inventory)
@@ -144,6 +146,8 @@ namespace SurvivorFarm.Runtime.Gameplay
                 FarmNotificationCenter.Show(MissingToolText);
                 return;
             }
+
+            if(GetComponent<ResourceTier>() is ResourceTier tier&&!tier.CanHarvest(inventory))return;
 
             var stats = inventory.GetComponent<PlayerSurvivalStats>();
             if (stats != null && stats.CurrentHealth <= 0) return;
@@ -193,7 +197,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             gathering = true;
             if (activeGatherStats != null) activeGatherStats.StatsChanged += CheckGathererHealth;
             animator.PlayAction(activeGatherClip, activeGatherDuration, transform.position);
-            FarmNotificationCenter.SetPrompt($"{GatherPresentText} {GetProgressText()}");
+            workClock=World.WorldActionClock.For(inventory.gameObject);workClock.Show(this,0);
         }
 
         private void UpdateGathering()
@@ -234,7 +238,7 @@ namespace SurvivorFarm.Runtime.Gameplay
                 PlayHarvestImpact(activeGatherInventory);
             }
 
-            FarmNotificationCenter.SetPrompt($"{GatherPresentText} {GetProgressText()}");
+            workClock?.Show(this,GatherProgress);
             if (!finished)
             {
                 return;
@@ -262,10 +266,11 @@ namespace SurvivorFarm.Runtime.Gameplay
             hurtFlashEndsAt = 0f;
         }
 
-        protected virtual void OnDisable() => CancelGathering();
+        protected override void OnDisable() { CancelGathering(); base.OnDisable(); }
 
         private void ClearGatheringState()
         {
+            workClock?.Hide(this);
             if (activeGatherStats != null) activeGatherStats.StatsChanged -= CheckGathererHealth;
             gathering = false;
             activeGatherAnimator = null;
@@ -306,13 +311,18 @@ namespace SurvivorFarm.Runtime.Gameplay
             int finalHarvestAmount = harvestAmount + Mathf.Max(0, toolBonus);
             int finalCoinReward = coinReward + Mathf.Max(0, toolBonus) * 2;
 
-            Definition.Reward.Grant(inventory, finalHarvestAmount);
+            bool scattered = this is AnimalResource animal && animal.ScatterAnimalRewards(finalHarvestAmount, finalCoinReward);
+            if (!scattered)
+            {
+                Definition.Reward.Grant(inventory, finalHarvestAmount);
+                ResourceFlyweights.Item(ItemKind.Coins).Grant(inventory, finalCoinReward);
+                string rewardText = $"+{finalHarvestAmount} {RewardName}";
+                inventory.GetComponent<GameFeelFeedback>()?.Pulse(rewardText, transform.position);
+                FarmNotificationCenter.Show(finalCoinReward > 0 ? $"{rewardText}, +{finalCoinReward} oro" : rewardText);
+            }
             inventory?.RecordGathered(finalHarvestAmount);
-            ResourceFlyweights.Item(ItemKind.Coins).Grant(inventory, finalCoinReward);
-            string rewardText = $"+{finalHarvestAmount} {RewardName}";
-            inventory.GetComponent<GameFeelFeedback>()?.Pulse(rewardText, transform.position);
-            FarmNotificationCenter.Show(finalCoinReward > 0 ? $"{rewardText}, +{finalCoinReward} oro" : rewardText);
             RaiseHarvestEvent();
+            GetComponent<ResourceTier>()?.Grant(inventory);
             Depleted?.Invoke(this);
         }
 
@@ -329,6 +339,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         public void Spawn(Vector3 position)
         {
             transform.position = position;
+            if(SurvivorFarm.Runtime.Core.PortfolioSession.Active){ResourceTier.Configure(this);SurvivorFarm.Runtime.World.FarmWorldPolish.StyleResource(this);}
             SpawnGeneration++;
             Restore(false);
         }
@@ -343,20 +354,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             ApplyVisuals();
         }
 
-        private float GatherProgress => gathering ? Mathf.Clamp01((Time.time - gatherStartedAt) / Mathf.Max(0.01f, activeGatherDuration)) : 1f;
-
-        private string GetProgressText()
-        {
-            int percent = Mathf.RoundToInt(GatherProgress * 100f);
-            return $"[{BuildProgressBar(GatherProgress)}] {percent}%";
-        }
-
-        private static string BuildProgressBar(float progress)
-        {
-            const int segmentCount = 10;
-            int filledSegments = Mathf.RoundToInt(Mathf.Clamp01(progress) * segmentCount);
-            return new string('#', filledSegments) + new string('-', segmentCount - filledSegments);
-        }
+        public float GatherProgress => gathering ? Mathf.Clamp01((Time.time - gatherStartedAt) / Mathf.Max(0.01f, activeGatherDuration)) : 1f;
 
         private void CacheVisuals()
         {
@@ -379,7 +377,8 @@ namespace SurvivorFarm.Runtime.Gameplay
 
             foreach (Collider2D collider in colliders)
             {
-                collider.enabled = !harvested;
+                if(collider!=null)collider.enabled = !harvested &&
+                    (!(this is TreeResource)||!Core.PortfolioSession.Active||collider is CircleCollider2D&&collider.transform==transform);
             }
 
             gameObject.SetActive(!harvested);

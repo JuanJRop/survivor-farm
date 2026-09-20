@@ -1,0 +1,5 @@
+PASS
+54 complete character clips loaded after reloading Main.
+873 directional frames verified within atlas bounds.
+Walk, run, facing, sword attack, planting, watering, harvesting, damage and death verified through live gameplay hooks.
+Temporary test state excluded from saves.

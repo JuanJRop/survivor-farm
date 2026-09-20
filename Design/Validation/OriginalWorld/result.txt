@@ -1,0 +1,7 @@
+PASS
+Terrain and paths use original tiles.
+Player starts at the requested position.
+Five animals have complete animation frames, including harvested animals; active movement and frame changes verified over five seconds.
+Wet soil and ripe crop visuals follow gameplay state.
+Shop entrance activates the textured interior.
+Preview changes excluded from saves.

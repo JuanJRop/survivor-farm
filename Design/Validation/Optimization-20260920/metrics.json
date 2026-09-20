@@ -1,0 +1,22 @@
+{
+    "cycles": 5000,
+    "arrowsCreated": 4,
+    "arrowLeasesRemaining": 0,
+    "lootCreatedBefore": 1,
+    "lootCreatedAfter": 1,
+    "impactsCreatedBefore": 6,
+    "impactsCreatedAfter": 6,
+    "navigationRefreshes": 3,
+    "navigationOverlapQueries": 3,
+    "navigationBoundaryQueries": 339,
+    "routeBuffers": 24,
+    "labelsCreatedBefore": 4,
+    "labelsCreatedAfter": 4,
+    "arrowManagedBytes": 0,
+    "lootManagedBytes": 0,
+    "impactManagedBytes": 0,
+    "labelManagedBytes": 0,
+    "navigationManagedBytesAfterWarmup": 0,
+    "poolsReleasedOnSceneUnload": true,
+    "attachedSwordRemoved": true
+}

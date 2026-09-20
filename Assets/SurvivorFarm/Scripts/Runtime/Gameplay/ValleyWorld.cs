@@ -85,8 +85,8 @@ namespace SurvivorFarm.Runtime.Gameplay
                 foreach(var sr in originalWell.GetComponentsInChildren<SpriteRenderer>())sr.enabled=false;
                 foreach(var collider in originalWell.GetComponents<Collider2D>())collider.enabled=false;
             }
-            var well=VillageItem(village,"Well",VillageLayout.Well,"village:well","Pozo comunal",1f,null);
-            var wellFeet=well.AddComponent<BoxCollider2D>();wellFeet.size=new Vector2(.6f,.35f);wellFeet.offset=new Vector2(0,.15f);
+            var well=VillageItem(village,"Well",VillageLayout.Well,"village:well","Pozo comunal",1.25f,null);
+            var wellFeet=well.AddComponent<BoxCollider2D>();wellFeet.size=new Vector2(.8f,.45f);wellFeet.offset=new Vector2(0,.2f);
             workshop=VillageItem(village,"Workbench",new Vector3(-7.05f,-3.25f),"village:workshop","Taller de Nico",.8f,null).GetComponent<ValleyInteraction>();
 
             // Small enclosed yards leave the streets and every entrance clear.
@@ -219,11 +219,13 @@ namespace SurvivorFarm.Runtime.Gameplay
             var e=go.AddComponent<ValleyEnemy>();e.Configure(campaign,this,zone,guardian,boss);enemies.Add(e);
         }
         public void ResetEncounter(){foreach(var e in enemies)e.ResetEncounter();}
+        static bool HiddenDemoProp(GameObject prop)=>Core.PortfolioSession.Active&&
+            (prop.name=="Fence"||prop.name=="Chest"||prop.name=="Sign"||prop.name=="Workbench");
         public void Refresh()
         {
             campaign.SyncVillageProgress();
-            foreach(var damage in villageDamage)if(damage.Root!=null)damage.Root.SetActive(!VillageUpgradeVisible(damage.Id));
-            foreach(var art in villageUpgrades)if(art.Root!=null)art.Root.SetActive(VillageUpgradeVisible(art.Id));
+            foreach(var damage in villageDamage)if(damage.Root!=null)damage.Root.SetActive(!HiddenDemoProp(damage.Root)&&!VillageUpgradeVisible(damage.Id));
+            foreach(var art in villageUpgrades)if(art.Root!=null)art.Root.SetActive(!HiddenDemoProp(art.Root)&&VillageUpgradeVisible(art.Id));
             RefreshBuilding(maraHouse,"mara");
             RefreshBuilding(millHouse,"dalia");
             RefreshBuilding(warehouseHouse,"nico");

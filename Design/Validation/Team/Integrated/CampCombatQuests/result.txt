@@ -1,0 +1,1 @@
+PASS: Iria combat offers and decline/accept, journal at two resolutions, partial kills/tracking through full GameSaveSystem roundtrip, automatic last-guard supplies, separate NPC mission reward and idempotent reload.

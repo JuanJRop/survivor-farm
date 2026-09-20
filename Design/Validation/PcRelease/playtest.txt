@@ -1,0 +1,9 @@
+Automated Play Mode journey; production sprites and gameplay methods, accelerated world time. User save excluded.
+Real tree/rock interactions granted resources.
+Dig → hoe → plant → water → natural growth → harvest → cook → bed passed.
+Construction, storage, tool-gated iron, expedition, blade, beacon and save roundtrip passed.
+Engine simulation: day 1 hour 16.0, hunger 0.90
+Engine simulation: day 2 hour 0.0, hunger 0.80
+Engine simulation: day 2 hour 8.0, hunger 0.90
+Engine simulation: day 2 hour 16.0, hunger 0.80
+PASS: first-day actions, directional animation, construction/cancellation/collisions/chest, iron tool gate, expedition, upgraded weapon, beacon, save roundtrip, 25 minutes of accelerated engine time.

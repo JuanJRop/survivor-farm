@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.1108828">
+  <test-suite type="TestSuite" id="1480" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="405" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.110883" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1474" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/QA/p/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="405" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.102423" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="15348" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1475" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="405" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.100358" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1476" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="405" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.098307" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1179" name="InteractionPromptTests" fullname="SurvivorFarm.Tests.InteractionPromptTests" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.093365" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="ParameterizedMethod" id="1186" name="NearbyBadgeMovesBesidePlayerAtDifferentCameraZooms" fullname="SurvivorFarm.Tests.InteractionPromptTests.NearbyBadgeMovesBesidePlayerAtDifferentCameraZooms" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.044554" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1184" name="NearbyBadgeMovesBesidePlayerAtDifferentCameraZooms(5.8f)" fullname="SurvivorFarm.Tests.InteractionPromptTests.NearbyBadgeMovesBesidePlayerAtDifferentCameraZooms(5.8f)" methodname="NearbyBadgeMovesBesidePlayerAtDifferentCameraZooms" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="1737946088" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.038238" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1185" name="NearbyBadgeMovesBesidePlayerAtDifferentCameraZooms(9.0f)" fullname="SurvivorFarm.Tests.InteractionPromptTests.NearbyBadgeMovesBesidePlayerAtDifferentCameraZooms(9.0f)" methodname="NearbyBadgeMovesBesidePlayerAtDifferentCameraZooms" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="1463343316" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.000697" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1181" name="OnlyHouseRepairAddsAWordToThePrompt" fullname="SurvivorFarm.Tests.InteractionPromptTests.OnlyHouseRepairAddsAWordToThePrompt" methodname="OnlyHouseRepairAddsAWordToThePrompt" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="1397803304" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.000736" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1182" name="PromptAnimatesWithoutChangingItsLayoutSize" fullname="SurvivorFarm.Tests.InteractionPromptTests.PromptAnimatesWithoutChangingItsLayoutSize" methodname="PromptAnimatesWithoutChangingItsLayoutSize" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="2064929681" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.028540" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1180" name="PromptShowsOnlyEAndHidesWithoutAnAvailableTarget" fullname="SurvivorFarm.Tests.InteractionPromptTests.PromptShowsOnlyEAndHidesWithoutAnAvailableTarget" methodname="PromptShowsOnlyEAndHidesWithoutAnAvailableTarget" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="58640167" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.002789" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1183" name="ShopIsDiscoverableByTheSameInteractionSelector" fullname="SurvivorFarm.Tests.InteractionPromptTests.ShopIsDiscoverableByTheSameInteractionSelector" methodname="ShopIsDiscoverableByTheSameInteractionSelector" classname="SurvivorFarm.Tests.InteractionPromptTests" runstate="Runnable" seed="1178008951" result="Passed" start-time="2026-09-20 10:00:41Z" end-time="2026-09-20 10:00:41Z" duration="0.002698" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

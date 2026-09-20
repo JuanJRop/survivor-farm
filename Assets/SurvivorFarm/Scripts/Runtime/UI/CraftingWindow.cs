@@ -56,7 +56,6 @@ namespace SurvivorFarm.Runtime.UI
             root.anchoredPosition = Vector2.zero;
             FarmUiStyle.Frame(root.gameObject.AddComponent<Image>());
             Label(root, "TALLER", 24, 16, 470, 36, 24);
-            if(Core.PortfolioSession.Active)Button(root,"Construir varias [Z]",570,16,242,40,()=>{Close();inventory.GetComponent<ConstructionSystem>()?.Begin("Fence");});
             FarmUiStyle.CloseButton(Button(root, "Cerrar [Esc]", 832, 16, 44, 40, Close));
             var bar = AdventureWindow.Rect(root, "Materiales disponibles", 24, 64, 852, 40);
             string[] resources = { "Wood", "Stone", "Iron", "Fruit", Core.PortfolioSession.Active?"GoldOre":"Coin" };
@@ -92,6 +91,7 @@ namespace SurvivorFarm.Runtime.UI
             ids.AddRange(crafting.GetRecipeDescriptors().Select(recipe => recipe.Id));
             foreach (string id in ids.Distinct())
             {
+                if(BackpackActions.IsRetiredDefense(id))continue;
                 if(Core.PortfolioSession.Active&&!Core.PortfolioSession.IsDemoRecipe(id))continue;
                 var rect = AdventureWindow.Rect(recipeContent, id, 0, 0, 840, 116);
                 var output = AdventureWindow.Rect(rect, "Resultado", 8, 16, 48, 48).gameObject.AddComponent<Image>();
@@ -263,6 +263,7 @@ namespace SurvivorFarm.Runtime.UI
         public void Close() { IsOpen = false; if (root != null) root.gameObject.SetActive(false); }
         public void Open()
         {
+            if(FarmIntroduction.IsOpen)return;
             VillageDialogueWindow.CloseActive();
             SimpleShopSystem.CloseActive();
             GetComponent<AdventureWindow>()?.Close();

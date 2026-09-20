@@ -75,7 +75,7 @@ namespace SurvivorFarm.Runtime.Player
             foreach (EconomyCookingRecipe recipe in EconomyCookingRecipes.All)
                 if (TryGetRecipeDescriptor(recipe.Id, out EconomyRecipeDescriptor descriptor)) descriptors.Add(descriptor);
             if (TryGetRecipeDescriptor("Sword", out EconomyRecipeDescriptor sword)) descriptors.Add(sword);
-            foreach (string id in new[] { "Campfire", "Fence", "StoneWall", "ReinforcedWall", "Trap", "Turret", "Chest", "Workbench", "Beacon", "Bed", "Cabinet", "Furnace" })
+            foreach (string id in new[] { "Arrow", "Saddle", "Campfire", "Chest", "Workbench", "Beacon", "Bed", "Cabinet", "Furnace" })
                 if (TryGetRecipeDescriptor(id, out EconomyRecipeDescriptor descriptor)) descriptors.Add(descriptor);
             foreach (EquipmentRecipe recipe in equipmentRecipes)
                 if (TryGetRecipeDescriptor(recipe.Id, out EconomyRecipeDescriptor descriptor)) descriptors.Add(descriptor);
@@ -116,12 +116,22 @@ namespace SurvivorFarm.Runtime.Player
                     requirements.Add(new EconomyRequirementDescriptor("WorkshopRestored", "Repara el taller de Nico.", GetComponent<ValleyCampaign>()?.WorkshopRestored == true));
                 requirements.Add(new EconomyRequirementDescriptor("OutputCapacity", "No caben mas raciones en el inventario.", inventory != null && (long)inventory.Food + outputAmount <= int.MaxValue));
             }
+            else if (id == "Arrow" || id == "Saddle")
+            {
+                name = id == "Arrow" ? "Fabricar 8 flechas" : "Montura de cuero";
+                outputAmount = id == "Arrow" ? 8 : 1;
+                AddIngredient(costs, "Wood", id == "Arrow" ? 2 : 4);
+                AddIngredient(costs, id == "Arrow" ? "Stone" : "Leather", id == "Arrow" ? 1 : 8);
+                requirements.Add(new EconomyRequirementDescriptor("Capacity", "Ya tienes una montura.", id != "Saddle" || inventory != null && inventory.GetItemCount("Saddle") == 0));
+            }
             else if (id == "Sword")
             {
                 name = "Mejorar espada";
                 AddIngredient(costs, "Wood", 6 * weaponLevel);
                 AddIngredient(costs, "Stone", 8 * weaponLevel);
                 requirements.Add(new EconomyRequirementDescriptor("WeaponLevel", "La espada ya tiene la mejora maxima.", weaponLevel < 3));
+                var mastery=GetComponent<ToolMastery>();
+                if(mastery!=null)requirements.Add(new EconomyRequirementDescriptor("Mastery",mastery.Requirement(FarmTool.Sword),mastery.CanUnlock(FarmTool.Sword)));
             }
             else if (BackpackActions.IsBuilding(id))
             {
@@ -153,6 +163,8 @@ namespace SurvivorFarm.Runtime.Player
                 AddIngredient(costs, "Coins", equipment.Coins);
                 AddIngredient(costs, equipment.Item, equipment.ItemAmount);
                 requirements.Add(new EconomyRequirementDescriptor("NotOwned", "Ya tienes este equipo.", inventory != null && !inventory.OwnsEquipment(id)));
+                if (id == "HunterBow" || id == "DiamondBow")
+                    requirements.Add(new EconomyRequirementDescriptor("DungeonBow", "Encuentra el arco en el cofre de una mazmorra.", inventory != null && inventory.OwnsEquipment("Bow")));
             }
             else return false;
             recipe = new EconomyRecipeDescriptor(id, name, outputId, outputAmount, costs, requirements);
@@ -194,6 +206,11 @@ namespace SurvivorFarm.Runtime.Player
                     return false;
                 }
             }
+            else if (id == "Arrow" || id == "Saddle")
+            {
+                if (!TryPay(id == "Arrow" ? 2 : 4, id == "Arrow" ? 1 : 0, 0, 0, id == "Saddle" ? "Leather" : null, id == "Saddle" ? 8 : 0)) return false;
+                inventory.AddItem(id, id == "Arrow" ? 8 : 1);
+            }
             else if (id == "Sword")
             {
                 if (weaponLevel>=3 || !TryPay(6*weaponLevel,8*weaponLevel)) return false;
@@ -207,7 +224,7 @@ namespace SurvivorFarm.Runtime.Player
             else return false;
             CraftingChanged?.Invoke();
             GetComponent<SurvivorFarm.Runtime.Gameplay.GameFeelFeedback>()?.Pulse("Fabricado",transform.position,false,true);
-            FarmNotificationCenter.Show("Fabricación terminada. Abre B para comida o C para equipar.");
+            FarmNotificationCenter.Show("Fabricación terminada. Abre I para ver tu mochila.");
             return true;
         }
         public void RegisterPlacedFire(){campfireBuilt=true;CraftingChanged?.Invoke();}

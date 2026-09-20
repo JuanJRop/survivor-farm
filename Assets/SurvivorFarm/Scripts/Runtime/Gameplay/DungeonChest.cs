@@ -24,6 +24,17 @@ namespace SurvivorFarm.Runtime.Gameplay
         public override bool IsAvailable => !opened && gameObject.activeInHierarchy;
         public bool IsOpened => opened;
 
+        private void Awake() => EnsureSolidBody();
+        private void EnsureSolidBody()
+        {
+            var body = GetComponent<BoxCollider2D>();
+            if (body == null) body = gameObject.AddComponent<BoxCollider2D>();
+            body.isTrigger = false;
+            Vector3 scale = transform.lossyScale;
+            body.size = new Vector2(.8f / Mathf.Max(.01f, Mathf.Abs(scale.x)), .55f / Mathf.Max(.01f, Mathf.Abs(scale.y)));
+            body.offset = Vector2.zero;
+        }
+
         public void ConfigureExpedition(SpriteRenderer visual, int coins, int iron, int gold, int ruby, int food)
         {
             bodyRenderer = visual;
@@ -31,6 +42,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             lidRenderer = null; originalArt = true;
             coinsReward = coins; ironReward = iron; goldReward = gold; rubyReward = ruby; foodReward = food;
             woodReward = stoneReward = commonSeedsReward = mineralSeedsReward = magicSeedsReward = 0;
+            EnsureSolidBody();
             ApplyVisuals();
         }
 
@@ -54,6 +66,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             commonSeedsReward = Mathf.Max(0, commonSeeds);
             mineralSeedsReward = Mathf.Max(0, mineralSeeds);
             magicSeedsReward = Mathf.Max(0, magicSeeds);
+            EnsureSolidBody();
             ApplyVisuals();
         }
 
@@ -70,21 +83,11 @@ namespace SurvivorFarm.Runtime.Gameplay
             }
 
             opened = true;
-            if (inventory != null)
-            {
-                ResourceFlyweights.Item(ItemKind.Coins).Grant(inventory, coinsReward);
-                ResourceFlyweights.Item(ItemKind.Wood).Grant(inventory, woodReward);
-                ResourceFlyweights.Item(ItemKind.Stone).Grant(inventory, stoneReward);
-                inventory.GetComponent<AdventureProgress>()?.AddIron(ironReward);
-                inventory.AddItem("GoldOre", goldReward);
-                inventory.AddItem("Ruby", rubyReward);
-                if (rubyReward > 0) inventory.AddEquipment("Gem");
-                inventory.AddFood(foodReward);
-                if (commonSeedsReward > 0) inventory.AddFruit(Mathf.Min(commonSeedsReward, 4));
-                if (mineralSeedsReward > 0 || magicSeedsReward > 0) inventory.AddFood(2);
-            }
-
-            FarmNotificationCenter.Show(originalArt ? $"Botin: {coinsReward} monedas, {ironReward} hierro, {goldReward} oro bruto, {rubyReward} rubi, {foodReward} raciones." : $"Cofre abierto: +{coinsReward} oro, +{woodReward} madera, +{stoneReward} piedra.");
+            var kinds = new[] { ItemKind.Coins, ItemKind.Wood, ItemKind.Stone, ItemKind.Iron, ItemKind.GoldOre, ItemKind.Ruby, ItemKind.Food, ItemKind.CommonSeed, ItemKind.MineralSeed, ItemKind.MagicSeed };
+            var amounts = new[] { coinsReward, woodReward, stoneReward, ironReward, goldReward, rubyReward, foodReward, commonSeedsReward, mineralSeedsReward, magicSeedsReward };
+            for (int i = 0; i < kinds.Length; i++)
+                if (amounts[i] > 0) EnemyLootPickup.Scatter(transform.position, transform.parent, kinds[i], amounts[i], angle: i * 2.399963f);
+            AudioFeedback.PlayAt(CombatSound.Drop, transform.position, .8f);
             ApplyVisuals();
         }
 

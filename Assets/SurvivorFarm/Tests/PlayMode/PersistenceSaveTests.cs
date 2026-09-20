@@ -31,7 +31,7 @@ namespace SurvivorFarm.Tests
         [TestCase(5)] [TestCase(6)] [TestCase(7)] [TestCase(8)]
         [TestCase(9)] [TestCase(10)] [TestCase(11)] [TestCase(12)]
         [TestCase(13)] [TestCase(14)] [TestCase(15)] [TestCase(16)]
-        [TestCase(17)] [TestCase(18)] [TestCase(19)] [TestCase(20)]
+        [TestCase(17)] [TestCase(18)] [TestCase(19)] [TestCase(20)] [TestCase(21)] [TestCase(22)]
         public void SupportedVersionsPreserveLegacySeedsAndOptionalDefaults(int version)
         {
             string json = Fixture.Replace("\"version\":20", "\"version\":" + version);
@@ -48,7 +48,7 @@ namespace SurvivorFarm.Tests
             Assert.That(Field(data, "buildings"), Is.Not.Null);
         }
 
-        [TestCase(4)] [TestCase(21)] [TestCase(0)]
+        [TestCase(4)] [TestCase(23)] [TestCase(0)]
         public void UnsupportedVersionsBlockAnIsolatedSlot(int version)
         {
             string path = Path.Combine(directory, "slot.json");
@@ -58,6 +58,19 @@ namespace SurvivorFarm.Tests
             Assert.That(store.TryLoad(out _), Is.EqualTo(SaveLoadSource.Failed));
             Assert.That(store.TryWrite(Fixture), Is.False);
             Assert.That(File.ReadAllText(path), Is.EqualTo(json));
+        }
+
+        [Test]
+        public void LegacyDropsRemainCoinsAndNewDropsPreserveTheirItemAndEncounter()
+        {
+            string legacy = Fixture.Replace("\"groundLoot\":[]", "\"groundLoot\":[{\"amount\":3,\"position\":{\"x\":1,\"y\":2,\"z\":0}}]");
+            var drops = (System.Collections.IList)Field(Read(legacy), "groundLoot");
+            Assert.AreEqual((int)ItemKind.Coins, Field(drops[0], "item"));
+            string current = legacy.Replace("\"version\":20", "\"version\":22")
+                .Replace("\"amount\":3", "\"amount\":3,\"item\":" + (int)ItemKind.Ruby + ",\"encounterId\":\"demo-crypt\"");
+            drops = (System.Collections.IList)Field(Read(current), "groundLoot");
+            Assert.AreEqual((int)ItemKind.Ruby, Field(drops[0], "item"));
+            Assert.AreEqual("demo-crypt", Field(drops[0], "encounterId"));
         }
 
         [TestCase("\"coins\":17", "\"coins\":-1")]

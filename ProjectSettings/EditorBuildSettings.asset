@@ -8,5 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/SurvivorFarm/Scenes/Main.unity
     guid: 185e3d8a29034d609f5b3eb637c2964d
+  - enabled: 1
+    path: Assets/SurvivorFarm/Scenes/ArenaCombate.unity
+    guid: 205026bacad3ff54ea7c4bed5192e5a2
+  - enabled: 1
+    path: Assets/SurvivorFarm/Scenes/TallerGranja.unity
+    guid: 1d14916c85e03c345beac1d1edc3e6d2
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
