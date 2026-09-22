@@ -10,7 +10,7 @@ namespace SurvivorFarm.Runtime.Player
 {
     public sealed class PlayerCombatController : MonoBehaviour
     {
-        [SerializeField] private float swordRange = 1.1f;
+        [SerializeField] private float swordRange = 1.25f;
         [SerializeField] private float bowRange = 10f;
         [SerializeField] private float attackCooldown = 0.45f;
         [SerializeField] private int swordDamage = 1;
@@ -65,7 +65,7 @@ namespace SurvivorFarm.Runtime.Player
         public bool LastAttackWasCharged {get;private set;}
         public bool HasBufferedAttack => queued;
         public float SwordRange=>swordRange;
-        public void SetSwordRange(float value)=>swordRange=Mathf.Clamp(value,.85f,1.15f);
+        public void SetSwordRange(float value)=>swordRange=Mathf.Clamp(value,.85f,1.35f);
         public int ProgressionDamage => (GetComponent<AdventureProgress>()?.Data.temperedBlade == true ? 2 : 0) + EquipmentItems.DamageBonusFor(inventory, FarmTool.Sword) + ((GetComponent<PlayerCraftingController>()?.WeaponLevel ?? 1)-1);
         public int PetDamageBonus => GetComponent<PlayerPetController>()?.DamageBonus ?? 0;
         public int GetAttackDamage(FarmTool tool) => tool == FarmTool.Sword
@@ -74,7 +74,7 @@ namespace SurvivorFarm.Runtime.Player
 
         private void Awake()
         {
-            swordRange = Mathf.Clamp(swordRange, .85f, 1.15f);
+            swordRange = Mathf.Clamp(swordRange, .85f, 1.35f);
             bowRange = Mathf.Max(10f, bowRange);
             toolbelt = GetComponent<PlayerToolbelt>();
             movement = GetComponent<PlayerMovementController>();
@@ -108,7 +108,7 @@ namespace SurvivorFarm.Runtime.Player
                 if(charge.IsCharging)
                 {
                     if(!chargePose){chargePose=true;audioFeedback?.Play(CombatSound.Charge,transform.position,.65f);}
-                    var aim=MouseAim();movement?.StopMovement();characterAnimator?.PoseSwordCharge(aim);
+                    var aim=MouseAim();characterAnimator?.PoseSwordCharge(aim);
                     EnsureSwordCue().ShowCharge(transform.position,charge.Progress,aim-transform.position,SwordTier);
                     if(charge.Progress>=1&&!chargeReadySound)
                     {
@@ -214,6 +214,15 @@ namespace SurvivorFarm.Runtime.Player
                 characterAnimator!=null&&characterAnimator.MovementLocked||GetComponent<PlayerSurvivalStats>()?.CurrentHealth<=0)return false;
             charge.Press(Time.time);chargePose=chargeReadySound=false;return true;
         }
+
+        /// <summary>
+        /// The attack animation keeps its authored timing, while the player can
+        /// still steer at a reduced speed during charge and recovery.
+        /// </summary>
+        public bool AllowsMovementDuringCombat => !IsExecuting &&
+            (charge != null && charge.IsPressed || Time.time < nextAttackTime);
+
+        public float CombatMovementSpeedMultiplier => charge != null && charge.IsPressed ? .52f : .68f;
         public void ReleaseCharge(IDamageable preferredTarget=null)
         {
             if(!charge.IsPressed)return;
@@ -302,7 +311,7 @@ namespace SurvivorFarm.Runtime.Player
         private void PerformSwordAreaAttack(int damage, bool heavy,bool charged=false)
         {
             bool areaBlast = charged && SwordTier >= 3;
-            float range=areaBlast?1.9f:charged?Mathf.Min(1.3f,swordRange*combo.Definition.chargedRangeMultiplier):swordRange;
+            float range=areaBlast?2.0f:charged?Mathf.Min(1.5f,swordRange*combo.Definition.chargedRangeMultiplier):swordRange;
             EnsureSwordCue().Show(transform.position, range, heavy, combo.StepNumber,charged,swordDirection,SwordTier);
             meleeTargets.Clear();
             Physics2D.OverlapCircle(transform.position, range, TargetFilter, nearbyColliders);
@@ -310,9 +319,14 @@ namespace SurvivorFarm.Runtime.Player
             {
                 var candidate = collider.GetComponentInParent<IDamageable>();
                 if (!ValidTarget(candidate) || candidate.Transform.IsChildOf(transform)) continue;
-                if (Vector2.Distance(transform.position, candidate.Transform.position) > range || !HasClearPath(candidate, true)) continue;
-                Vector2 offset = candidate.Transform.position - transform.position;
-                if (!areaBlast && offset.sqrMagnitude > .08f && Vector2.Dot(swordDirection, offset.normalized) < (charged ? -.35f : -.05f)) continue;
+                // Use the actual collider point touching the sweep. A target's
+                // pivot can sit outside the blade radius while its hitbox is
+                // visibly inside the authored arc; filtering by the pivot used
+                // to make that part of the FX cosmetic only.
+                Vector2 hitPoint = collider.ClosestPoint(transform.position);
+                Vector2 offset = hitPoint - (Vector2)transform.position;
+                if (offset.sqrMagnitude > range * range + .001f || !HasClearPath(candidate, true)) continue;
+                if (!areaBlast && offset.sqrMagnitude > .01f && Vector2.Dot(swordDirection, offset.normalized) < (charged ? -.35f : -.05f)) continue;
                 meleeTargets.Add(candidate);
             }
             hitFeedback.BeginStrike();

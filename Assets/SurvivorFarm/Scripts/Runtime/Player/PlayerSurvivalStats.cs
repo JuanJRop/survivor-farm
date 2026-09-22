@@ -10,6 +10,7 @@ namespace SurvivorFarm.Runtime.Player
         [SerializeField] private int currentHealth = 5;
         private float invulnerableUntil;
         private float blockedDamage;
+        private bool deathNotified;
         private void Awake()
         {
             if (GetComponent<PlayerRespawnController>() == null) gameObject.AddComponent<PlayerRespawnController>();
@@ -31,6 +32,7 @@ namespace SurvivorFarm.Runtime.Player
         public float HungerPercent => 1f;
 
         public event Action StatsChanged;
+        public event Action Died;
 
         private void Start()
         {
@@ -63,6 +65,11 @@ namespace SurvivorFarm.Runtime.Player
 
             if (currentHealth <= 0)
             {
+                if (!deathNotified)
+                {
+                    deathNotified = true;
+                    Died?.Invoke();
+                }
                 FindFirstObjectByType<TutorialQuestSystem>()?.NotifyDeath();
                 FarmNotificationCenter.Show("Te quedaste sin vida.");
             }
@@ -103,6 +110,7 @@ namespace SurvivorFarm.Runtime.Player
             SpawnGeneration++;
             maxHealth = Mathf.Max(1, savedMaxHealth);
             currentHealth = Mathf.Clamp(savedHealth, 0, maxHealth);
+            if (currentHealth > 0) deathNotified = false;
             NotifyChanged();
         }
 

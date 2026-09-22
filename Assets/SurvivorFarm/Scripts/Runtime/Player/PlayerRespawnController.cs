@@ -11,11 +11,40 @@ namespace SurvivorFarm.Runtime.Player
         public static bool MenuOpen { get; private set; }
         public Vector3 Checkpoint { get; private set; }
         private PlayerSurvivalStats stats;
+        private PlayerDeathDrops deathDrops;
         private GameObject overlay;
         private float previousTimeScale = 1;
         private bool ownsPause;
+        private bool deathHandled;
 
-        private void Awake() { stats=GetComponent<PlayerSurvivalStats>(); Checkpoint=transform.position; }
+        private void Awake()
+        {
+            stats=GetComponent<PlayerSurvivalStats>();
+            deathDrops=GetComponent<PlayerDeathDrops>() ?? gameObject.AddComponent<PlayerDeathDrops>();
+            Checkpoint=transform.position;
+        }
+        private void OnEnable()
+        {
+            if (stats != null) stats.Died += OnDeath;
+        }
+        private void Start()
+        {
+            if (stats != null) { stats.Died -= OnDeath; stats.Died += OnDeath; }
+        }
+        private void OnDisable()
+        {
+            if (stats != null) stats.Died -= OnDeath;
+            Hide();
+        }
+        private void OnDeath()
+        {
+            if (stats == null || deathHandled) return;
+            deathHandled = true;
+            deathDrops?.DropAtDeathPosition();
+            // Save immediately so the emptied inventory and physical drops are
+            // durable even if the process closes while the death menu is open.
+            FindFirstObjectByType<GameSaveSystem>()?.SaveGame(false);
+        }
         public void SetCheckpoint(Vector3 position)
         {
             if(float.IsNaN(position.x)||float.IsNaN(position.y)||float.IsInfinity(position.x)||float.IsInfinity(position.y))return;
@@ -59,6 +88,8 @@ namespace SurvivorFarm.Runtime.Player
             }
             GetComponent<PlayerMovementController>()?.StopMovement();
             stats.Revive();
+            deathHandled=false;
+            deathDrops?.ResetForNextLife();
             GetComponent<PlayerCharacterAnimator>()?.CancelAction();
             Hide();
             FindFirstObjectByType<GameSaveSystem>()?.SaveGame(false);
@@ -73,7 +104,6 @@ namespace SurvivorFarm.Runtime.Player
             Application.Quit();
 #endif
         }
-        private void OnDisable(){Hide();}
         private void OnDestroy(){Hide();if(overlay!=null)Destroy(overlay);}
         private void BuildMenu()
         {
@@ -87,11 +117,11 @@ namespace SurvivorFarm.Runtime.Player
             var rect=panel.GetComponent<RectTransform>();rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);rect.sizeDelta=new Vector2(520,370);
             var image=panel.GetComponent<Image>();image.sprite=Resources.Load<Sprite>("BackpackIcons/Panel");image.type=Image.Type.Sliced;
             Label(rect,"HAS MUERTO",126,30,26);
-            Label(rect,"Elige cómo continuar. Conservas tus objetos.",83,42,16);
+            Label(rect,"Tus recursos quedaron en el lugar de la caída.",83,42,16);
             Button(rect,"Continuar aquí",20,ContinueHere);
             Button(rect,"Último punto de aparición",-43,ReturnToCheckpoint);
             Button(rect,"Salir de la partida",-106,ExitGame);
-            Label(rect,"Al continuar recuperas toda la vida.",-153,24,14);
+            Label(rect,"Al continuar recuperas toda la vida; el equipo permanece contigo.",-153,24,14);
         }
         private Text Label(Transform parent,string value,float y,float height,int size)
         {

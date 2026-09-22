@@ -260,10 +260,19 @@ namespace SurvivorFarm.Runtime.UI
             return button;
         }
 
-        public void Close() { IsOpen = false; if (root != null) root.gameObject.SetActive(false); }
+        public void Close()
+        {
+            CloseLegacy();
+            GetComponent<WorkshopProgressionWindow>()?.Close();
+        }
+
+        /// <summary>Hides the legacy recipe surface without closing the unified workshop.</summary>
+        public void CloseLegacy() { IsOpen = false; if (root != null) root.gameObject.SetActive(false); }
         public void Open()
         {
             if(FarmIntroduction.IsOpen)return;
+            WorkshopProgressionWindow unified = GetComponent<WorkshopProgressionWindow>();
+            if (unified != null) { unified.Open(); return; }
             VillageDialogueWindow.CloseActive();
             SimpleShopSystem.CloseActive();
             GetComponent<AdventureWindow>()?.Close();
@@ -280,7 +289,16 @@ namespace SurvivorFarm.Runtime.UI
         private void Update()
         {
             if (PlayerRespawnController.MenuOpen) { Close(); return; }
-            if (Input.GetKeyDown(KeyCode.F)) { if (IsOpen) Close(); else Open(); }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                WorkshopProgressionWindow unified = GetComponent<WorkshopProgressionWindow>();
+                if (unified != null)
+                {
+                    if (WorkshopProgressionWindow.IsOpen) unified.Close(); else unified.Open();
+                    return;
+                }
+                if (IsOpen) CloseLegacy(); else Open();
+            }
             if (IsOpen && Input.GetKeyDown(KeyCode.Escape)) Close();
             if (!IsOpen) return;
             FarmUiStyle.FitWindow(root);

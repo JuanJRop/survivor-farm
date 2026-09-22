@@ -15,25 +15,30 @@ namespace SurvivorFarm.Runtime.World
         public float Speed = .45f;
         public float FootRadius = .16f;
         public bool SideFacesRight;
+        [Tooltip("When enabled, the animal pauses in place for a short grazing animation.")]
+        public bool CanEat;
+        [Min(0f)] public float EatChance = .22f;
+        [Min(.1f)] public float EatDuration = 1.6f;
         private Vector2 home, destination, direction = Vector2.down;
         private float nextDecision, animationTime;
-        private bool walking;
+        private bool walking, eating;
         private float frightenedUntil;
         private HarvestableResource resource;
         private readonly Collider2D[] hits = new Collider2D[24];
         public bool IsWalking => walking;
+        public bool IsEating => eating;
 
         public void ReactToHit(Vector2 away)
         {
             frightenedUntil = Time.time + 1.5f;
             destination = (Vector2)transform.position + (away.sqrMagnitude > .01f ? away.normalized : Vector2.right) * 2f;
-            walking = true; nextDecision = frightenedUntil;
+            eating = false; walking = true; nextDecision = frightenedUntil;
         }
 
         public void ResetHome()
         {
             home = destination = transform.position;
-            walking = false;
+            walking = false; eating = false;
             nextDecision = Time.time + 1f;
         }
 
@@ -41,15 +46,33 @@ namespace SurvivorFarm.Runtime.World
         {
             home = transform.position;
             nextDecision = Time.time + Random.Range(.3f, 1.6f);
-            walking = false;
+            walking = false; eating = false;
             resource = GetComponent<HarvestableResource>();
         }
 
         private void Update()
         {
             if (resource != null && !resource.IsAvailable) return;
+            if (eating)
+            {
+                // Eating is a grounded state: do not advance the destination while
+                // the mouth/idle frames are playing.
+                if (Time.time >= nextDecision)
+                {
+                    eating = false;
+                    nextDecision = Time.time + Random.Range(.35f, 1.1f);
+                }
+                return;
+            }
             if (Time.time >= nextDecision)
             {
+                if (CanEat && !walking && Random.value <= Mathf.Clamp01(EatChance))
+                {
+                    eating = true;
+                    nextDecision = Time.time + Mathf.Max(.1f, EatDuration);
+                    animationTime = 0f;
+                    return;
+                }
                 walking = !walking;
                 destination = home + Random.insideUnitCircle * Radius;
                 nextDecision = Time.time + (walking ? Random.Range(1.5f, 3f) : Random.Range(1f, 2.5f));
@@ -77,7 +100,9 @@ namespace SurvivorFarm.Runtime.World
             Visual.flipX = row == 0 && (SideFacesRight ? direction.x < 0 : direction.x > 0);
             Sprite[] frames = walking ? Walk : Idle;
             int count = walking ? WalkFrames : IdleFrames;
-            animationTime += Time.deltaTime * (walking ? (Time.time < frightenedUntil ? 12f : 8f) : 3f);
+            // The authored idle strip is also the grazing cycle for livestock. The
+            // separate state above guarantees the body stays at one world position.
+            animationTime += Time.deltaTime * (walking ? (Time.time < frightenedUntil ? 12f : 8f) : eating ? 6f : 3f);
             int index = row * count + (int)animationTime % Mathf.Max(1, count);
             if (frames != null && index < frames.Length) Visual.sprite = frames[index];
         }

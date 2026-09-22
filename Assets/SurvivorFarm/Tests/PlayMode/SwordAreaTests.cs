@@ -51,7 +51,7 @@ namespace SurvivorFarm.Tests
             var a = Enemy(new Vector2(0.65f, 0f));
             var b = Enemy(new Vector2(-0.7f, 0f));
             var c = Enemy(new Vector2(0f, 1.1f));
-            var far = Enemy(new Vector2(1.25f, .1f));
+            var far = Enemy(new Vector2(1.55f, .1f));
             a.gameObject.AddComponent<CircleCollider2D>().radius = 0.2f;
             Physics2D.SyncTransforms();
             combat.AttackTarget(a);

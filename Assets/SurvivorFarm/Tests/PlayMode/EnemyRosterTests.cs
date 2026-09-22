@@ -399,7 +399,9 @@ namespace SurvivorFarm.Tests
             Assert.IsFalse(enemy.GetComponent<Collider2D>().enabled);
             Assert.AreEqual("Dead", enemy.SpriteAnimation.StateName);
             Assert.AreEqual(0, arrows.ActiveCount);
-            Assert.AreEqual(1, root.GetComponentsInChildren<EnemyLootPickup>().Length);
+            // Archer deaths now scatter their ammunition alongside the authored
+            // loot template, while the death guard still prevents duplicates.
+            Assert.AreEqual(2, root.GetComponentsInChildren<EnemyLootPickup>().Length);
             yield return new WaitForSeconds(.9f);
             Assert.IsFalse(enemy.gameObject.activeSelf);
             int generation = enemy.SpawnGeneration;

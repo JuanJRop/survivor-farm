@@ -19,6 +19,7 @@ namespace SurvivorFarm.Runtime.Player
         private Camera mainCamera;
         private SpriteRenderer[] indicatorRenderers = new SpriteRenderer[0];
         private SpriteRenderer playerVisual;
+        private FarmHandCursor handCursor;
         private Predicate<WorldInteractable> pointerFilter;
         private FarmTool pointerTool;
 
@@ -35,12 +36,16 @@ namespace SurvivorFarm.Runtime.Player
             mainCamera = Camera.main;
             playerVisual = GetComponent<SpriteRenderer>();
             pointerFilter = AcceptPointer;
-            if (GetComponent<FarmHandCursor>() == null) gameObject.AddComponent<FarmHandCursor>();
+            handCursor = GetComponent<FarmHandCursor>();
+            if (handCursor == null) handCursor = gameObject.AddComponent<FarmHandCursor>();
         }
 
         private void Update()
         {
             if(!Exists(highlightedInteractable))highlightedInteractable=null;
+            if (mainCamera == null) mainCamera = Camera.main;
+            handCursor?.SetEnemyTarget(!InventoryPanelSystem.IsOpen && !VillageUpgradeWindow.IsOpen &&
+                !AdventureWindow.IsOpen && !IsPointerOverUi(-1) && IsEnemyUnderPointer());
             if (InventoryPanelSystem.IsOpen || VillageUpgradeWindow.IsOpen || !FarmIntroduction.AllowsInteraction || AdventureWindow.IsOpen || Time.timeScale == 0f)
             {
                 FarmNotificationCenter.SetInteractionButton(false, "Interactuar");
@@ -74,7 +79,6 @@ namespace SurvivorFarm.Runtime.Player
             }
 
             FarmNotificationCenter.SetPrompt(string.Empty);
-            if (mainCamera == null) mainCamera = Camera.main;
             FarmNotificationCenter.SetInteractionButtonAtWorldPosition(highlightedInteractable != null,
                 highlightedInteractable is VillageHouseHealth house ? house.Health < house.Maximum ? "Reparar" : "Mejorar" : "E",
                 highlightedInteractable != null ? GetIndicatorPosition(highlightedInteractable) : Vector3.zero, mainCamera);
@@ -203,6 +207,22 @@ namespace SurvivorFarm.Runtime.Player
         }
 
         private bool AcceptPointer(WorldInteractable target) => Supports(target, ResolveInteractionTool(target, pointerTool));
+
+        private bool IsEnemyUnderPointer()
+        {
+            if (mainCamera == null || IsPointerOverUi(-1)) return false;
+            Vector3 pointer = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            pointer.z = 0;
+            var enemies = EnemyAIBase.ActiveEnemies;
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                var enemy = enemies[i];
+                if (enemy == null || !enemy.IsAlive) continue;
+                var collider = enemy.GetComponent<Collider2D>();
+                if (collider != null && collider.OverlapPoint(pointer)) return true;
+            }
+            return false;
+        }
 
         private static bool IsPointerOverUi(int pointerId)
         {

@@ -51,7 +51,7 @@ namespace SurvivorFarm.Runtime.Player
         public bool TryDash(Vector2 direction)
         {
             if (direction.sqrMagnitude < .01f || Time.timeScale == 0 || Time.time < nextDash ||
-                UI.InventoryPanelSystem.IsOpen || UI.VillageUpgradeWindow.IsOpen || UI.FarmIntroduction.IsOpen || GetComponent<PlayerMountController>()?.IsMounted == true || stats != null && stats.CurrentHealth <= 0) return false;
+                UI.InventoryPanelSystem.IsOpen || UI.VillageUpgradeWindow.IsOpen || UI.FarmIntroduction.BlocksGameplay || GetComponent<PlayerMountController>()?.IsMounted == true || stats != null && stats.CurrentHealth <= 0) return false;
             characterAnimator?.CancelAction();
             dashDirection = direction.normalized;
             dashUntil = Time.time + .18f;
@@ -62,12 +62,15 @@ namespace SurvivorFarm.Runtime.Player
 
         private void FixedUpdate()
         {
-            if (GetComponent<PlayerCombatController>()?.IsExecuting == true) { body.linearVelocity = Vector2.zero; return; }
+            var combat = GetComponent<PlayerCombatController>();
+            if (combat?.IsExecuting == true) { body.linearVelocity = Vector2.zero; return; }
             if (IsDashing) { body.linearVelocity = dashDirection * 11f; return; }
             if (characterAnimator == null) characterAnimator = GetComponent<PlayerCharacterAnimator>();
-            if (characterAnimator != null && characterAnimator.MovementLocked)
+            bool combatMovement = combat != null && combat.AllowsMovementDuringCombat;
+            if (characterAnimator != null && characterAnimator.MovementLocked && !combatMovement)
             { body.linearVelocity = Vector2.zero; return; }
-            body.linearVelocity = moveInput * (Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed) * (inventory?.MovementBonus ?? 1f) * (GetComponent<PlayerMountController>()?.SpeedMultiplier ?? 1f);
+            float combatMultiplier = combatMovement ? combat.CombatMovementSpeedMultiplier : 1f;
+            body.linearVelocity = moveInput * (Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed) * combatMultiplier * (inventory?.MovementBonus ?? 1f) * (GetComponent<PlayerMountController>()?.SpeedMultiplier ?? 1f);
         }
 
         // Old save data can no longer enable destination or touch movement.

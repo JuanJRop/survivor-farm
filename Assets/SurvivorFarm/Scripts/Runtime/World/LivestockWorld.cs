@@ -27,6 +27,7 @@ namespace SurvivorFarm.Runtime.World
                 var roam = go.AddComponent<AnimalRoamingVisual>(); roam.Visual = visual;
                 roam.Idle = Rows("PackCowBrown", 32, 32, new[] {0,1,2}, 4); roam.IdleFrames = 4;
                 roam.Walk = Rows("PackCowBrown", 32, 32, new[] {3,4,5}, 4); roam.WalkFrames = 4;
+                roam.CanEat = true; roam.EatChance = .24f; roam.EatDuration = 1.6f;
                 roam.Radius = 1.3f; roam.Speed = .55f; roam.FootRadius = .4f;
                 ResourceSpawnPoint.Attach(cow).Configure(null, cow, "livestock:cow:" + i);
                 Physics2D.SyncTransforms();

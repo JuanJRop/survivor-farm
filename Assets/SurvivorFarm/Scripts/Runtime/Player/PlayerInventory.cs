@@ -228,6 +228,7 @@ namespace SurvivorFarm.Runtime.Player
             if(GetComponent<AdventureProgress>()==null)gameObject.AddComponent<AdventureProgress>();
             if(GetComponent<ConstructionSystem>()==null)gameObject.AddComponent<ConstructionSystem>();
             if(GetComponent<GameFeelFeedback>()==null)gameObject.AddComponent<GameFeelFeedback>();
+            if(GetComponent<PlayerQuickSlots>()==null)gameObject.AddComponent<PlayerQuickSlots>();
         }
         private void Start()
         {

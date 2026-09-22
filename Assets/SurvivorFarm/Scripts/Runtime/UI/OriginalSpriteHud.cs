@@ -40,6 +40,7 @@ namespace SurvivorFarm.Runtime.UI
         private float restyleUntil;
         private float nextStyleRefresh;
         private float nextWeaponRefresh;
+        private PlayerHealthBarUI healthBar;
         private static readonly Color SurvivalPanel = FarmUiStyle.Surface;
         private static readonly Color SurvivalSubPanel = FarmUiStyle.Control;
         private static readonly Color SurvivalInk = FarmUiStyle.Ink;
@@ -52,6 +53,8 @@ namespace SurvivorFarm.Runtime.UI
         {
             PcControlsLayout.Apply(GetComponentInParent<Canvas>());
             ApplySurvivalLayout();
+            healthBar = GetComponent<PlayerHealthBarUI>() ?? gameObject.AddComponent<PlayerHealthBarUI>();
+            healthBar.Configure(Stats, Hearts);
             restyleUntil = Time.unscaledTime + 1.5f;
             for (int i = 0; ToolButtons != null && i < ToolButtons.Length; i++)
             {
@@ -151,8 +154,22 @@ namespace SurvivorFarm.Runtime.UI
 
         private void RefreshSurvival()
         {
-            if (Stats == null || Hearts == null) return;
+            if (Stats == null) return;
+            // Keep the authored heart row laid out and sized even though its
+            // graphics are hidden behind the new compact bar. This preserves
+            // scene-authored HUD geometry and lets the bar follow max-health
+            // upgrades without reviving the old heart visuals.
             StyleVitals();
+            if (Hearts != null)
+                for (int i = 0; i < Hearts.Length; i++)
+                    if (Hearts[i] != null) Hearts[i].gameObject.SetActive(i < Stats.MaxHealth);
+            if (healthBar != null)
+            {
+                healthBar.Layout();
+                healthBar.Refresh();
+                return;
+            }
+            if (Hearts == null) return;
             for (int i = 0; i < Hearts.Length; i++)
             {
                 if (Hearts[i] == null) continue;
@@ -287,6 +304,7 @@ namespace SurvivorFarm.Runtime.UI
                 StyleMissionPanel(mission);
             }
             if (Stats != null) RefreshSurvival();
+            healthBar?.Layout();
             if (Toolbelt != null) RefreshTool(Toolbelt.SelectedTool);
         }
 

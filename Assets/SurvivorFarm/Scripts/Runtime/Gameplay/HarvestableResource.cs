@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using SurvivorFarm.Runtime.Core;
 using SurvivorFarm.Runtime.Player;
 using SurvivorFarm.Runtime.UI;
 
@@ -56,6 +57,12 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected abstract ItemKind ResourceKind { get; }
         protected string RewardName => Definition.Reward.DisplayName;
         protected abstract void RaiseHarvestEvent();
+        /// <summary>
+        /// Trees in the authored farm use the same physical loot pipeline as enemies.
+        /// Fixtures and non-portfolio scenes keep the old immediate reward semantics so
+        /// resources remain useful outside the playable campaign.
+        /// </summary>
+        protected virtual bool UsesPhysicalHarvestDrop => PortfolioSession.Active && this is TreeResource;
         protected virtual float GatherDuration => 2.2f;
         protected virtual int GatherHitCount => 4;
         protected virtual string GatherStartText => "Recolectando...";
@@ -312,7 +319,19 @@ namespace SurvivorFarm.Runtime.Gameplay
             int finalCoinReward = coinReward + Mathf.Max(0, toolBonus) * 2;
 
             bool scattered = this is AnimalResource animal && animal.ScatterAnimalRewards(finalHarvestAmount, finalCoinReward);
-            if (!scattered)
+            if (!scattered && UsesPhysicalHarvestDrop)
+            {
+                // The tree disappears first, then its wood and coin rewards follow the
+                // same short hop, float and fast magnet flight used by combat loot.
+                float playerAngle = Mathf.Atan2(inventory.transform.position.y - transform.position.y,
+                    inventory.transform.position.x - transform.position.x);
+                EnemyLootPickup.Scatter(transform.position, transform.parent, Definition.Reward.Kind,
+                    finalHarvestAmount, null, playerAngle);
+                if (finalCoinReward > 0)
+                    EnemyLootPickup.Scatter(transform.position, transform.parent, ItemKind.Coins,
+                        finalCoinReward, null, playerAngle);
+            }
+            else if (!scattered)
             {
                 Definition.Reward.Grant(inventory, finalHarvestAmount);
                 ResourceFlyweights.Item(ItemKind.Coins).Grant(inventory, finalCoinReward);
@@ -322,7 +341,7 @@ namespace SurvivorFarm.Runtime.Gameplay
             }
             inventory?.RecordGathered(finalHarvestAmount);
             RaiseHarvestEvent();
-            GetComponent<ResourceTier>()?.Grant(inventory);
+            GetComponent<ResourceTier>()?.Grant(inventory, UsesPhysicalHarvestDrop);
             Depleted?.Invoke(this);
         }
 

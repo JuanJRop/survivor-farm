@@ -89,7 +89,7 @@ namespace SurvivorFarm.Tests
             var combat = inventory.gameObject.AddComponent<PlayerCombatController>();
             var front = Target(new Vector3(.8f, 0));
             var behind = Target(new Vector3(-.8f, 0));
-            var distant = Target(new Vector3(1.5f, 0));
+            var distant = Target(new Vector3(1.8f, 0));
             front.gameObject.AddComponent<CircleCollider2D>().isTrigger = true;
             Physics2D.SyncTransforms();
             combat.AttackTarget(front);
@@ -98,7 +98,7 @@ namespace SurvivorFarm.Tests
             Assert.That(behind.Damage, Is.Zero);
             Assert.That(distant.Damage, Is.Zero);
             var sweep = inventory.GetComponent<CombatFeelRangeCue>();
-            Assert.That(sweep.Radius, Is.EqualTo(1.1f).Within(.001f));
+            Assert.That(sweep.Radius, Is.EqualTo(1.25f).Within(.001f));
             Assert.That(sweep.IsShowing, Is.True);
             Assert.That(sweep.SweepVisual.sprite.texture, Is.SameAs(CombatFxLibrary.Atlas));
         }

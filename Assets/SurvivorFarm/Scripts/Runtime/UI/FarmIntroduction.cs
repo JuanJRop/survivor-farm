@@ -11,11 +11,11 @@ namespace SurvivorFarm.Runtime.UI
     [DefaultExecutionOrder(-900)]
     public sealed class FarmIntroduction : MonoBehaviour
     {
-        public enum Lesson { MovementHint, Movement, ComboHint, Combo, ChargeHint, Charge, Mission }
+        public enum Lesson { MovementHint, Movement, DashRunHint, DashRun, ComboHint, Combo, ChargeHint, Charge, Mission }
         private static FarmIntroduction current;
         public static bool IsOpen=>current!=null&&current.open;
         public static bool BlocksGameplay=>IsOpen&&current.IsHint;
-        public static bool AllowsMovement=>!IsOpen||current.lesson==Lesson.Movement||current.lesson==Lesson.Combo||current.lesson==Lesson.Charge;
+        public static bool AllowsMovement=>!IsOpen||current.lesson==Lesson.Movement||current.lesson==Lesson.DashRun||current.lesson==Lesson.Combo||current.lesson==Lesson.Charge;
         public static bool AllowsCombat=>!IsOpen||current.lesson==Lesson.Combo||current.lesson==Lesson.Charge;
         public static bool AllowsInteraction=>!IsOpen;
         private bool open;
@@ -27,21 +27,25 @@ namespace SurvivorFarm.Runtime.UI
         private Text heading,body,progress;
         private Button next;
         private PlayerInventory player;
+        private PlayerMovementController movement;
         private PlayerCombatController combat;
         private HitFeedback feedback;
         private TrainingEnemy practice;
         private Vector3 movedFrom;
+        private Vector3 skillStart;
         private string sentence;
         private float revealed,readyAt,advanceAt=-1;
         private int hits;
+        private bool ran,dashed;
         public int Page=>(int)lesson;
         public Lesson CurrentLesson=>lesson;
         public TrainingEnemy PracticeEnemy=>practice;
-        private bool IsHint=>lesson==Lesson.MovementHint||lesson==Lesson.ComboHint||lesson==Lesson.ChargeHint||lesson==Lesson.Mission;
+        private bool IsHint=>lesson==Lesson.MovementHint||lesson==Lesson.DashRunHint||lesson==Lesson.ComboHint||lesson==Lesson.ChargeHint||lesson==Lesson.Mission;
         public void Open()
         {
             if(IsOpen||PortfolioSession.Instance?.Player==null)return;
             current=this;open=true;player=PortfolioSession.Instance.Player;
+            movement=player.GetComponent<PlayerMovementController>();
             combat=player.GetComponent<PlayerCombatController>();feedback=player.GetComponent<HitFeedback>();
             if(feedback!=null)feedback.HitResolved+=OnHit;
             root=MasteryWindow.CreateCanvas("Aprender jugando",130);
@@ -70,14 +74,16 @@ namespace SurvivorFarm.Runtime.UI
         }
         private void SetLesson(Lesson value)
         {
-            lesson=value;hits=0;revealed=0;advanceAt=-1;readyAt=Time.unscaledTime+.65f;
-            player.GetComponent<PlayerMovementController>()?.StopMovement();
+            lesson=value;hits=0;ran=false;dashed=false;revealed=0;advanceAt=-1;readyAt=Time.unscaledTime+.65f;
+            movement?.StopMovement();
             combat.CancelMelee();
             string title;
             switch(value)
             {
                 case Lesson.MovementHint:title="PRIMERO, MUÉVETE";sentence="El pueblo te necesita. Usa W A S D para caminar. Pulsa una de esas teclas cuando estés listo: la pantalla se aclarará.";break;
                 case Lesson.Movement:title="DA UNOS PASOS";sentence="Eso es. Camina un poco por el sendero con W A S D.";movedFrom=player.transform.position;break;
+                case Lesson.DashRunHint:title="CORRE Y ESQUIVA";sentence="Mantén SHIFT mientras caminas para correr. Pulsa ESPACIO en la dirección en la que quieras hacer dash.";break;
+                case Lesson.DashRun:title="PRUEBA MOVILIDAD";sentence="Corre un poco y haz un dash con ESPACIO. El dash te vuelve invulnerable durante un instante.";skillStart=player.transform.position;break;
                 case Lesson.ComboHint:title="ESTE ES TU RIVAL DE PRÁCTICA";sentence="No puede hacerte daño. Acércate y apunta hacia él. CLIC, CLIC, CLIC: el tercer corte es un remate.";SpawnPractice();break;
                 case Lesson.Combo:title="ENCADENA LOS TRES CORTES";sentence="Clics cortos, uno tras otro. Verás la reacción, las chispas y el remate. Si esperas demasiado, el combo vuelve al primero.";break;
                 case Lesson.ChargeHint:title="AHORA, CARGA LA ESPADA";sentence="Mantén CLIC hasta oír la señal y ver la energía dorada. Suelta el botón para descargar un golpe mucho más fuerte.";break;
@@ -87,7 +93,7 @@ namespace SurvivorFarm.Runtime.UI
             heading.text=title;
             foreach(var key in keys)key.gameObject.SetActive(value==Lesson.MovementHint||value==Lesson.Movement);
             next.gameObject.SetActive(IsHint&&value!=Lesson.MovementHint);
-            next.GetComponentInChildren<Text>().text=value==Lesson.Mission?"¡A jugar!":"Practicar";
+            next.GetComponentInChildren<Text>().text=value==Lesson.Mission?"¡A jugar!":value==Lesson.ComboHint||value==Lesson.ChargeHint||value==Lesson.DashRunHint?"Sigue":"Practicar";
             PortfolioSession.Instance.Pause(IsHint);
             UpdateFocus();
         }
@@ -100,7 +106,8 @@ namespace SurvivorFarm.Runtime.UI
         {
             if(!open||Time.unscaledTime<readyAt)return;
             if(revealed<sentence.Length){revealed=sentence.Length;return;}
-            if(lesson==Lesson.ComboHint)SetLesson(Lesson.Combo);
+            if(lesson==Lesson.DashRunHint)SetLesson(Lesson.DashRun);
+            else if(lesson==Lesson.ComboHint)SetLesson(Lesson.Combo);
             else if(lesson==Lesson.ChargeHint)SetLesson(Lesson.Charge);
             else if(lesson==Lesson.Mission)Finish();
         }
@@ -124,10 +131,18 @@ namespace SurvivorFarm.Runtime.UI
                 Vector2 direction=new Vector2((Input.GetKey(KeyCode.D)?1:0)-(Input.GetKey(KeyCode.A)?1:0),(Input.GetKey(KeyCode.W)?1:0)-(Input.GetKey(KeyCode.S)?1:0));
                 TryBeginMovement(direction);
             }
-            else if(lesson==Lesson.Movement&&Vector2.Distance(movedFrom,player.transform.position)>.9f)SetLesson(Lesson.ComboHint);
+            else if(lesson==Lesson.Movement&&Vector2.Distance(movedFrom,player.transform.position)>.9f)SetLesson(Lesson.DashRunHint);
+            else if(lesson==Lesson.DashRunHint && (Input.GetKeyDown(KeyCode.LeftShift)||Input.GetKeyDown(KeyCode.RightShift)||Input.GetKeyDown(KeyCode.Space)))
+                SetLesson(Lesson.DashRun);
+            else if(lesson==Lesson.DashRun)
+            {
+                if(movement != null && movement.IsDashing)dashed=true;
+                if((Input.GetKey(KeyCode.LeftShift)||Input.GetKey(KeyCode.RightShift))&&Vector2.Distance(skillStart,player.transform.position)>.25f)ran=true;
+                if(ran&&dashed)SetLesson(Lesson.ComboHint);
+            }
             if(advanceAt>=0&&Time.unscaledTime>=advanceAt)SetLesson(lesson==Lesson.Combo&&combat.CanChargeSword?Lesson.ChargeHint:Lesson.Mission);
             if(IsHint&&lesson!=Lesson.MovementHint&&Input.GetKeyDown(KeyCode.Return))Next();
-            progress.text=lesson==Lesson.Combo?("CORTES  "+hits+" / 3"):lesson==Lesson.Charge?(combat.Charge.Progress>=1?"¡SUELTA!":"MANTÉN CLIC"):IsHint?"La noche espera mientras aprendes":"Práctica segura · el reloj está detenido";
+            progress.text=lesson==Lesson.Combo?("CORTES  "+hits+" / 3"):lesson==Lesson.Charge?(combat.Charge.Progress>=1?"¡SUELTA!":"MANTÉN CLIC"):lesson==Lesson.DashRun?("CORRER: "+(ran?"✓":"—")+"   DASH: "+(dashed?"✓":"—")):IsHint?"La noche espera mientras aprendes":"Práctica segura · el reloj está detenido";
             if(practice!=null&&!practice.IsAlive&&!practice.IsDying&&advanceAt<0)
             {practice.ActivateFromPool(PracticePosition());}
             FarmUiStyle.FitWindow(panel);UpdateFocus();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SurvivorFarm.Runtime.Gameplay;
 using SurvivorFarm.Runtime.Player;
 using SurvivorFarm.Runtime.UI;
@@ -392,6 +393,7 @@ namespace SurvivorFarm.Runtime.Core
                     equippedEquipment = inventory.EquippedEquipment,
                     itemStacks = inventory.ItemStacks,
                     preferredCatalogSeed = inventory.PreferredCatalogSeed,
+                    quickSlots = inventory.GetComponent<PlayerQuickSlots>()?.Slots?.ToArray(),
                     maxSeedsPerSlot = 99
                 },
                 survival = new SurvivalSaveData
@@ -539,6 +541,7 @@ namespace SurvivorFarm.Runtime.Core
             inventory?.GetComponent<HouseSystem>()?.LoadLayout(data.house);
             inventory?.GetComponent<ConstructionSystem>()?.Restore(data.buildings);
             inventory?.RestoreEquipment(data.inventory.ownedEquipment, data.inventory.equippedEquipment);
+            inventory?.GetComponent<PlayerQuickSlots>()?.Restore(data.inventory.quickSlots);
             inventory?.RestoreGathered(data.inventory.totalGathered);
             inventory?.Restore(
                 data.inventory.commonSeeds > 0 ? data.inventory.commonSeeds : data.inventory.seeds,
@@ -780,6 +783,7 @@ namespace SurvivorFarm.Runtime.Core
             public string[] equippedEquipment;
             public List<InventoryStack> itemStacks = new List<InventoryStack>();
             public string preferredCatalogSeed;
+            public string[] quickSlots;
         }
 
         [Serializable]

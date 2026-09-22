@@ -151,6 +151,12 @@ namespace SurvivorFarm.Tests
             Assert.That(FarmIntroduction.AllowsMovement,Is.False);yield return new WaitForSecondsRealtime(.8f);
             Assert.That(intro.TryBeginMovement(Vector2.right),Is.True);Assert.That(FarmIntroduction.AllowsCombat,Is.False);
             p.GetComponent<ValleyCampaign>().Teleport(p.transform.position+Vector3.right*1.1f);yield return null;
+            Assert.That(intro.CurrentLesson,Is.EqualTo(FarmIntroduction.Lesson.DashRunHint));
+            yield return new WaitForSecondsRealtime(.8f);intro.Next();intro.Next();
+            typeof(FarmIntroduction).GetField("ran",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)
+                .SetValue(intro,true);
+            Assert.IsTrue(p.GetComponent<PlayerMovementController>().TryDash(Vector2.right));
+            yield return new WaitForSecondsRealtime(.1f);
             Assert.That(intro.CurrentLesson,Is.EqualTo(FarmIntroduction.Lesson.ComboHint));
             yield return new WaitForSecondsRealtime(.8f);intro.Next();intro.Next();
             Assert.That(FarmIntroduction.AllowsCombat,Is.True);Assert.That(intro.PracticeEnemy,Is.Not.Null);

@@ -67,7 +67,10 @@ namespace SurvivorFarm.Runtime.Player
             if (clip == null || stats != null && stats.CurrentHealth <= 0 && name != "Dead") return;
             ActionVersion++; meleeDuration = 0; chargingSword=false;
             if (target.HasValue) FaceWorldPosition(target.Value);
-            GetComponent<PlayerMovementController>()?.StopMovement();
+            var movement = GetComponent<PlayerMovementController>();
+            var combat = GetComponent<PlayerCombatController>();
+            if (movement != null && (combat == null || !combat.AllowsMovementDuringCombat))
+                movement.StopMovement();
             action = name; repeatAction = duration > clip.Frames / clip.FramesPerSecond;
             actionEndsAt = Time.time + Mathf.Max(duration, clip.Frames / clip.FramesPerSecond);
             Switch(name, true); Render();

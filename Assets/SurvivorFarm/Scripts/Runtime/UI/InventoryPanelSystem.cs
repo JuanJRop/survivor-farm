@@ -84,7 +84,7 @@ namespace SurvivorFarm.Runtime.UI
         {
             if(open&&FarmIntroduction.IsOpen)return;
             EnsureVisual();
-            if (open) { VillageDialogueWindow.CloseActive(); SimpleShopSystem.CloseActive(); GetComponent<AdventureWindow>()?.Close();inventory?.GetComponent<ConstructionSystem>()?.Cancel(); equipment?.Close(); GetComponent<CraftingWindow>()?.Close(); }
+            if (open) { VillageDialogueWindow.CloseActive(); SimpleShopSystem.CloseActive(); GetComponent<AdventureWindow>()?.Close();inventory?.GetComponent<ConstructionSystem>()?.Cancel(); equipment?.Close(); GetComponent<CraftingWindow>()?.Close(); GetComponent<WorkshopProgressionWindow>()?.Close(); }
             backpackOpen = open;
             inventory?.GetComponent<PlayerMovementController>()?.StopMovement();
             if (panel != null)
@@ -111,9 +111,19 @@ namespace SurvivorFarm.Runtime.UI
 
         private VisualBackpack visual;
         private static bool backpackOpen;
-        public static bool IsOpen => backpackOpen || PetAdoptionWindow.IsOpen || MasteryWindow.IsOpen || VillageUpgradeWindow.IsOpen || FarmIntroduction.BlocksGameplay || VillageDialogueWindow.IsOpen || SimpleShopSystem.IsOpen || AdventureWindow.IsOpen || ConstructionSystem.IsPlacing || CraftingWindow.IsOpen || PlayerEquipmentWindow.IsOpen || PlayerRespawnController.MenuOpen;
+        public static bool IsOpen => backpackOpen || PetAdoptionWindow.IsOpen || MasteryWindow.IsOpen || VillageUpgradeWindow.IsOpen || WorkshopProgressionWindow.IsOpen || FarmIntroduction.BlocksGameplay || VillageDialogueWindow.IsOpen || SimpleShopSystem.IsOpen || AdventureWindow.IsOpen || ConstructionSystem.IsPlacing || CraftingWindow.IsOpen || PlayerEquipmentWindow.IsOpen || PlayerRespawnController.MenuOpen;
         private PlayerEquipmentWindow equipment;
-        private void Start() { EnsureEquipment(); if(inventory!=null){gameObject.AddComponent<CraftingWindow>().Configure(inventory,panel.transform.parent);gameObject.AddComponent<AdventureWindow>().Configure(inventory,panel.transform.parent);gameObject.AddComponent<VillageDialogueWindow>().Configure(panel.transform.parent);} }
+        private void Start()
+        {
+            EnsureEquipment();
+            if (inventory != null)
+            {
+                gameObject.AddComponent<CraftingWindow>().Configure(inventory, panel.transform.parent);
+                gameObject.AddComponent<WorkshopProgressionWindow>().Configure(inventory, panel.transform.parent);
+                gameObject.AddComponent<AdventureWindow>().Configure(inventory, panel.transform.parent);
+                gameObject.AddComponent<VillageDialogueWindow>().Configure(panel.transform.parent);
+            }
+        }
         private void EnsureEquipment()
         {
             if (equipment != null || inventory == null) return;
