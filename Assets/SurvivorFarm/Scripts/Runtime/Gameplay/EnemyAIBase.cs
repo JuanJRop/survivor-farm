@@ -62,6 +62,10 @@ namespace SurvivorFarm.Runtime.Gameplay
         private Vector2 knockbackVelocity;
         private float knockbackRemaining;
         private float activeKnockbackDuration;
+        private float skillStunnedUntil;
+        private float skillSlowedUntil;
+        private float skillSlowMultiplier = 1f;
+        private float skillFrozenUntil;
         public virtual bool IsElite => false;
         protected virtual float KnockbackResistance => 1f;
         private readonly RaycastHit2D[] knockbackHits = new RaycastHit2D[24];
@@ -71,10 +75,45 @@ namespace SurvivorFarm.Runtime.Gameplay
         public float AttackWindup => CombatStyle == EnemyCombatStyle.ArcherGoblin ? .7f : enemyName == "Golem" ? .85f : .55f;
         public int CurrentHealth => Mathf.Max(0, currentHealth);
         public int MaximumHealth => maxHealth;
+        public bool IsSkillFrozen => Time.time < skillFrozenUntil;
         public virtual bool CanBeExecuted => IsAlive && !IsElite && CurrentHealth <= Mathf.Max(1, Mathf.CeilToInt(maxHealth * .25f));
         public bool IsProvoked { get; private set; }
         public void CalmDown() => IsProvoked = false;
         public void EnsureMinimumHealth(int health) => maxHealth = Mathf.Max(maxHealth, health);
+
+        /// <summary>Applies a temporary movement slow or freeze from a player skill.</summary>
+        public void ApplySkillSlow(float duration, float movementMultiplier)
+        {
+            if (!IsAlive || duration <= 0f) return;
+            float until = Time.time + duration;
+            skillSlowedUntil = Mathf.Max(skillSlowedUntil, until);
+            skillSlowMultiplier = Mathf.Min(skillSlowMultiplier, Mathf.Clamp(movementMultiplier, 0f, 1f));
+            if (movementMultiplier <= .15f)
+            {
+                skillFrozenUntil = Mathf.Max(skillFrozenUntil, until);
+                ApplySkillStun(duration);
+            }
+        }
+
+        /// <summary>Interrupts an enemy's movement and wind-up for the requested duration.</summary>
+        public void ApplySkillStun(float duration)
+        {
+            if (!IsAlive || duration <= 0f) return;
+            skillStunnedUntil = Mathf.Max(skillStunnedUntil, Time.time + duration);
+            CancelAttack();
+        }
+
+        /// <summary>Applies a skill-directed impulse without requiring a player hit wrapper.</summary>
+        public void ApplySkillKnockback(Vector2 direction, float distance, float duration)
+        {
+            if (!IsAlive || distance <= 0f || duration <= 0f) return;
+            if (direction.sqrMagnitude < .0001f) direction = Vector2.up;
+            activeKnockbackDuration = Mathf.Max(.04f, duration);
+            knockbackVelocity = direction.normalized * (distance / activeKnockbackDuration);
+            knockbackRemaining = activeKnockbackDuration;
+            nextAttackTime = Mathf.Max(nextAttackTime, Time.time + activeKnockbackDuration);
+            CancelAttack();
+        }
 
         protected Transform Target => target;
         protected virtual float MovementSpeedMultiplier => 1f;
@@ -281,6 +320,12 @@ namespace SurvivorFarm.Runtime.Gameplay
                 return;
             }
             if (!IsAlive) return;
+            if (Time.time < skillStunnedUntil)
+            {
+                CancelAttack();
+                return;
+            }
+            if (Time.time >= skillSlowedUntil) skillSlowMultiplier = 1f;
             RefreshTarget();
             if (target == null || !target.gameObject.activeInHierarchy || (targetStats != null && targetStats.CurrentHealth <= 0))
             {
@@ -359,7 +404,8 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected bool MoveInDirection(Vector2 direction)
         {
             if (direction.sqrMagnitude < .0001f) return false;
-            Vector2 displacement = direction.normalized * moveSpeed * MovementSpeedMultiplier * Time.deltaTime;
+            float slowMultiplier = Time.time < skillSlowedUntil ? skillSlowMultiplier : 1f;
+            Vector2 displacement = direction.normalized * moveSpeed * MovementSpeedMultiplier * slowMultiplier * Time.deltaTime;
             if (TryMove(displacement)) return true;
             // Sliding along a blocked axis lets chasers and retreating archers negotiate props.
             if (Mathf.Abs(displacement.x) > .001f && TryMove(new Vector2(displacement.x, 0))) return true;

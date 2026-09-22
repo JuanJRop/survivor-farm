@@ -43,5 +43,11 @@ namespace SurvivorFarm.Editor
             File.WriteAllText("Design/Validation/Portfolio/build.txt",$"{report.summary.result} | errors={report.summary.totalErrors} | bytes={report.summary.totalSize} | duration={report.summary.totalTime}");
             if(report.summary.result!=BuildResult.Succeeded)throw new Exception("Portfolio Windows build failed.");
         }
+        /// <summary>Batch entry point used after isolated integration verification.</summary>
+        public static void BuildBatch()
+        {
+            try { Build(); if (Application.isBatchMode) EditorApplication.Exit(0); }
+            catch (Exception error) { Debug.LogException(error); if (Application.isBatchMode) EditorApplication.Exit(1); else throw; }
+        }
     }
 }

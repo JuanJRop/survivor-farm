@@ -63,6 +63,22 @@ namespace SurvivorFarm.Tests
         }
 
         [Test]
+        public void SwordDamageReachMatchesTheEnlargedSlashCueRadius()
+        {
+            combat.SetSwordRange(1.35f);
+            var edge = Enemy(new Vector2(1.45f, 0f));
+            Physics2D.SyncTransforms();
+
+            combat.AttackTarget(edge);
+
+            var cue = root.GetComponent<CombatFeelRangeCue>();
+            Assert.That(cue, Is.Not.Null);
+            Assert.That(cue.Radius, Is.EqualTo(combat.SwordRange).Within(.001f));
+            Assert.That(combat.SwordRange, Is.EqualTo(1.35f).Within(.001f));
+            Assert.That(health.GetValue(edge), Is.EqualTo(9), "The collider edge inside the rendered slash radius must receive damage.");
+        }
+
+        [Test]
         public void WallsStopAreaDamageButOtherEnemiesDoNot()
         {
             var a = Enemy(new Vector2(0.4f, 0f));

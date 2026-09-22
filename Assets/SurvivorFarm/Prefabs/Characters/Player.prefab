@@ -206,7 +206,6 @@ MonoBehaviour:
   BackpackOrder: []
   OwnedEquipment:
   - Sword
-  - Bow
   EquippedEquipment:
   - 
   - 

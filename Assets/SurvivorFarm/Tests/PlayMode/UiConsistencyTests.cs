@@ -81,6 +81,71 @@ namespace SurvivorFarm.Tests
         }
 
         [Test]
+        public void BowSlotAppearsOnlyAfterTheBowIsFound()
+        {
+            root = new GameObject("HUD bow discovery test", typeof(RectTransform));
+            root.SetActive(false);
+            var inventory = root.AddComponent<PlayerInventory>();
+            inventory.RestoreEquipment(new[] { "Sword" }, new[] { "", "", "", "Sword", "", "", "", "" });
+            var belt = root.AddComponent<PlayerToolbelt>();
+            var canvasObject = new GameObject("HUD canvas", typeof(RectTransform), typeof(Canvas));
+            canvasObject.transform.SetParent(root.transform, false);
+            var canvas = canvasObject.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            var toolbar = new GameObject("Tools", typeof(RectTransform));
+            toolbar.transform.SetParent(canvasObject.transform, false);
+            var sword = CreateHudButton("Sword", toolbar.transform);
+            var bow = CreateHudButton("Bow", toolbar.transform);
+            var hudObject = new GameObject("HUD", typeof(RectTransform));
+            hudObject.transform.SetParent(canvasObject.transform, false);
+            var hud = hudObject.AddComponent<OriginalSpriteHud>();
+            hud.Inventory = inventory;
+            hud.Toolbelt = belt;
+            hud.ToolButtons = new[] { sword, bow };
+
+            root.SetActive(true);
+            Assert.That(bow.gameObject.activeSelf, Is.False);
+
+            inventory.AddEquipment("Bow");
+
+            Assert.That(bow.gameObject.activeSelf, Is.True);
+        }
+
+        private static Button CreateHudButton(string name, Transform parent)
+        {
+            var go = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
+            go.transform.SetParent(parent, false);
+            return go.GetComponent<Button>();
+        }
+
+        [Test]
+        public void HealthBarShowsCurrentHealthAndEquippedArmor()
+        {
+            root = new GameObject("Health bar display test");
+            var player = new GameObject("Player");
+            player.transform.SetParent(root.transform, false);
+            var inventory = player.AddComponent<PlayerInventory>();
+            var stats = player.AddComponent<PlayerSurvivalStats>();
+            inventory.AddEquipment("IronChestplate");
+            Assert.That(inventory.Equip("IronChestplate", 1), Is.True);
+            stats.Restore(7, 4, 1f);
+
+            var panel = new GameObject("Vitals", typeof(RectTransform));
+            panel.transform.SetParent(root.transform, false);
+            var heart = new GameObject("Heart", typeof(RectTransform), typeof(Image));
+            heart.transform.SetParent(panel.transform, false);
+            var bar = root.AddComponent<PlayerHealthBarUI>();
+            bar.Configure(stats, new[] { heart.GetComponent<Image>() });
+
+            var text = panel.GetComponentInChildren<Text>(true);
+            Assert.That(text, Is.Not.Null);
+            Assert.That(text.text, Does.Contain("4/7"));
+            var armor = panel.transform.Find("Barra de vida/Armadura").GetComponent<Text>();
+            Assert.That(armor.text, Does.Contain("34%"));
+            Assert.That(heart.GetComponent<Image>().color.a, Is.EqualTo(0f).Within(.001f));
+        }
+
+        [Test]
         public void IngredientKeepsExactQuantitiesInTooltipAndUsesTheCoinSprite()
         {
             root = new GameObject("UI badge test", typeof(RectTransform));

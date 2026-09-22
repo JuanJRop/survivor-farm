@@ -21,6 +21,7 @@ namespace SurvivorFarm.Runtime.UI
         private float nextRefresh;
         public void Open()
         {
+            if (GameMenuWindow.Instance != null) { GameMenuWindow.OpenSkillsActive(); return; }
             if (FarmIntroduction.IsOpen) return;
             if (canvasRoot == null) Build();
             canvasRoot.SetActive(true); IsOpen = true; Refresh();
@@ -30,6 +31,7 @@ namespace SurvivorFarm.Runtime.UI
         public void Close() { IsOpen = false; if (canvasRoot != null) canvasRoot.SetActive(false); }
         private void Update()
         {
+            if (GameMenuWindow.Instance != null) return;
             if (Input.GetKeyDown(KeyCode.K))
             {
                 if (IsOpen) Close();

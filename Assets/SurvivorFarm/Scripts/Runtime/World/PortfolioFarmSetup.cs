@@ -17,7 +17,7 @@ namespace SurvivorFarm.Runtime.World
             player.gameObject.AddComponent<ToolMastery>();player.gameObject.AddComponent<MasteryWindow>();
             player.gameObject.AddComponent<ResourceHoverHint>();
             player.gameObject.AddComponent<PlayerFootsteps>();
-            player.GetComponent<PlayerCombatController>().SetSwordRange(1.1f);
+            player.GetComponent<PlayerCombatController>().SetSwordRange(1.35f);
             player.gameObject.AddComponent<PetAdoption>().Restore(false);
             foreach(var pool in Object.FindObjectsByType<OutdoorEnemyPool>(FindObjectsInactive.Include,FindObjectsSortMode.None))pool.enabled=false;
             foreach(var enemy in Object.FindObjectsByType<EnemyAIBase>(FindObjectsSortMode.None))enemy.ReturnToPool();

@@ -43,8 +43,35 @@ namespace SurvivorFarm.Runtime.UI
         private int selectedQuickSlot;
         private Image previewImage;
         private Text previewLabel;
-        private float nextRefresh;
+
         private readonly List<GameObject> generated = new List<GameObject>();
+        private bool embedded;
+        private bool refreshPending = true;
+        private SkillDemonstrationPreview demonstration;
+
+        public void Mount(Transform parent)
+        {
+            embedded = true;
+            panel.SetParent(parent, false);
+            panel.anchorMin = panel.anchorMax = panel.pivot = new Vector2(0, 1);
+            panel.anchoredPosition = Vector2.zero;
+            panel.sizeDelta = new Vector2(1180, 552);
+            panel.GetComponent<Image>().enabled = false;
+            foreach (Transform child in panel) child.gameObject.SetActive(child == body || child == wallet.transform || child == hint.transform);
+            body.anchoredPosition = new Vector2(0, -52); body.sizeDelta = new Vector2(1180, 495);
+            wallet.rectTransform.anchoredPosition = new Vector2(760, -4); wallet.rectTransform.sizeDelta = new Vector2(410, 30);
+            hint.rectTransform.anchoredPosition = Vector2.zero; hint.rectTransform.sizeDelta = new Vector2(730, 36);
+            panel.gameObject.SetActive(false);
+        }
+        public void ShowEmbedded(Section value)
+        {
+            section = value; IsOpen = true; panel.gameObject.SetActive(true); Refresh();
+        }
+        public void HideEmbedded()
+        {
+            IsOpen = false;
+            if (embedded && panel != null) panel.gameObject.SetActive(false);
+        }
 
         public void Configure(PlayerInventory source, Transform canvasParent)
         {
@@ -160,6 +187,7 @@ namespace SurvivorFarm.Runtime.UI
 
         public void Open()
         {
+            if (GameMenuWindow.Instance != null) { GameMenuWindow.OpenWorkshopActive(); return; }
             if (FarmIntroduction.IsOpen || canvasRoot == null) return;
             VillageDialogueWindow.CloseActive();
             SimpleShopSystem.CloseActive();
@@ -182,6 +210,14 @@ namespace SurvivorFarm.Runtime.UI
 
         public void Close()
         {
+            if (embedded)
+            {
+                if (GameMenuWindow.IsOpen && GameMenuWindow.Instance != null &&
+                    (GameMenuWindow.Instance.CurrentPage == GameMenuWindow.Page.Workshop || GameMenuWindow.Instance.CurrentPage == GameMenuWindow.Page.Upgrades))
+                    GameMenuWindow.Instance.Close();
+                else HideEmbedded();
+                return;
+            }
             IsOpen = false;
             if (canvasRoot != null) canvasRoot.SetActive(false);
         }
@@ -190,33 +226,31 @@ namespace SurvivorFarm.Runtime.UI
         {
             if (PlayerRespawnController.MenuOpen) { Close(); return; }
             if (!IsOpen) return;
-            if (Input.GetKeyDown(KeyCode.Escape)) { Close(); return; }
-            if (Time.unscaledTime >= nextRefresh)
-            {
-                nextRefresh = Time.unscaledTime + .35f;
-                Refresh();
-            }
-            FarmUiStyle.FitWindow(panel);
+            if (!embedded && Input.GetKeyDown(KeyCode.Escape)) { Close(); return; }
+            if (refreshPending) Refresh();
+            if (!embedded) FarmUiStyle.FitWindow(panel);
             AnimatePreview();
         }
 
         public void Refresh()
         {
             if (panel == null || inventory == null) return;
+            if (!IsOpen) { refreshPending = true; return; }
+            refreshPending = false;
             if (wallet != null) wallet.text = $"Oro {inventory.Coins}   ·   Madera {inventory.Wood}   ·   Piedra {inventory.Stone}";
             for (int i = 0; i < tabs.Length; i++) FarmUiStyle.Button(tabs[i], (int)section == i);
             ClearGenerated();
             if (section == Section.Shop) DrawShop();
             else if (section == Section.Upgrades) DrawUpgrades();
             else DrawSkills();
-            RefreshQuickStrip();
-            RefreshQuickPicker();
+            if (!embedded) { RefreshQuickStrip(); RefreshQuickPicker(); }
+            if (embedded) JourneyMenuStyle.Restyle(panel);
         }
 
         private void DrawShop()
         {
-            hint.text = "Tienda, materiales y fabricación. Las recetas reutilizan el inventario y economía existentes.";
-            ScrollRect scroll = FarmUiStyle.Scroll(body, "Tienda y recetas", 0, 0, 1132, 326);
+            hint.text = "Tienda y fabricación · Prepara tu próxima expedición";
+            ScrollRect scroll = FarmUiStyle.Scroll(body, "Tienda y recetas", 0, 0, 1170, embedded ? 495 : 326);
             generated.Add(scroll.gameObject);
             RectTransform content = scroll.content;
             float y = 0;
@@ -241,28 +275,49 @@ namespace SurvivorFarm.Runtime.UI
         private void DrawUpgrades()
         {
             hint.text = "Mejora herramientas, armas y armaduras desde el mismo taller.";
+            ScrollRect scroll = FarmUiStyle.Scroll(body, "Mejoras disponibles", 0, 0, 608, embedded ? 495 : 326);
+            RectTransform list = scroll.content;
             float y = 0;
-            AddHeading(body, "MEJORAS DE HERRAMIENTAS Y ARMAS", 0, ref y);
-            AddUpgradeCard(body, "Sword", "Espada", "La vista previa muestra la espada de nivel 2.",
+            EconomyRecipeDescriptor sword = null;
+            if (crafting != null) crafting.TryGetRecipeDescriptor("Sword", out sword);
+            AddHeading(list, "HERRAMIENTAS Y ARMAS", 0, ref y);
+            AddUpgradeCard(list, "Sword", "Espada · nivel " + (crafting != null ? crafting.WeaponLevel : 1),
+                sword == null ? "" : sword.CanCraft ? string.Join(" · ", sword.Ingredients.Select(v => v.Name + " " + v.Required)) : sword.UnavailableReason,
                 PlayerWeaponPresentation.SwordSprite(crafting != null ? crafting.WeaponLevel : 1),
-                crafting != null && crafting.TryGetRecipeDescriptor("Sword", out EconomyRecipeDescriptor sword) && sword.CanCraft,
+                sword != null && sword.CanCraft,
                 "Mejorar", () => { crafting?.Craft("Sword"); Refresh(); }, ref y);
-            AddUpgradeCard(body, "Axe", "Hacha", upgrades != null ? "Nivel " + upgrades.AxeLevel + " · " + upgrades.GetNextCostText(FarmTool.Axe) : "Sin controlador",
-                FarmUiStyle.ItemIcon("Axe"), upgrades != null && upgrades.GetNextCost(FarmTool.Axe, out _, out _, out _),
+            AddUpgradeCard(list, "Axe", "Hacha", ToolUpgradeDetail(FarmTool.Axe),
+                FarmUiStyle.ItemIcon("Axe"), CanUpgradeTool(FarmTool.Axe),
                 "Mejorar", () => { upgrades?.TryUpgrade(FarmTool.Axe); Refresh(); }, ref y);
-            AddUpgradeCard(body, "Pickaxe", "Pico", upgrades != null ? "Nivel " + upgrades.PickaxeLevel + " · " + upgrades.GetNextCostText(FarmTool.Pickaxe) : "Sin controlador",
-                FarmUiStyle.ItemIcon("Pickaxe"), upgrades != null && upgrades.GetNextCost(FarmTool.Pickaxe, out _, out _, out _),
+            AddUpgradeCard(list, "Pickaxe", "Pico", ToolUpgradeDetail(FarmTool.Pickaxe),
+                FarmUiStyle.ItemIcon("Pickaxe"), CanUpgradeTool(FarmTool.Pickaxe),
                 "Mejorar", () => { upgrades?.TryUpgrade(FarmTool.Pickaxe); Refresh(); }, ref y);
 
-            AddHeading(body, "EQUIPO Y ARMADURAS", 0, ref y);
+            if (mastery != null) foreach (FarmTool tool in new[] { FarmTool.Bow, FarmTool.Hoe, FarmTool.WateringCan })
+            {
+                if (!mastery.HasBranch(tool)) continue;
+                FarmTool selected = tool;
+                mastery.Cost(tool, out int wood, out int stone, out int coins);
+                string costs = $"Madera {wood} · Piedra {stone} · Oro {coins}";
+                AddUpgradeCard(list, tool.ToString(), PlayerToolbelt.GetDisplayName(tool) + " · nivel " + mastery.Level(tool),
+                    mastery.CanUnlock(tool) ? costs : mastery.Requirement(tool), FarmUiStyle.ItemIcon(tool.ToString()),
+                    mastery.CanUnlock(tool) && mastery.CanAfford(tool), "Mejorar", () => { mastery.Purchase(selected); Refresh(); }, ref y);
+            }
+            int vitalityCost = 6 + (crafting?.CampLevel ?? 0) * 5;
+            AddUpgradeCard(list, "Vitality", "Vitalidad · +1 vida máxima", $"Madera {vitalityCost} · Piedra {vitalityCost}",
+                FarmUiStyle.ItemIcon("Food"), crafting != null && inventory.Wood >= vitalityCost && inventory.Stone >= vitalityCost,
+                "Mejorar", () => { crafting?.CraftCamp(); Refresh(); }, ref y);
+
+            AddHeading(list, "EQUIPO Y ARMADURAS", 0, ref y);
             foreach (string id in new[] { "Helmet", "Chestplate", "Boots", "IronSword", "WoodenShield" })
             {
                 if (crafting == null || !crafting.TryGetRecipeDescriptor(id, out EconomyRecipeDescriptor descriptor)) continue;
                 EconomyRecipeDescriptor saved = descriptor;
-                AddRecipe(body, descriptor.Name, string.Join(" · ", descriptor.Ingredients.Select(value => value.Name + " " + value.Owned + "/" + value.Required)),
-                    descriptor.CanCraft, descriptor.UnavailableReason, () => { crafting.Craft(saved.Id); Refresh(); }, ref y);
+                AddUpgradeCard(list, id, descriptor.Name, string.Join(" · ", descriptor.Ingredients.Select(value => value.Name + " " + value.Owned + "/" + value.Required)),
+                    FarmUiStyle.ItemIcon(id), descriptor.CanCraft, "Fabricar", () => { crafting.Craft(saved.Id); Refresh(); }, ref y);
             }
-            AddPreview(body, 620, 0);
+            list.sizeDelta = new Vector2(598, y + 12);
+            AddPreview(body, 674, 0);
         }
 
         private void DrawSkills()
@@ -311,8 +366,35 @@ namespace SurvivorFarm.Runtime.UI
             AddPreview(body, 830, 0);
         }
 
+        private bool CanUpgradeTool(FarmTool tool) => upgrades != null && inventory != null &&
+            upgrades.GetNextCost(tool, out int wood, out int stone, out int coins) &&
+            (mastery == null || mastery.CanUnlock(tool)) && inventory.Wood >= wood && inventory.Stone >= stone && inventory.Coins >= coins;
+
+        private string ToolUpgradeDetail(FarmTool tool)
+        {
+            if (upgrades == null) return "Herramienta no disponible";
+            if (!upgrades.GetNextCost(tool, out int wood, out int stone, out int coins)) return "Nivel máximo";
+            if (mastery != null && !mastery.CanUnlock(tool)) return "Nivel " + upgrades.GetToolLevel(tool) + " · " + mastery.Requirement(tool);
+            return $"Madera {inventory.Wood}/{wood} · Piedra {inventory.Stone}/{stone} · Oro {inventory.Coins}/{coins}";
+        }
+
         private void AddPreview(Transform parent, float x, float y)
         {
+            if (embedded)
+            {
+                JourneyMenuStyle.Label(parent, "La evolución de tu espada", x, y, 480, 38, 25, true);
+                var stage = JourneyMenuStyle.Rect(parent, "Demostración de la espada", x, y + 86, 480, 320);
+                demonstration = stage.gameObject.AddComponent<SkillDemonstrationPreview>();
+                demonstration.Configure("force_shockwave");
+                for (int i = 1; i <= 3; i++)
+                {
+                    int tier = i;
+                    JourneyMenuStyle.Button(parent, "Nivel " + i, x + (i - 1) * 160, y + 45, 148, 32,
+                        () => { demonstration.SetSkill(tier == 1 ? null : tier == 2 ? "force_heavy_hit" : "force_shockwave"); });
+                }
+                JourneyMenuStyle.Label(parent, "I   Corte básico     II   Ataque cargado\nIII   Onda de daño en área", x, y + 426, 475, 59, 16);
+                return;
+            }
             RectTransform preview = AdventureWindow.Rect(parent, "Vista previa animada", x, y, 286, 280);
             FarmUiStyle.Frame(preview.gameObject.AddComponent<Image>(), true);
             MasteryWindow.Label(preview, "VISTA PREVIA", 12, 12, 260, 22, 14).color = FarmUiStyle.Accent;
@@ -447,7 +529,7 @@ namespace SurvivorFarm.Runtime.UI
             // picker and quick-slot strip live outside it and are preserved.
             if (body != null)
                 for (int i = body.childCount - 1; i >= 0; i--)
-                    Destroy(body.GetChild(i).gameObject);
+                { var child = body.GetChild(i).gameObject; child.SetActive(false); Destroy(child); }
             generated.Clear();
             previewImage = null;
             previewLabel = null;

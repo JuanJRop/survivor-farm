@@ -3,7 +3,8 @@ param(
     [string]$Method = 'SurvivorFarm.Editor.VillageLayoutVerification.Run',
     [switch]$PrepareOnly,
     [switch]$SkipCopy,
-    [switch]$UnitTests
+    [switch]$UnitTests,
+    [string]$TestFilter = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -31,7 +32,9 @@ if ($PrepareOnly) { Write-Output "Prepared isolated QA project: $qa"; exit 0 }
 $log = Join-Path $output $(if ($UnitTests) { 'unity-tests.log' } else { 'unity-integration.log' })
 $args = @('-batchmode', '-projectPath', ('"' + $qa + '"'), '--qa', '-logFile', ('"' + $log + '"'))
 if ($UnitTests) {
-    $args += @('-runTests', '-testPlatform', 'PlayMode', '-testResults', ('"' + (Join-Path $output 'playmode-results.xml') + '"'))
+    $reportName = if ($TestFilter) { 'playmode-focused-results.xml' } else { 'playmode-results.xml' }
+    $args += @('-runTests', '-testPlatform', 'PlayMode', '-testResults', ('"' + (Join-Path $output $reportName) + '"'))
+    if ($TestFilter) { $args += @('-testFilter', ('"' + $TestFilter + '"')) }
 } else {
     $args += @('-executeMethod', $Method, '-screen-width', '1920', '-screen-height', '1080')
 }

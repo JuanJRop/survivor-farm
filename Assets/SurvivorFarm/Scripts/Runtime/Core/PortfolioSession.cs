@@ -158,7 +158,7 @@ namespace SurvivorFarm.Runtime.Core
         private void Update()
         {
             if(!IsReady||!HasBegun)return;
-            if(Input.GetKeyDown(KeyCode.Escape)&&!InventoryPanelSystem.IsOpen&&!FarmIntroduction.IsOpen)Pause(!IsPaused);
+            // GameMenuWindow owns Escape and pause across all progression pages.
             if(IsPaused||Phase==SlicePhase.Victory||Phase==SlicePhase.Defeat)return;
             if(stats.CurrentHealth<=0){Lose("Has caído. El pueblo necesita a su defensor.");return;}
             if(!InventoryPanelSystem.IsOpen&&!FarmIntroduction.IsOpen)

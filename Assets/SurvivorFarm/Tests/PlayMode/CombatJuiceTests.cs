@@ -171,6 +171,13 @@ namespace SurvivorFarm.Tests
             Assert.That(session.Remaining,Is.EqualTo(clock));Assert.That(p.GetComponent<ToolMastery>().Uses(FarmTool.Sword,1),Is.Zero);
             intro.Finish();Assert.That(FarmIntroduction.IsOpen,Is.False);Assert.That(session.IsPaused,Is.False);
         }
+
+        [Test] public void SprintModifierAcceptsEitherShiftKey()
+        {
+            Assert.That(PlayerMovementController.IsSprintModifierHeld(true, false), Is.True);
+            Assert.That(PlayerMovementController.IsSprintModifierHeld(false, true), Is.True);
+            Assert.That(PlayerMovementController.IsSprintModifierHeld(false, false), Is.False);
+        }
         [UnityTest] public IEnumerator RaiderRetargetsAfterCivilianDeathToAnIntactHouse()
         {
             var p=session.Player;p.GetComponent<ValleyCampaign>().Teleport(new Vector3(10,-12));
@@ -189,14 +196,25 @@ namespace SurvivorFarm.Tests
             foreach(var other in people.Skip(1))other.gameObject.SetActive(false);
             person.GetComponent<VillageNpcRoutine>().enabled=false;person.transform.position=new Vector3(0,-10);
             session.PrepareNow();session.Advance(session.Settings.duskSeconds+1);
+            // The test owns one attacker. Prevent the real wave scheduler from
+            // introducing unrelated raiders into the two projectile checks.
+            session.Raids.Stop();
             var arrows=EnemyProjectilePool.Ensure(session.gameObject,24);var enemy=session.Raids.Enemies[0];
             enemy.ConfigureRaid(session,RaidRole.Archer,arrows,0);enemy.ActivateFromPool(new Vector3(-3,-10));Physics2D.SyncTransforms();
-            int health=person.Health;yield return new WaitForSeconds(1.65f);
+            yield return null;
+            Assert.That(enemy.TargetKind,Is.EqualTo("Civilian"));Assert.That(enemy.SelectedTarget,Is.SameAs(person.transform));
+            int health=person.Health;float deadline=Time.realtimeSinceStartup+3f;
+            while(person.Health>=health&&Time.realtimeSinceStartup<deadline)yield return null;
             Assert.That(person.Health,Is.LessThan(health),"An archer must launch and connect, not just choose the civilian.");
             person.gameObject.SetActive(false);enemy.ReturnToPool();
-            var home=VillageHouseHealth.All.First();home.transform.position=new Vector3(0,-10);session.Navigation.Invalidate();
+            var home=VillageHouseHealth.All.FirstOrDefault(h=>h.Id=="mara");Assert.That(home,Is.Not.Null);
+            foreach(var other in VillageHouseHealth.All.Where(h=>h!=home).ToArray())other.gameObject.SetActive(false);
+            home.transform.position=new Vector3(0,-10);session.Navigation.Invalidate();Physics2D.SyncTransforms();
             enemy.ConfigureRaid(session,RaidRole.Archer,arrows,0);enemy.ActivateFromPool(new Vector3(-3,-10));Physics2D.SyncTransforms();
-            health=home.Health;yield return new WaitForSeconds(1.65f);
+            yield return null;
+            Assert.That(enemy.TargetKind,Is.EqualTo("House"));Assert.That(enemy.SelectedTarget,Is.SameAs(home.transform));
+            health=home.Health;deadline=Time.realtimeSinceStartup+3f;
+            while(home.Health>=health&&Time.realtimeSinceStartup<deadline)yield return null;
             Assert.That(home.Health,Is.LessThan(health),"House-targeting archers must have a valid projectile receiver.");enemy.ReturnToPool();
         }
     }

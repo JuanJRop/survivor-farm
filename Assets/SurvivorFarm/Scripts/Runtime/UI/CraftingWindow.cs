@@ -270,6 +270,7 @@ namespace SurvivorFarm.Runtime.UI
         public void CloseLegacy() { IsOpen = false; if (root != null) root.gameObject.SetActive(false); }
         public void Open()
         {
+            if (GameMenuWindow.Instance != null) { GameMenuWindow.OpenWorkshopActive(); return; }
             if(FarmIntroduction.IsOpen)return;
             WorkshopProgressionWindow unified = GetComponent<WorkshopProgressionWindow>();
             if (unified != null) { unified.Open(); return; }
@@ -288,6 +289,7 @@ namespace SurvivorFarm.Runtime.UI
         }
         private void Update()
         {
+            if (GameMenuWindow.Instance != null) return;
             if (PlayerRespawnController.MenuOpen) { Close(); return; }
             if (Input.GetKeyDown(KeyCode.F))
             {

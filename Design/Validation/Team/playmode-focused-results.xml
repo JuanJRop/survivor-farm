@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 22:02:45Z" end-time="2026-09-22 22:02:45Z" duration="0.4122226">
+  <test-suite type="TestSuite" id="1575" name="Survivor Farm" fullname="Survivor Farm" runstate="Runnable" testcasecount="485" result="Passed" start-time="2026-09-22 22:02:45Z" end-time="2026-09-22 22:02:45Z" duration="0.412223" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1569" name="SurvivorFarm.PlayModeTests.dll" fullname="C:/Users/Juan Jose/Documents/ProyectosUnity/Juegos/Survivor Farm/Temp/TeamQA/Library/ScriptAssemblies/SurvivorFarm.PlayModeTests.dll" runstate="Runnable" testcasecount="485" result="Passed" start-time="2026-09-22 22:02:45Z" end-time="2026-09-22 22:02:45Z" duration="0.398760" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="36040" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1570" name="SurvivorFarm" fullname="SurvivorFarm" runstate="Runnable" testcasecount="485" result="Passed" start-time="2026-09-22 22:02:45Z" end-time="2026-09-22 22:02:45Z" duration="0.393417" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1571" name="Tests" fullname="SurvivorFarm.Tests" runstate="Runnable" testcasecount="485" result="Passed" start-time="2026-09-22 22:02:45Z" end-time="2026-09-22 22:02:45Z" duration="0.387567" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1551" name="WorkshopProgressionTests" fullname="SurvivorFarm.Tests.WorkshopProgressionTests" classname="SurvivorFarm.Tests.WorkshopProgressionTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-22 22:02:45Z" end-time="2026-09-22 22:02:45Z" duration="0.379518" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1552" name="QuickSlotsKeepFiveAssignmentsAndOnlyAcceptUsableItems" fullname="SurvivorFarm.Tests.WorkshopProgressionTests.QuickSlotsKeepFiveAssignmentsAndOnlyAcceptUsableItems" methodname="QuickSlotsKeepFiveAssignmentsAndOnlyAcceptUsableItems" classname="SurvivorFarm.Tests.WorkshopProgressionTests" runstate="Runnable" seed="1861923196" result="Passed" start-time="2026-09-22 22:02:45Z" end-time="2026-09-22 22:02:45Z" duration="0.045763" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1553" name="UnifiedMenuRoutesWorkshopSkillsEquipmentAndResumesPausedRun" fullname="SurvivorFarm.Tests.WorkshopProgressionTests.UnifiedMenuRoutesWorkshopSkillsEquipmentAndResumesPausedRun" methodname="UnifiedMenuRoutesWorkshopSkillsEquipmentAndResumesPausedRun" classname="SurvivorFarm.Tests.WorkshopProgressionTests" runstate="Runnable" seed="292994674" result="Passed" start-time="2026-09-22 22:02:45Z" end-time="2026-09-22 22:02:45Z" duration="0.274018" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1554" name="UnifiedSettingsPersistVolumeAndReducedMotionAcrossMenuRecreation" fullname="SurvivorFarm.Tests.WorkshopProgressionTests.UnifiedSettingsPersistVolumeAndReducedMotionAcrossMenuRecreation" methodname="UnifiedSettingsPersistVolumeAndReducedMotionAcrossMenuRecreation" classname="SurvivorFarm.Tests.WorkshopProgressionTests" runstate="Runnable" seed="1896947382" result="Passed" start-time="2026-09-22 22:02:45Z" end-time="2026-09-22 22:02:45Z" duration="0.046511" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: C:/Users/Juan Jose/AppData/LocalLow/DefaultCompany/Survivor Farm\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

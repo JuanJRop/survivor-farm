@@ -48,8 +48,22 @@ namespace SurvivorFarm.Tests
             Assert.That(Field(data, "buildings"), Is.Not.Null);
         }
 
-        [TestCase(4)] [TestCase(23)] [TestCase(0)]
-        public void UnsupportedVersionsBlockAnIsolatedSlot(int version)
+        [TestCase(4)] [TestCase(0)]
+        public void UnsupportedOldVersionsBlockAnIsolatedSlot(int version)
+        {
+            AssertUnsupportedVersion(version);
+        }
+
+        [Test]
+        public void FutureVersionsBlockAnIsolatedSlot()
+        {
+            int currentVersion = (int)typeof(GameSaveSystem)
+                .GetField("SaveVersion", BindingFlags.NonPublic | BindingFlags.Static)
+                .GetRawConstantValue();
+            AssertUnsupportedVersion(currentVersion + 1);
+        }
+
+        private void AssertUnsupportedVersion(int version)
         {
             string path = Path.Combine(directory, "slot.json");
             string json = Fixture.Replace("\"version\":20", "\"version\":" + version);

@@ -39,18 +39,31 @@ namespace SurvivorFarm.Tests
             PlayerSurvivalStats stats = player.AddComponent<PlayerSurvivalStats>();
             yield return null;
 
+            // The portfolio flow disables the legacy respawn/menu controller.
+            // Death drops still need to run from the shared survival death path.
+            player.GetComponent<PlayerRespawnController>().enabled = false;
             inventory.AddWood(7);
             inventory.AddStone(3);
+            inventory.AddSeeds(SeedRarity.Mineral, 4);
+            inventory.AddFruit(2);
+            inventory.AddFood(3);
+            inventory.AddCoins(11);
             inventory.AddItem("Arrow", 5);
             inventory.AddItem("Diamond", 2);
+            inventory.GetComponent<AdventureProgress>().AddIron(6);
             stats.Restore(5, 5, 1f);
             stats.TakeDamage(999);
             yield return null;
 
             Assert.That(inventory.Wood, Is.Zero);
             Assert.That(inventory.Stone, Is.Zero);
+            Assert.That(inventory.MineralSeeds, Is.Zero);
+            Assert.That(inventory.Fruit, Is.Zero);
+            Assert.That(inventory.Food, Is.Zero);
+            Assert.That(inventory.Coins, Is.Zero);
             Assert.That(inventory.GetItemCount("Arrow"), Is.Zero);
             Assert.That(inventory.GetItemCount("Diamond"), Is.Zero);
+            Assert.That(inventory.GetComponent<AdventureProgress>().Data.iron, Is.Zero);
             Assert.That(Object.FindObjectsByType<EnemyLootPickup>(FindObjectsInactive.Include, FindObjectsSortMode.None).Length,
                 Is.GreaterThanOrEqualTo(3));
             Assert.That(player.GetComponent<PlayerDeathDrops>().DroppedForCurrentLife, Is.True);

@@ -21,8 +21,11 @@ namespace SurvivorFarm.Runtime.Player
         private PlayerSurvivalStats stats;
         private Vector2 dashDirection;
         private float dashUntil, nextDash;
+        private float secondDashUntil;
+        private bool secondDashReady;
         public bool IsDashing => Time.time < dashUntil;
-        public float DashCooldown => Mathf.Max(0, nextDash - Time.time);
+        public float DashCooldown => secondDashReady && Time.time < secondDashUntil && !IsDashing ? 0 : Mathf.Max(0, nextDash - Time.time);
+        public void RefundDashCooldown(float seconds) => nextDash = Mathf.Max(Time.time, nextDash - Mathf.Max(0, seconds));
 
         public MobileMovementMode MovementMode => movementMode;
 
@@ -50,13 +53,20 @@ namespace SurvivorFarm.Runtime.Player
 
         public bool TryDash(Vector2 direction)
         {
-            if (direction.sqrMagnitude < .01f || Time.timeScale == 0 || Time.time < nextDash ||
+            SkillTreeManager skills = GetComponent<SkillTreeManager>();
+            bool secondDash = skills != null && skills.HasSecondDash && secondDashReady && Time.time < secondDashUntil;
+            if (direction.sqrMagnitude < .01f || Time.timeScale == 0 || IsDashing || (Time.time < nextDash && !secondDash) ||
                 UI.InventoryPanelSystem.IsOpen || UI.VillageUpgradeWindow.IsOpen || UI.FarmIntroduction.BlocksGameplay || GetComponent<PlayerMountController>()?.IsMounted == true || stats != null && stats.CurrentHealth <= 0) return false;
             characterAnimator?.CancelAction();
             dashDirection = direction.normalized;
-            SkillTreeManager skills = GetComponent<SkillTreeManager>();
             dashUntil = Time.time + .18f * (skills?.DashDurationMultiplier ?? 1f);
-            nextDash = Time.time + (skills != null && skills.HasSecondDash ? .72f : 1.4f);
+            if (secondDash) secondDashReady = false;
+            else
+            {
+                nextDash = Time.time + 1.4f * (skills?.DashCooldownMultiplier ?? 1f);
+                secondDashReady = skills != null && skills.HasSecondDash;
+                secondDashUntil = Time.time + .8f;
+            }
             stats?.GrantInvulnerability(.22f);
             skills?.NotifyDash(dashDirection);
             return true;
@@ -72,8 +82,11 @@ namespace SurvivorFarm.Runtime.Player
             if (characterAnimator != null && characterAnimator.MovementLocked && !combatMovement)
             { body.linearVelocity = Vector2.zero; return; }
             float combatMultiplier = combatMovement ? combat.CombatMovementSpeedMultiplier : 1f;
-            body.linearVelocity = moveInput * (Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed) * combatMultiplier * (inventory?.MovementBonus ?? 1f) * (GetComponent<PlayerMountController>()?.SpeedMultiplier ?? 1f);
+            bool sprinting = IsSprintModifierHeld(Input.GetKey(KeyCode.LeftShift), Input.GetKey(KeyCode.RightShift));
+            body.linearVelocity = moveInput * (sprinting ? runSpeed : walkSpeed) * combatMultiplier * (inventory?.MovementBonus ?? 1f) * (GetComponent<SkillTreeManager>()?.MovementMultiplier ?? 1f) * (GetComponent<PlayerMountController>()?.SpeedMultiplier ?? 1f);
         }
+
+        public static bool IsSprintModifierHeld(bool leftShiftHeld, bool rightShiftHeld) => leftShiftHeld || rightShiftHeld;
 
         // Old save data can no longer enable destination or touch movement.
         public void SetMovementMode(MobileMovementMode mode)

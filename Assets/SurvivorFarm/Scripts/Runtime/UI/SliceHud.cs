@@ -131,7 +131,7 @@ namespace SurvivorFarm.Runtime.UI
             if(overlay==null)return;
             if(!session.HasBegun){overlay.SetActive(false);return;}
             foreach(var button in buttons)Destroy(button);buttons.Clear();
-            bool show=!FarmIntroduction.IsOpen&&(!session.HasBegun||session.IsPaused||session.Phase==SlicePhase.Victory||session.Phase==SlicePhase.Defeat);
+            bool show=!GameMenuWindow.IsOpen&&!FarmIntroduction.IsOpen&&(!session.HasBegun||session.IsPaused||session.Phase==SlicePhase.Victory||session.Phase==SlicePhase.Defeat);
             overlay.SetActive(show);if(!show)return;
             fade.alpha=session.Phase==SlicePhase.Victory?0:1;
             bool victory=session.Phase==SlicePhase.Victory,defeat=session.Phase==SlicePhase.Defeat;

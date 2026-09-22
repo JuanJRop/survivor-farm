@@ -96,7 +96,7 @@ namespace SurvivorFarm.Tests
         }
         [UnityTest] public IEnumerator GrassBanksAndNativeCookingAnimationSurviveSaveLoad()
         {
-            session.BeginNewGame();yield return null;Assert.That(session.Player.GetComponent<PlayerCombatController>().SwordRange,Is.EqualTo(1.1f));
+            session.BeginNewGame();yield return null;Assert.That(session.Player.GetComponent<PlayerCombatController>().SwordRange,Is.EqualTo(1.35f));
             var shores=Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None).Where(a=>a.name=="Orilla norte de pasto"||a.name=="Orilla sur de pasto").ToArray();
             Assert.That(shores.Length,Is.GreaterThan(100));
             Assert.That(shores.All(s=>s.sprite.texture.name=="TerrainAtlas"&&Mathf.Abs(s.bounds.size.x-.5f)<.001f),Is.True,"Both banks use grass at the terrain pixel scale.");

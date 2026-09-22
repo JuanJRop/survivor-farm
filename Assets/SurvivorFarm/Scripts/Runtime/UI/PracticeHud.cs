@@ -63,7 +63,7 @@ namespace SurvivorFarm.Runtime.UI
         }
         private void Run(System.Action action){action();practice.Session.Pause(false);}
         private void Toggle()=>practice.Session.Pause(!practice.Session.IsPaused);
-        public void RefreshPause(){if(panel!=null)panel.gameObject.SetActive(practice.Session.IsPaused);}
+        public void RefreshPause(){if(panel!=null)panel.gameObject.SetActive(practice.Session.IsPaused && !GameMenuWindow.IsOpen);}
         private void Update()
         {
             if(practice==null||!practice.Ready)return;

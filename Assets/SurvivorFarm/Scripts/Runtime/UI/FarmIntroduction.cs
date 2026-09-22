@@ -88,12 +88,12 @@ namespace SurvivorFarm.Runtime.UI
                 case Lesson.Combo:title="ENCADENA LOS TRES CORTES";sentence="Clics cortos, uno tras otro. Verás la reacción, las chispas y el remate. Si esperas demasiado, el combo vuelve al primero.";break;
                 case Lesson.ChargeHint:title="AHORA, CARGA LA ESPADA";sentence="Mantén CLIC hasta oír la señal y ver la energía dorada. Suelta el botón para descargar un golpe mucho más fuerte.";break;
                 case Lesson.Charge:title="MANTÉN… Y SUELTA";sentence="Un segundo de carga. Suelta sobre tu rival: la descarga lo empuja más lejos. Esquivar o recibir daño interrumpe la carga.";break;
-                default:title="PROTEGE TU PUEBLO";sentence="Explora campamentos y ruinas. Aprende la carga de espada al alcanzar nivel 2 en K: habilidades. E interactúa · I mochila · F recetas · Espacio esquiva · Q cura.";RemovePractice();break;
+                default:title="PROTEGE TU PUEBLO";sentence="Explora campamentos y ruinas. Mejora la espada a nivel 2 en Esc → Mejoras para cargar ataques. E interactúa · I mochila · F taller · K habilidades · Espacio esquiva.";RemovePractice();break;
             }
             heading.text=title;
             foreach(var key in keys)key.gameObject.SetActive(value==Lesson.MovementHint||value==Lesson.Movement);
             next.gameObject.SetActive(IsHint&&value!=Lesson.MovementHint);
-            next.GetComponentInChildren<Text>().text=value==Lesson.Mission?"¡A jugar!":value==Lesson.ComboHint||value==Lesson.ChargeHint||value==Lesson.DashRunHint?"Sigue":"Practicar";
+            next.GetComponentInChildren<Text>().text=value==Lesson.Mission?"¡A jugar!":"Practicar";
             PortfolioSession.Instance.Pause(IsHint);
             UpdateFocus();
         }
@@ -123,7 +123,7 @@ namespace SurvivorFarm.Runtime.UI
         }
         private void Update()
         {
-            if(!open)return;
+            if(!open || GameMenuWindow.IsOpen)return;
             revealed+=Time.unscaledDeltaTime*52;
             body.text=sentence.Substring(0,Mathf.Min((int)revealed,sentence.Length));
             if(lesson==Lesson.MovementHint)

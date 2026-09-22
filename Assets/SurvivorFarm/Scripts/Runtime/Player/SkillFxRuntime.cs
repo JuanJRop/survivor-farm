@@ -5,8 +5,8 @@ namespace SurvivorFarm.Runtime.Player
 {
     /// <summary>
     /// Plays skill feedback with a small reusable pool. It listens to the existing
-    /// skill event bus, so unlocking a node immediately previews its effect and the
-    /// same art is reused during attacks, dashes and kill reactions.
+    /// skill event bus, so only learned effects that actually trigger are displayed. The
+    /// same art is reused by menu previews, attacks, dashes and kill reactions.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class SkillFxRuntime : MonoBehaviour
@@ -41,21 +41,16 @@ namespace SurvivorFarm.Runtime.Player
             slots = new Slot[MaximumSlots];
             SkillCombatEventBus events = manager.Events;
             events.OnSkillUsed += OnSkillUsed;
-            events.OnAttack += OnAttack;
-            events.OnHit += OnHit;
-            events.OnDash += OnDash;
-            events.OnEnemyKilled += OnEnemyKilled;
             events.OnDamageTaken += OnDamageTaken;
         }
 
         private void OnDestroy()
         {
+            if (slots != null)
+                for (int i = 0; i < created; i++)
+                    if (slots[i]?.Root != null) Destroy(slots[i].Root);
             if (manager == null || manager.Events == null) return;
             manager.Events.OnSkillUsed -= OnSkillUsed;
-            manager.Events.OnAttack -= OnAttack;
-            manager.Events.OnHit -= OnHit;
-            manager.Events.OnDash -= OnDash;
-            manager.Events.OnEnemyKilled -= OnEnemyKilled;
             manager.Events.OnDamageTaken -= OnDamageTaken;
         }
 
@@ -68,7 +63,7 @@ namespace SurvivorFarm.Runtime.Player
                 return;
             }
 
-            float now = Time.unscaledTime;
+            float now = Time.time;
             for (int i = 0; i < created; i++)
             {
                 Slot slot = slots[i];
@@ -85,34 +80,17 @@ namespace SurvivorFarm.Runtime.Player
 
         private void OnSkillUsed(SkillEventContext context)
         {
+            if (manager == null || manager.GetLevel(context.SkillId) <= 0) return;
             SkillFxLibrary.Clip clip = SkillFxLibrary.ForSkill(context.SkillId);
-            if (clip != null) Play(clip, transform.position + Vector3.up * .35f, 1.05f);
-        }
-
-        private void OnAttack(SkillEventContext context)
-        {
-            if (context.Tool != FarmTool.Bow && !context.Charged && !context.Heavy) return;
-            SkillFxLibrary.Clip clip = SkillFxLibrary.ForAttack(context.Tool, context.Charged, context.Heavy);
-            if (clip != null) Play(clip, transform.position + Vector3.up * .15f, .85f);
-        }
-
-        private void OnHit(SkillEventContext context)
-        {
-            if (context.Target == null) return;
-            SkillFxLibrary.Clip clip = SkillFxLibrary.ForHit(manager, context);
-            if (clip != null) Play(clip, context.Position, context.Charged ? 1.0f : .72f);
-        }
-
-        private void OnDash(SkillEventContext context)
-        {
-            SkillFxLibrary.Clip clip = SkillFxLibrary.ForDash(manager);
-            if (clip != null) Play(clip, transform.position, .80f);
-        }
-
-        private void OnEnemyKilled(SkillEventContext context)
-        {
-            SkillFxLibrary.Clip clip = SkillFxLibrary.ForEnemyKilled(manager);
-            if (clip != null) Play(clip, context.Position, .90f);
+            if (clip == null) return;
+            SkillDefinition definition = SkillTreeCatalog.Find(context.SkillId);
+            float scale = 1.05f;
+            if (definition != null && definition.Radius > 0 && clip.At(0) != null)
+            {
+                Vector3 extents = clip.At(0).bounds.extents;
+                scale = definition.Radius / Mathf.Max(.01f, Mathf.Max(extents.x, extents.y) * clip.Scale);
+            }
+            Play(clip, context.Position, scale);
         }
 
         private void OnDamageTaken(SkillEventContext context)
@@ -127,7 +105,7 @@ namespace SurvivorFarm.Runtime.Player
             Slot slot = Rent();
             if (slot == null) return;
             slot.Clip = clip;
-            slot.StartedAt = Time.unscaledTime;
+            slot.StartedAt = Time.time;
             slot.Duration = Mathf.Max(.04f, clip.Duration);
             slot.Active = true;
             slot.Root.transform.position = position;

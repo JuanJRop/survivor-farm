@@ -36,7 +36,7 @@ namespace SurvivorFarm.Runtime.Player
             int level=Level(tool);if(level>=3||resourceTier>0&&resourceTier<level)return;
             bool unlocked=CanUnlock(tool);
             record.uses[level-1]=Mathf.Min(Required(tool,level),record.uses[level-1]+1);
-            if(!unlocked&&CanUnlock(tool))FarmNotificationCenter.Show(PlayerToolbelt.GetDisplayName(tool)+": nivel "+(level+1)+" desbloqueado. Cómpralo en Maestrías [K].");
+            if(!unlocked&&CanUnlock(tool))FarmNotificationCenter.Show(PlayerToolbelt.GetDisplayName(tool)+": nivel "+(level+1)+" desbloqueado. Cómpralo en Esc → Mejoras.");
             Changed?.Invoke();
         }
         public void Cost(FarmTool tool,out int wood,out int stone,out int coins)

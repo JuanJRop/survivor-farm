@@ -150,6 +150,7 @@ namespace SurvivorFarm.Runtime.UI
         private void RefreshCoins()
         {
             if (Coins != null && Inventory != null) Coins.text = FarmUiStyle.Quantity(Inventory.Coins);
+            RefreshWeaponSlots();
         }
 
         private void RefreshSurvival()
@@ -202,6 +203,7 @@ namespace SurvivorFarm.Runtime.UI
             int arrows = Inventory.GetItemCount("Arrow");
             Button swordButton = ToolButtons.Length > (int)FarmTool.Sword ? ToolButtons[(int)FarmTool.Sword] : null;
             Button bowButton = ToolButtons.Length > (int)FarmTool.Bow ? ToolButtons[(int)FarmTool.Bow] : null;
+            if (bowButton != null) bowButton.gameObject.SetActive(bowUnlocked);
             if (displayedSwordTier == swordTier && displayedArrows == arrows && displayedBowUnlocked == bowUnlocked &&
                 displayedSwordButton == swordButton && displayedBowButton == bowButton) return;
             displayedSwordTier = swordTier; displayedArrows = arrows; displayedBowUnlocked = bowUnlocked;
@@ -260,7 +262,8 @@ namespace SurvivorFarm.Runtime.UI
                 Button button = ToolButtons[i];
                 if (button == null) continue;
                 bool visibleTool = i == (int)FarmTool.Sword || i == (int)FarmTool.Bow;
-                button.gameObject.SetActive(visibleTool);
+                button.gameObject.SetActive(visibleTool &&
+                    (i != (int)FarmTool.Bow || Inventory != null && Inventory.OwnsEquipment("Bow")));
                 if (!visibleTool) continue;
                 int visibleIndex = i == (int)FarmTool.Sword ? 0 : i == (int)FarmTool.Bow ? 1 : 2;
 

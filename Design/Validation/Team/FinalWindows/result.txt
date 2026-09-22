@@ -1,0 +1,2 @@
+PASS
+Warmed 5,000-cycle arrow, loot, impact and floating label reuse; bounded route cache; scene cleanup and no attached sword. This is an allocation/reuse stress check, not an FPS claim.

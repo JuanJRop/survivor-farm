@@ -66,6 +66,7 @@ namespace SurvivorFarm.Runtime.UI
         }
         public void Open()
         {
+            if (GameMenuWindow.Instance != null) { GameMenuWindow.OpenEquipmentActive(); return; }
             VillageDialogueWindow.CloseActive(); SimpleShopSystem.CloseActive(); GetComponent<AdventureWindow>()?.Close(); inventory.GetComponent<ConstructionSystem>()?.Cancel(); backpack.Close(); GetComponent<CraftingWindow>()?.Close(); IsOpen=true; inventory.GetComponent<PlayerMovementController>()?.StopMovement();
             root.gameObject.SetActive(true); root.SetAsLastSibling(); filter=-1;previewId=null; Refresh();FarmUiStyle.FitWindow(root);
         }
@@ -74,6 +75,7 @@ namespace SurvivorFarm.Runtime.UI
         private void OnDestroy() { if(inventory!=null)inventory.InventoryChanged-=Refresh; if(root!=null)Destroy(root.gameObject); }
         private void Update()
         {
+            if (GameMenuWindow.Instance != null) return;
             if(PlayerRespawnController.MenuOpen){Close();return;}
             if(Input.GetKeyDown(KeyCode.C)) { if(IsOpen)Close();else Open(); }
             if(Input.GetKeyDown(KeyCode.Escape) && IsOpen)Close();

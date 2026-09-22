@@ -81,6 +81,12 @@ namespace SurvivorFarm.Runtime.Player
                 if (!deathNotified)
                 {
                     deathNotified = true;
+                    // Portfolio mode disables the legacy respawn controller and
+                    // handles defeat through PortfolioSession. Keep the physical
+                    // resource drop on the death path itself so both flows share it.
+                    PlayerDeathDrops drops = GetComponent<PlayerDeathDrops>();
+                    if (drops == null) drops = gameObject.AddComponent<PlayerDeathDrops>();
+                    drops.DropAtDeathPosition();
                     Died?.Invoke();
                     GetComponent<SkillTreeManager>()?.NotifyPlayerDeath();
                 }

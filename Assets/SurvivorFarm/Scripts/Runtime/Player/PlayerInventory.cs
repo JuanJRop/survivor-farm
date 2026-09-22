@@ -232,6 +232,7 @@ namespace SurvivorFarm.Runtime.Player
             if(GetComponent<SkillTreeManager>()==null)gameObject.AddComponent<SkillTreeManager>();
             if(GetComponent<SkillRuntimeEffects>()==null)gameObject.AddComponent<SkillRuntimeEffects>();
             if(GetComponent<SkillFxRuntime>()==null)gameObject.AddComponent<SkillFxRuntime>();
+            UI.GameMenuWindow.Ensure(this);
         }
         private void Start()
         {

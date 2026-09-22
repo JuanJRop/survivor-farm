@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
@@ -6,6 +7,8 @@ using SurvivorFarm.Runtime.Gameplay;
 using SurvivorFarm.Runtime.Player;
 using SurvivorFarm.Runtime.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.TestTools;
 
 namespace SurvivorFarm.Tests
@@ -33,7 +36,9 @@ namespace SurvivorFarm.Tests
         }
         [TearDown] public void TearDown()
         {
+            GameMenuWindow.Instance?.Close();
             foreach (var arrow in Object.FindObjectsByType<ArrowProjectile>(FindObjectsSortMode.None)) Object.DestroyImmediate(arrow.gameObject);
+            foreach (GameObject canvas in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None).Where(value => value.name == "Menú de viaje")) Object.DestroyImmediate(canvas);
             Object.DestroyImmediate(root); Time.timeScale = 1;
         }
         private WeaponSkillTarget Target(Vector2 position, int health = 20)
@@ -151,15 +156,89 @@ namespace SurvivorFarm.Tests
             Time.timeScale = 1;
         }
 
-        [Test] public void SkillTreeShowsAllThreeTiersAndLocksMissingBowBranch()
+        [UnityTest] public IEnumerator UnifiedMenuShowsConnectedFiveBranchTreeLiveCombatPreviewAndRoutedUnlock()
         {
-            var mastery = inventory.GetComponent<ToolMastery>(); if (mastery == null) mastery = inventory.gameObject.AddComponent<ToolMastery>();
-            Assert.IsFalse(mastery.HasBranch(FarmTool.Bow));
-            var window = inventory.gameObject.AddComponent<MasteryWindow>(); window.Open();
-            var labels = Object.FindObjectsByType<UnityEngine.UI.Text>(FindObjectsSortMode.None).Select(t => t.text).ToArray();
-            CollectionAssert.Contains(labels, "NIVEL 1"); CollectionAssert.Contains(labels, "NIVEL 2"); CollectionAssert.Contains(labels, "NIVEL 3");
-            CollectionAssert.Contains(labels, "Espada de madera"); CollectionAssert.Contains(labels, "Hoja de acero"); CollectionAssert.Contains(labels, "Espada real");
-            window.Close();
+            GameObject eventSystemObject = Child("Menu event system");
+            var eventSystem = eventSystemObject.AddComponent<EventSystem>();
+            var manager = SkillTreeManager.Ensure(inventory);
+
+            GameMenuWindow.OpenSkillsActive();
+            GameMenuWindow menu = GameMenuWindow.Instance;
+            Assert.IsNotNull(menu);
+            yield return null;
+            menu.FitToViewport();
+            Canvas.ForceUpdateCanvases();
+            Assert.IsTrue(GameMenuWindow.IsOpen);
+            Assert.IsTrue(SkillTreeWindow.IsOpen);
+            Assert.AreEqual(GameMenuWindow.Page.Skills, menu.CurrentPage);
+            Assert.AreEqual(0f, Time.timeScale);
+
+            var labels = Object.FindObjectsByType<Text>(FindObjectsSortMode.None).Select(t => t.text).ToArray();
+            CollectionAssert.Contains(labels, "FUERZA");
+            CollectionAssert.Contains(labels, "MAGIA");
+            CollectionAssert.Contains(labels, "SUPERVIVENCIA");
+            CollectionAssert.Contains(labels, "MOVILIDAD");
+            CollectionAssert.Contains(labels, "CAOS");
+
+            SkillTreeWindow tree = inventory.GetComponent<SkillTreeWindow>();
+            Assert.IsNotNull(tree);
+            var treeRoot = menu.Content.Find("Árbol de habilidades · tinta y oro");
+            Assert.IsNotNull(treeRoot);
+            Assert.AreSame(menu.Content, treeRoot.parent);
+            Assert.AreSame(menu.Content.GetComponentInParent<Canvas>(), treeRoot.GetComponentInParent<Canvas>());
+
+            SkillDemonstrationPreview preview = treeRoot.GetComponentInChildren<SkillDemonstrationPreview>(true);
+            Assert.IsNotNull(preview);
+            preview.SetSkill("force_shockwave");
+            Assert.IsNotNull(preview.transform.Find("Héroe en combate").GetComponent<Image>().sprite);
+            Assert.IsNotNull(preview.transform.Find("Enemigo alcanzado").GetComponent<Image>().sprite);
+            Assert.IsNotNull(preview.transform.Find("Efecto de la habilidad").GetComponent<Image>().sprite);
+
+            ClickByRaycast(eventSystem, "Técnica force_bleeding_edge");
+            string[] detailLabels = treeRoot.GetComponentsInChildren<Text>(true).Select(t => t.text).ToArray();
+            CollectionAssert.Contains(detailLabels, "Filo sangrante");
+            Assert.IsTrue(detailLabels.Any(text => text.StartsWith("SELLADA")), "Locked nodes remain selectable and explain their requirements.");
+            ClickByRaycast(eventSystem, "Técnica force_shockwave");
+            CollectionAssert.Contains(treeRoot.GetComponentsInChildren<Text>(true).Select(t => t.text).ToArray(), "Onda de choque");
+            ClickByRaycast(eventSystem, "Técnica force_heavy_hit");
+            CollectionAssert.Contains(treeRoot.GetComponentsInChildren<Text>(true).Select(t => t.text).ToArray(), "Golpe pesado");
+            ClickByRaycast(eventSystem, "Aprender habilidad");
+            Assert.AreEqual(SkillStatus.Maxed, manager.GetStatus("force_heavy_hit"));
+
+            GameMenuWindow.OpenEquipmentActive();
+            Assert.AreEqual(GameMenuWindow.Page.Equipment, menu.CurrentPage);
+            labels = Object.FindObjectsByType<Text>(FindObjectsSortMode.None).Select(t => t.text).ToArray();
+            CollectionAssert.Contains(labels, "Cinco cajones rápidos");
+            for (int slot = 1; slot <= PlayerQuickSlots.SlotCount; slot++)
+                Assert.IsTrue(labels.Any(text => text.StartsWith(slot + "   ")));
+
+            menu.Close();
+            Assert.IsFalse(GameMenuWindow.IsOpen);
+            Assert.IsFalse(SkillTreeWindow.IsOpen);
+            Assert.AreEqual(1f, Time.timeScale);
+        }
+
+        private void ClickByRaycast(EventSystem eventSystem, string objectName)
+        {
+            Canvas.ForceUpdateCanvases();
+            GameObject target = GameObject.Find(objectName);
+            Assert.IsNotNull(target, "Missing clickable skill UI object: " + objectName);
+            Image circle = target.GetComponent<Image>();
+            Assert.IsNotNull(circle, "Skill node needs a circular graphic as its raycast target.");
+            Assert.IsTrue(circle.raycastTarget, "The circular node must receive pointer raycasts.");
+            Button button = target.GetComponent<Button>();
+            Assert.IsNotNull(button);
+            Assert.IsTrue(button.interactable, "Even locked skill nodes must remain selectable.");
+            RectTransform rect = target.GetComponent<RectTransform>();
+            Vector2 screen = RectTransformUtility.WorldToScreenPoint(null, rect.TransformPoint(rect.rect.center));
+            var pointer = new PointerEventData(eventSystem) { position = screen, button = PointerEventData.InputButton.Left };
+            var results = new List<RaycastResult>();
+            eventSystem.RaycastAll(pointer, results);
+            string hitNames = string.Join(", ", results.Select(result => result.gameObject.name).ToArray());
+            Assert.IsTrue(results.Any(result => result.gameObject == target), "Expected a raycast hit on " + objectName + ". Hits: " + hitNames);
+            ExecuteEvents.Execute(target, pointer, ExecuteEvents.pointerDownHandler);
+            ExecuteEvents.Execute(target, pointer, ExecuteEvents.pointerUpHandler);
+            ExecuteEvents.Execute(target, pointer, ExecuteEvents.pointerClickHandler);
         }
     }
 }

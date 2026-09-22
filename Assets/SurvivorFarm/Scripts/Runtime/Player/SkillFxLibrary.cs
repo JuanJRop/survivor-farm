@@ -14,7 +14,7 @@ namespace SurvivorFarm.Runtime.Player
     {
         private const int CellSize = 64;
         private const int PixelsPerUnit = 16;
-        private const int MaxCachedClips = 32;
+        private const int MaxCachedClips = 96;
 
         private sealed class Descriptor
         {
@@ -71,7 +71,8 @@ namespace SurvivorFarm.Runtime.Player
         private static readonly Descriptor shockwave = new Descriptor("SkillFx/Part14/652", 0, .42f, .78f);
         private static readonly Descriptor corpseExplosion = new Descriptor("SkillFx/Part12/566", 7, .48f, .90f);
 
-        private static readonly Dictionary<string, Clip> cache = new Dictionary<string, Clip>(MaxCachedClips, StringComparer.Ordinal);
+        private static readonly Dictionary<Descriptor, Clip> cache = new Dictionary<Descriptor, Clip>(MaxCachedClips);
+        private static readonly Dictionary<string, Sprite[]> framesBySheet = new Dictionary<string, Sprite[]>(StringComparer.Ordinal);
         private static readonly Dictionary<string, Descriptor> skillDescriptors = BuildSkillDescriptors();
 
         public static int CachedClipCount { get { return cache.Count; } }
@@ -119,8 +120,15 @@ namespace SurvivorFarm.Runtime.Player
         {
             if (descriptor == null || string.IsNullOrEmpty(descriptor.Path)) return null;
             string key = descriptor.Path + "#" + descriptor.Row;
-            if (cache.TryGetValue(key, out Clip existing) && existing != null) return existing;
+            if (cache.TryGetValue(descriptor, out Clip existing) && existing != null) return existing;
             if (cache.Count >= MaxCachedClips) return null;
+
+            if (framesBySheet.TryGetValue(key, out Sprite[] shared))
+            {
+                var sharedClip = new Clip(shared, descriptor.Duration, descriptor.Scale, descriptor.SortingOrder);
+                cache.Add(descriptor, sharedClip);
+                return sharedClip;
+            }
 
             Texture2D texture = Resources.Load<Texture2D>(descriptor.Path);
             if (texture == null)
@@ -144,8 +152,17 @@ namespace SurvivorFarm.Runtime.Player
                 frames[column] = frame;
             }
             Clip clip = new Clip(frames, descriptor.Duration, descriptor.Scale, descriptor.SortingOrder);
-            cache.Add(key, clip);
+            framesBySheet.Add(key, frames);
+            cache.Add(descriptor, clip);
             return clip;
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetCache()
+        {
+            foreach (Sprite[] frames in framesBySheet.Values)
+                foreach (Sprite sprite in frames) if (sprite != null) UnityEngine.Object.Destroy(sprite);
+            framesBySheet.Clear(); cache.Clear();
         }
 
         private static Descriptor BranchFallback(SkillBranch branch)
@@ -196,24 +213,26 @@ namespace SurvivorFarm.Runtime.Player
                 { "Domination", new Descriptor("SkillFx/Part10/464", 7, .42f, .62f) },
                 { "DivineAscension", new Descriptor("SkillFx/Part14/652", 7, .64f, 1.10f) }
             };
+            result["BrutalCombo"] = new Descriptor("SkillFx/Part15/700", 0, .28f, .62f);
+            result["Earthquake"] = new Descriptor("SkillFx/Part14/652", 0, .58f, 1.15f);
+            result["Carnage"] = new Descriptor("SkillFx/Part03/113", 7, .24f, .48f);
+            result["MonsterStrength"] = new Descriptor("SkillFx/Part04/174", 0, .36f, .85f);
+            result["FireExplosion"] = new Descriptor("SkillFx/Part10/464", 7, .52f, .88f);
+            result["Meteor"] = new Descriptor("SkillFx/Part12/566", 7, .62f, 1.1f);
+            result["Cataclysm"] = new Descriptor("SkillFx/Part10/464", 7, .72f, 1.35f);
+            result["Thunderstorm"] = new Descriptor("SkillFx/Part11/506", 2, .48f, .88f);
+            result["Overload"] = new Descriptor("SkillFx/Part11/506", 2, .28f, .60f);
+            result["ThunderGod"] = new Descriptor("SkillFx/Part11/506", 2, .58f, 1.15f);
+            result["IceShatter"] = new Descriptor("SkillFx/Part13/612", 2, .30f, .55f);
+            result["FrostNova"] = new Descriptor("SkillFx/Part13/612", 2, .54f, .96f);
+            result["Glacier"] = new Descriptor("SkillFx/Part13/612", 2, .68f, 1.25f);
+            result["VoidGravity"] = new Descriptor("SkillFx/Part13/612", 1, .50f, .90f);
+            result["BlackHole"] = new Descriptor("SkillFx/Part13/612", 1, .72f, 1.18f);
+            result["Singularity"] = new Descriptor("SkillFx/Part13/612", 1, .84f, 1.40f);
+            result["ShadowBurst"] = new Descriptor("SkillFx/Part06/273", 8, .30f, .70f);
+            result["OffensiveTeleport"] = new Descriptor("SkillFx/Part07/313", 8, .32f, .92f);
             return result;
         }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void Reset()
-        {
-            foreach (Clip clip in cache.Values)
-            {
-                if (clip == null) continue;
-                // Sprite references are the only objects owned by this cache. The
-                // Resources texture itself remains managed by Unity's Resources system.
-                for (int i = 0; i < clip.FrameCount; i++)
-                {
-                    Sprite sprite = clip.At((i + .1f) / Mathf.Max(1, clip.FrameCount));
-                    if (sprite != null) UnityEngine.Object.Destroy(sprite);
-                }
-            }
-            cache.Clear();
-        }
     }
 }

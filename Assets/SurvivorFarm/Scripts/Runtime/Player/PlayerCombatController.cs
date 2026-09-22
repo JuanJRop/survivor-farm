@@ -60,6 +60,7 @@ namespace SurvivorFarm.Runtime.Player
         public bool BowUnlocked => inventory != null && inventory.OwnsEquipment("Bow");
         public int ArrowCount => inventory != null ? inventory.GetAvailableItemCount("Arrow") : 0;
         public float ExecutionCooldown => Mathf.Max(0, nextExecutionTime - Time.time);
+        public void RefundAttackCooldown(float seconds) => nextAttackTime = Mathf.Max(Time.time, nextAttackTime - Mathf.Max(0, seconds));
         public ComboController Combo => combo;
         public SwordChargeController Charge=>charge;
         public bool LastAttackWasCharged {get;private set;}

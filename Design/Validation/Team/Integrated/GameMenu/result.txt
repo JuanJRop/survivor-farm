@@ -1,0 +1,2 @@
+PASS
+Main scene title flow starts a new game and safely closes the tutorial. The unified host opens through its public Escape-equivalent API, all five pages expose their expected widgets, and the session pauses while open and resumes when closed. Captures: habilidades.png, taller.png, mejoras.png, equipo.png, ajustes.png. Save writes were disabled and the prior portfolio slot preference was restored.
