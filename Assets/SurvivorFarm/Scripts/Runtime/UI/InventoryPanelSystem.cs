@@ -84,7 +84,7 @@ namespace SurvivorFarm.Runtime.UI
         {
             if(open&&FarmIntroduction.IsOpen)return;
             EnsureVisual();
-            if (open) { VillageDialogueWindow.CloseActive(); SimpleShopSystem.CloseActive(); GetComponent<AdventureWindow>()?.Close();inventory?.GetComponent<ConstructionSystem>()?.Cancel(); equipment?.Close(); GetComponent<CraftingWindow>()?.Close(); GetComponent<WorkshopProgressionWindow>()?.Close(); }
+            if (open) { VillageDialogueWindow.CloseActive(); SimpleShopSystem.CloseActive(); GetComponent<AdventureWindow>()?.Close();inventory?.GetComponent<ConstructionSystem>()?.Cancel(); equipment?.Close(); GetComponent<CraftingWindow>()?.Close(); GetComponent<WorkshopProgressionWindow>()?.Close(); GetComponent<SkillTreeWindow>()?.Close(); }
             backpackOpen = open;
             inventory?.GetComponent<PlayerMovementController>()?.StopMovement();
             if (panel != null)
@@ -111,7 +111,7 @@ namespace SurvivorFarm.Runtime.UI
 
         private VisualBackpack visual;
         private static bool backpackOpen;
-        public static bool IsOpen => backpackOpen || PetAdoptionWindow.IsOpen || MasteryWindow.IsOpen || VillageUpgradeWindow.IsOpen || WorkshopProgressionWindow.IsOpen || FarmIntroduction.BlocksGameplay || VillageDialogueWindow.IsOpen || SimpleShopSystem.IsOpen || AdventureWindow.IsOpen || ConstructionSystem.IsPlacing || CraftingWindow.IsOpen || PlayerEquipmentWindow.IsOpen || PlayerRespawnController.MenuOpen;
+        public static bool IsOpen => backpackOpen || PetAdoptionWindow.IsOpen || MasteryWindow.IsOpen || SkillTreeWindow.IsOpen || VillageUpgradeWindow.IsOpen || WorkshopProgressionWindow.IsOpen || FarmIntroduction.BlocksGameplay || VillageDialogueWindow.IsOpen || SimpleShopSystem.IsOpen || AdventureWindow.IsOpen || ConstructionSystem.IsPlacing || CraftingWindow.IsOpen || PlayerEquipmentWindow.IsOpen || PlayerRespawnController.MenuOpen;
         private PlayerEquipmentWindow equipment;
         private void Start()
         {
@@ -120,6 +120,7 @@ namespace SurvivorFarm.Runtime.UI
             {
                 gameObject.AddComponent<CraftingWindow>().Configure(inventory, panel.transform.parent);
                 gameObject.AddComponent<WorkshopProgressionWindow>().Configure(inventory, panel.transform.parent);
+                gameObject.AddComponent<SkillTreeWindow>().Configure(inventory, panel.transform.parent);
                 gameObject.AddComponent<AdventureWindow>().Configure(inventory, panel.transform.parent);
                 gameObject.AddComponent<VillageDialogueWindow>().Configure(panel.transform.parent);
             }

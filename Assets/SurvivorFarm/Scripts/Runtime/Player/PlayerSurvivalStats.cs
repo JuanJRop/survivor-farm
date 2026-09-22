@@ -19,6 +19,7 @@ namespace SurvivorFarm.Runtime.Player
         {
             Restore(maxHealth,maxHealth,1f);
             invulnerableUntil = Time.time + 3f;
+            GetComponent<SkillTreeManager>()?.NotifyPlayerRevived();
         }
 
         public int MaxHealth => maxHealth;
@@ -52,11 +53,23 @@ namespace SurvivorFarm.Runtime.Player
 
             if(!starvation)
             {
+                SkillTreeManager skills = GetComponent<SkillTreeManager>();
+                if (skills != null) amount = Mathf.Max(1, Mathf.RoundToInt(amount * (1f - skills.DamageReduction)));
                 blockedDamage += amount*(GetComponent<PlayerInventory>()?.ArmorReduction ?? 0);
                 int blocked=Mathf.FloorToInt(blockedDamage);blockedDamage-=blocked;amount-=blocked;
                 if(amount<=0){FarmNotificationCenter.Show("Tu armadura absorbió el golpe.");return;}
             }
+            SkillTreeManager skillsForLife = GetComponent<SkillTreeManager>();
+            if (currentHealth - amount <= 0 && skillsForLife != null && skillsForLife.TryConsumeSecondChance())
+            {
+                currentHealth = Mathf.Max(1, Mathf.CeilToInt(maxHealth * .35f));
+                GrantInvulnerability(1.2f);
+                NotifyChanged();
+                FarmNotificationCenter.Show("Segunda oportunidad: sigues con vida.");
+                return;
+            }
             currentHealth = Mathf.Max(0, currentHealth - amount);
+            GetComponent<SkillTreeManager>()?.NotifyDamageTaken(amount);
             if (Core.PortfolioSession.Active) GrantInvulnerability(.7f);
             GetComponent<PlayerCombatController>()?.CancelMelee();
             GetComponent<SurvivorFarm.Runtime.Gameplay.HitFeedback>()?.PlayerHurt(amount, currentHealth <= 0);
@@ -69,6 +82,7 @@ namespace SurvivorFarm.Runtime.Player
                 {
                     deathNotified = true;
                     Died?.Invoke();
+                    GetComponent<SkillTreeManager>()?.NotifyPlayerDeath();
                 }
                 FindFirstObjectByType<TutorialQuestSystem>()?.NotifyDeath();
                 FarmNotificationCenter.Show("Te quedaste sin vida.");

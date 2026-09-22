@@ -229,6 +229,8 @@ namespace SurvivorFarm.Runtime.Player
             if(GetComponent<ConstructionSystem>()==null)gameObject.AddComponent<ConstructionSystem>();
             if(GetComponent<GameFeelFeedback>()==null)gameObject.AddComponent<GameFeelFeedback>();
             if(GetComponent<PlayerQuickSlots>()==null)gameObject.AddComponent<PlayerQuickSlots>();
+            if(GetComponent<SkillTreeManager>()==null)gameObject.AddComponent<SkillTreeManager>();
+            if(GetComponent<SkillRuntimeEffects>()==null)gameObject.AddComponent<SkillRuntimeEffects>();
         }
         private void Start()
         {

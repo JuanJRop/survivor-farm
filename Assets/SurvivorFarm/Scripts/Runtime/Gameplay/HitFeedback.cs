@@ -102,6 +102,7 @@ namespace SurvivorFarm.Runtime.Gameplay
                 }
             }
             HitResolved?.Invoke(new ResolvedHit(target, damage, heavy, killed, finisher,charged));
+            GetComponent<SkillTreeManager>()?.NotifyHit(target, damage, resolvingTool, heavy, charged);
         }
 
         public void PlayerHurt(int damage, bool dead)

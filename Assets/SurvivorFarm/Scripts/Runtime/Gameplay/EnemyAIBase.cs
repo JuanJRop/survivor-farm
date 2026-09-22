@@ -416,6 +416,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         {
             pool?.NotifyDefeated(this);
             DropLoot();
+            inventory?.GetComponent<SkillTreeManager>()?.NotifyEnemyKilled(gameObject, IsElite ? 12 : 5);
             FarmGameEvents.RaiseEnemyDefeated();
         }
 

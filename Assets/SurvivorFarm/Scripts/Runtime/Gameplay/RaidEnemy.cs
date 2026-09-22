@@ -138,6 +138,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected override void OnDefeated(PlayerInventory inventory)
         {
             DropLoot();
+            inventory?.GetComponent<SkillTreeManager>()?.NotifyEnemyKilled(gameObject, IsElite ? 12 : 5);
             FarmGameEvents.RaiseEnemyDefeated();
         }
     }

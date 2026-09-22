@@ -268,7 +268,12 @@ namespace SurvivorFarm.Runtime.UI
         private void DrawSkills()
         {
             hint.text = "Elige una rama y desbloquea los nodos al alcanzar sus usos. El arco aparece al encontrarlo en la mazmorra.";
-            if (mastery == null) return;
+            MasteryWindow.Button(body, "ABRIR ÁRBOL COMPLETO", 850, 0, 250, 36, SkillTreeWindow.OpenActive);
+            if (mastery == null)
+            {
+                MasteryWindow.Label(body, "El árbol de habilidades completo usa experiencia y puntos de habilidad.", 0, 55, 800, 30, 15).color = FarmUiStyle.Muted;
+                return;
+            }
             for (int i = 0; i < ToolMastery.Branches.Length; i++)
             {
                 int index = i;

@@ -12,7 +12,7 @@ namespace SurvivorFarm.Runtime.Core
 {
     public sealed class GameSaveSystem : MonoBehaviour
     {
-        private const int SaveVersion = 22;
+        private const int SaveVersion = 23;
 
         [SerializeField] private DayNightCycle dayNightCycle;
 
@@ -225,7 +225,7 @@ namespace SurvivorFarm.Runtime.Core
                 JsonUtility.FromJsonOverwrite(json, data);
                 if (data == null || data.version < 5 || data.version > SaveVersion)
                 {
-                    error = "Unsupported save version (expected 5..22).";
+                    error = "Unsupported save version (expected 5..23).";
                     return false;
                 }
                 NormalizeSaveData(data);
@@ -264,6 +264,11 @@ namespace SurvivorFarm.Runtime.Core
             if (data.tutorialQuest == null)
             {
                 data.tutorialQuest = new TutorialQuestSaveData();
+            }
+
+            if (data.skillTree == null)
+            {
+                data.skillTree = new SkillTreeSaveData();
             }
 
             if (data.plots == null)
@@ -316,6 +321,13 @@ namespace SurvivorFarm.Runtime.Core
                 data.crafting.storageLevel < 0 || data.crafting.campLevel < 0 || data.crafting.mealsCooked < 0 ||
                 data.crafting.weaponLevel < 0 || data.tutorialQuest.questIndex < 0 || data.tutorialQuest.questProgress < 0 ||
                 data.tutorialQuest.firstNightDay < 0) return false;
+            if (data.skillTree.skillPoints < 0 || data.skillTree.playerLevel < 1 || data.skillTree.experience < 0)
+                return false;
+            var skillIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (SkillLevelSaveData skill in data.skillTree.skills ?? Array.Empty<SkillLevelSaveData>())
+                if (skill == null || string.IsNullOrWhiteSpace(skill.id) || skill.level < 0 || skill.level > 1 ||
+                    SkillTreeCatalog.Find(skill.id) == null || !skillIds.Add(skill.id))
+                { error = "Invalid or duplicate skill identity."; return false; }
 
             var plotIds = new HashSet<string>(StringComparer.Ordinal);
             var legacyIndices = new HashSet<int>();
@@ -421,7 +433,8 @@ namespace SurvivorFarm.Runtime.Core
                     rewardedSteps = questSystem != null ? questSystem.RewardedSteps : 0,
                     questProgress = questSystem != null ? questSystem.QuestProgress : 0,
                     completedSteps = questSystem != null ? questSystem.CompletedSteps : 0, firstNightDay = questSystem != null ? questSystem.FirstNightDay : 0
-                }
+                },
+                skillTree = inventory.GetComponent<SkillTreeManager>()?.Capture()
             };
 
             List<FarmingPlot> plots = GetSortedPlots();
@@ -564,6 +577,7 @@ namespace SurvivorFarm.Runtime.Core
             if(legacyBed)inventory.AddPacked("Bed");
             crafting?.Restore(data.crafting.storageLevel, data.crafting.campLevel, data.crafting.bedBuilt&&!legacyBed, data.crafting.campfireBuilt&&!legacyFire, data.crafting.mealsCooked, data.crafting.weaponLevel);
             questSystem?.Restore(data.tutorialQuest.questIndex, data.tutorialQuest.questProgress, data.version >= 11 ? data.tutorialQuest.completedSteps : -1, data.tutorialQuest.firstNightDay, data.version >= 13 ? data.tutorialQuest.rewardedSteps : -1);
+            inventory?.GetComponent<SkillTreeManager>()?.Restore(data.version >= 23 ? data.skillTree : null);
 
             if (movement != null)
             {
@@ -745,6 +759,7 @@ namespace SurvivorFarm.Runtime.Core
             public ToolUpgradeSaveData toolUpgrades = new ToolUpgradeSaveData();
             public CraftingSaveData crafting = new CraftingSaveData();
             public TutorialQuestSaveData tutorialQuest = new TutorialQuestSaveData();
+            public SkillTreeSaveData skillTree = new SkillTreeSaveData();
             public List<PlotSaveData> plots = new List<PlotSaveData>();
             public List<ResourceSaveData> resources = new List<ResourceSaveData>();
             public List<ResourceSpawnSaveData> resourceSpawns = new List<ResourceSpawnSaveData>();

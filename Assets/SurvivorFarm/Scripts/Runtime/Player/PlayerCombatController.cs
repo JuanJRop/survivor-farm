@@ -68,9 +68,10 @@ namespace SurvivorFarm.Runtime.Player
         public void SetSwordRange(float value)=>swordRange=Mathf.Clamp(value,.85f,1.35f);
         public int ProgressionDamage => (GetComponent<AdventureProgress>()?.Data.temperedBlade == true ? 2 : 0) + EquipmentItems.DamageBonusFor(inventory, FarmTool.Sword) + ((GetComponent<PlayerCraftingController>()?.WeaponLevel ?? 1)-1);
         public int PetDamageBonus => GetComponent<PlayerPetController>()?.DamageBonus ?? 0;
-        public int GetAttackDamage(FarmTool tool) => tool == FarmTool.Sword
+        public int GetAttackDamage(FarmTool tool) => Mathf.Max(1, Mathf.RoundToInt((tool == FarmTool.Sword
             ? swordDamage + PetDamageBonus + ProgressionDamage
-            : tool == FarmTool.Bow ? Mathf.Max(8, arrowDamage) + PetDamageBonus + EquipmentItems.DamageBonusFor(inventory, tool) + ((GetComponent<ToolMastery>()?.Level(FarmTool.Bow)??1)-1) * 4 : 0;
+            : tool == FarmTool.Bow ? Mathf.Max(8, arrowDamage) + PetDamageBonus + EquipmentItems.DamageBonusFor(inventory, tool) + ((GetComponent<ToolMastery>()?.Level(FarmTool.Bow)??1)-1) * 4 : 0) *
+            (GetComponent<SkillTreeManager>()?.DamageMultiplier(tool, LastAttackWasCharged) ?? 1f)));
 
         private void Awake()
         {
@@ -189,6 +190,7 @@ namespace SurvivorFarm.Runtime.Player
             Vector2 aim = worldPosition - transform.position;
             if (aim.sqrMagnitude < .0001f) return false;
             Vector2 direction = aim.normalized;
+            GetComponent<SkillTreeManager>()?.NotifyAttack(FarmTool.Bow, false);
             movement?.StopMovement();
             var clip = characterAnimator != null && characterAnimator.Library != null ? characterAnimator.Library.Find("Bow") : null;
             float clipDuration = clip != null && clip.FramesPerSecond > 0f ? clip.Frames / clip.FramesPerSecond : 0f;
@@ -281,6 +283,7 @@ namespace SurvivorFarm.Runtime.Player
             var attack = charged?combo.BeginCharged():combo.Begin(Time.time);
             if (attack == null) return;
             LastAttackWasCharged=charged;
+            GetComponent<SkillTreeManager>()?.NotifyAttack(FarmTool.Sword, charged);
             Vector3 aim=ValidTarget(target)?target.Transform.position:MouseAim();
             if((aim-transform.position).sqrMagnitude>.001f)swordDirection=(aim-transform.position).normalized;
             activeCooldown = Mathf.Max(.15f, attack.duration);

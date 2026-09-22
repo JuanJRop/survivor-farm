@@ -99,6 +99,7 @@ namespace SurvivorFarm.Runtime.Gameplay
         protected override void OnDefeated(PlayerInventory inventory)
         {
             DropLoot();
+            inventory?.GetComponent<SkillTreeManager>()?.NotifyEnemyKilled(gameObject, 20);
             if(farmSession!=null){farmPattern.Stop();farmSession.Win();FarmGameEvents.RaiseEnemyDefeated();return;}
             warning.enabled = false; expedition.CompleteBoss(); FarmGameEvents.RaiseEnemyDefeated();
         }

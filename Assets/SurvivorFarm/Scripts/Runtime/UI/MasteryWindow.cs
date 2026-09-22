@@ -101,16 +101,16 @@ namespace SurvivorFarm.Runtime.UI
                 purchases[t].interactable = affordable;
             }
         }
-        internal static GameObject CreateCanvas(string name, int order)
+        public static GameObject CreateCanvas(string name, int order)
         {
             var root = new GameObject(name, typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             var canvas = root.GetComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = order;
             var scaler = root.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1280, 720); scaler.matchWidthOrHeight = .5f; return root;
         }
-        internal static Text Label(Transform parent, string text, float x, float y, float w, float h, int size)
+        public static Text Label(Transform parent, string text, float x, float y, float w, float h, int size)
         { var label = AdventureWindow.Rect(parent, "Texto", x, y, w, h).gameObject.AddComponent<Text>(); FarmUiStyle.Text(label, size); label.text = text; label.raycastTarget = false; return label; }
-        internal static Button Button(Transform parent, string caption, float x, float y, float w, float h, UnityEngine.Events.UnityAction action)
+        public static Button Button(Transform parent, string caption, float x, float y, float w, float h, UnityEngine.Events.UnityAction action)
         { var root = AdventureWindow.Rect(parent, caption, x, y, w, h); root.gameObject.AddComponent<Image>(); var button = root.gameObject.AddComponent<Button>(); FarmUiStyle.Button(button); button.onClick.AddListener(action); Label(root, caption, 4, 2, w - 8, h - 4, 15).alignment = TextAnchor.MiddleCenter; return button; }
         private void OnDisable() => Close();
         private void OnDestroy() { Close(); if (canvasRoot != null) Destroy(canvasRoot); }

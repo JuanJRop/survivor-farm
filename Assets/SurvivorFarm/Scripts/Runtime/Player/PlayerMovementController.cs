@@ -54,9 +54,11 @@ namespace SurvivorFarm.Runtime.Player
                 UI.InventoryPanelSystem.IsOpen || UI.VillageUpgradeWindow.IsOpen || UI.FarmIntroduction.BlocksGameplay || GetComponent<PlayerMountController>()?.IsMounted == true || stats != null && stats.CurrentHealth <= 0) return false;
             characterAnimator?.CancelAction();
             dashDirection = direction.normalized;
-            dashUntil = Time.time + .18f;
-            nextDash = Time.time + 1.4f;
+            SkillTreeManager skills = GetComponent<SkillTreeManager>();
+            dashUntil = Time.time + .18f * (skills?.DashDurationMultiplier ?? 1f);
+            nextDash = Time.time + (skills != null && skills.HasSecondDash ? .72f : 1.4f);
             stats?.GrantInvulnerability(.22f);
+            skills?.NotifyDash(dashDirection);
             return true;
         }
 
@@ -64,7 +66,7 @@ namespace SurvivorFarm.Runtime.Player
         {
             var combat = GetComponent<PlayerCombatController>();
             if (combat?.IsExecuting == true) { body.linearVelocity = Vector2.zero; return; }
-            if (IsDashing) { body.linearVelocity = dashDirection * 11f; return; }
+            if (IsDashing) { body.linearVelocity = dashDirection * 11f * (GetComponent<SkillTreeManager>()?.DashSpeedMultiplier ?? 1f); return; }
             if (characterAnimator == null) characterAnimator = GetComponent<PlayerCharacterAnimator>();
             bool combatMovement = combat != null && combat.AllowsMovementDuringCombat;
             if (characterAnimator != null && characterAnimator.MovementLocked && !combatMovement)
