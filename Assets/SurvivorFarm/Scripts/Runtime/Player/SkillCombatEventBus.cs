@@ -14,9 +14,12 @@ namespace SurvivorFarm.Runtime.Player
         public readonly bool Charged;
         public readonly bool Heavy;
         public readonly bool Critical;
+        /// <summary>Identifier of the skill that caused the event, when the event is an unlock/use event.</summary>
+        public readonly string SkillId;
 
         public SkillEventContext(GameObject source, GameObject target, Vector2 position, int amount,
-            FarmTool tool = FarmTool.Sword, bool charged = false, bool heavy = false, bool critical = false)
+            FarmTool tool = FarmTool.Sword, bool charged = false, bool heavy = false, bool critical = false,
+            string skillId = null)
         {
             Source = source;
             Target = target;
@@ -26,6 +29,7 @@ namespace SurvivorFarm.Runtime.Player
             Charged = charged;
             Heavy = heavy;
             Critical = critical;
+            SkillId = skillId;
         }
     }
 

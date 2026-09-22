@@ -94,7 +94,8 @@ namespace SurvivorFarm.Runtime.Player
             if (!CanUnlock(definition)) return false;
             skillPoints -= definition.Cost;
             levels[definition.Id] = 1;
-            events.RaiseSkillUsed(new SkillEventContext(gameObject, null, transform.position, definition.Cost));
+            events.RaiseSkillUsed(new SkillEventContext(gameObject, null, transform.position, definition.Cost,
+                skillId: definition.Id));
             Changed?.Invoke();
             return true;
         }
